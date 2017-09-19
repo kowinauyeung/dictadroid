@@ -19,7 +19,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "check": "eslint ./src/ --ext .jsx,.js --fix",
+    "check": "eslint ./src/ --ext .jsx --fix",
     "eject": "react-scripts eject"
   }
 }
