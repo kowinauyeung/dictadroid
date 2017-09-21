@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import './NavBar.css';
 
 const propTypes = {
   pageName: PropTypes.string.isRequired,

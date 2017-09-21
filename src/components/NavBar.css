@@ -1,0 +1,76 @@
+.navbar {
+  height: 44px;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 17px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  margin: 0;
+  z-index: 500;
+  background: #ef3c6c;
+}
+
+.navbar-inner {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0 8px;
+  box-sizing: border-box;
+}
+
+.navbar .center {
+  font-size: 17px;
+  font-weight: 500;
+  text-align: center;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 44px;
+  flex-shrink: 10;
+  color: #fff;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+.navbar .left, .navbar .right {
+  color: #6f1c33;
+  height: 100%;
+  line-height: 44px;
+}
+
+.navbar .left {
+  margin-right: 10px;
+  float: left;
+}
+
+.navbar .right {
+  margin-left: 10px;
+  float: right;
+}
+
+.navbar .icon {
+  line-height: inherit;
+  display: block;
+  font-size: 30px;
+  float: left;
+}
+
+.navbar .icon + span {
+  margin-left: 10px;
+}
+
+.navbar .icon-only {
+  min-width: 44px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+}

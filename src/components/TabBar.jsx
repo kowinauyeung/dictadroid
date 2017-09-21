@@ -1,5 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import './TabBar.css';
 
 const isHomePage = (match, location) => {
   if (!match) {
@@ -27,8 +28,8 @@ function TabBar() {
           <span className="tabber-label">Books</span>
         </NavLink>
         <NavLink to="/dictation" className="tab-link">
-          <i className="icon ion-ios-timer-outline inactive" />
-          <i className="icon ion-ios-timer active" />
+          <i className="icon ion-ios-mic-outline inactive" />
+          <i className="icon ion-ios-mic active" />
           <span className="tabber-label">Dictation</span>
         </NavLink>
         <NavLink to="/translation" className="tab-link">
