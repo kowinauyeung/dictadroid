@@ -1,9 +1,24 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import NavBar from '../components/NavBar';
+import BackButton from '../components/BackButton';
 
-function Lessions() {
+const propTypes = {
+  history: PropTypes.shape({ goBack: PropTypes.func }).isRequired,
+};
+
+function Lessions(props) {
+  const { history } = props;
   return (
-    <div className="lessions">Lessions</div>
+    <div className="lessions">
+      <NavBar
+        pageName="Lessions"
+        left={<BackButton history={history} />}
+      />
+    </div>
   );
 }
+
+Lessions.propTypes = propTypes;
 
 export default Lessions;

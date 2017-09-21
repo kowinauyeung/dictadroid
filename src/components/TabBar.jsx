@@ -22,9 +22,9 @@ function TabBar() {
     <div className="tabbar">
       <div className="tabbar-inner">
         <NavLink to="/" className="tab-link" isActive={isHomePage}>
-          <i className="icon ion-ios-home-outline inactive" />
-          <i className="icon ion-ios-home active" />
-          <span className="tabber-label">Home</span>
+          <i className="icon ion-ios-book-outline inactive" />
+          <i className="icon ion-ios-book active" />
+          <span className="tabber-label">Books</span>
         </NavLink>
         <NavLink to="/dictation" className="tab-link">
           <i className="icon ion-ios-timer-outline inactive" />
