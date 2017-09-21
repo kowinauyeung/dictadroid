@@ -18,16 +18,17 @@
   display: flex;
   text-align: center;
   align-items: center;
-  line-height: 40px;
+  position: relative;
 }
 
 .home-header-inner {
   flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .home-header-inner .subtext {
   font-size: 20px;
-  line-height: 20px;
   color: #772c40;
 }
 
@@ -72,4 +73,19 @@
 .home-menu .link > span {
   flex: 1;
   color: #672738;
+}
+
+.link-books {
+  display: block;
+  color: #fff;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+}
+
+.link-books .icon {
+  line-height: inherit;
 }

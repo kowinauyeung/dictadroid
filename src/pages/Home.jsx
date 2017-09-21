@@ -24,9 +24,12 @@ function Home(props) {
       <div className="home-inner">
         <div className="home-header">
           <div className="home-header-inner">
-            {activeBook.title}<br />
+            <span>{activeBook.title}</span>
             <span className="subtext">Total lesson: 12</span>
           </div>
+          <Link to="books" className="link-books">
+            <i className="icon ion-ios-bookmarks-outline" />
+          </Link>
         </div>
         <div className="home-menu">
           <div className="card">
@@ -39,9 +42,9 @@ function Home(props) {
                 <i className="icon ion-ios-list-outline" />
                 <span>Lessons</span>
               </Link>
-              <Link to="/dictation" className="link">
-                <i className="icon ion-ios-play-outline" />
-                <span>Start Learning</span>
+              <Link to="/" className="link">
+                <i className="icon ion-ios-clock-outline" />
+                <span>History</span>
               </Link>
               <Link to="/" className="link">
                 <i className="icon ion-ios-trash-outline" />
