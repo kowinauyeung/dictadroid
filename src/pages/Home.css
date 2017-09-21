@@ -1,0 +1,75 @@
+.home {
+  height: 100%;
+  padding-bottom: 50px;
+  box-sizing: border-box;
+  background: #f7f7f7;
+}
+
+.home-inner {
+  width: 100%;
+  height: 100%;
+}
+
+.home-header {
+  background: #ef3c6c;
+  color: #fff;
+  height: 50%;
+  font-size: 35px;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  line-height: 40px;
+}
+
+.home-header-inner {
+  flex: 1;
+}
+
+.home-header-inner .subtext {
+  font-size: 20px;
+  line-height: 20px;
+  color: #772c40;
+}
+
+.home-menu {
+  height: 50%;
+  margin-top: -40px;
+}
+
+.home-menu .card {
+  height: 100%;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.home-menu .card-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.home-menu .link {
+  height: 50%;
+  flex: 1 1 50%;
+  display: flex;
+  flex-direction: column;
+}
+
+.home-menu .link > .icon,
+.home-menu .link > span {
+  align-self: center;
+  display: flex;
+  align-items: center;
+}
+
+.home-menu .link > .icon {
+  flex: 2;
+  color: #ef3c6c;
+  font-size: 80px;
+}
+
+.home-menu .link > span {
+  flex: 1;
+  color: #672738;
+}

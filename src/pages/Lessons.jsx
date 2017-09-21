@@ -7,18 +7,18 @@ const propTypes = {
   history: PropTypes.shape({ goBack: PropTypes.func }).isRequired,
 };
 
-function Lessions(props) {
+function Lessons(props) {
   const { history } = props;
   return (
-    <div className="lessions">
+    <div className="lessons">
       <NavBar
-        pageName="Lessions"
+        pageName="Lessons"
         left={<BackButton history={history} />}
       />
     </div>
   );
 }
 
-Lessions.propTypes = propTypes;
+Lessons.propTypes = propTypes;
 
-export default Lessions;
+export default Lessons;

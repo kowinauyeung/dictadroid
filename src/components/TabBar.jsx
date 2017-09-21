@@ -38,8 +38,8 @@ function TabBar() {
           <span className="tabber-label">Translation</span>
         </NavLink>
         <NavLink to="/settings" className="tab-link">
-          <i className="icon ion-ios-settings-outline inactive" />
-          <i className="icon ion-ios-settings active" />
+          <i className="icon ion-ios-gear-outline inactive" />
+          <i className="icon ion-ios-gear active" />
           <span className="tabber-label">Settings</span>
         </NavLink>
       </div>

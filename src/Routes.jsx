@@ -3,7 +3,7 @@ import { Route } from 'react-router-dom';
 
 import Home from './pages/Home';
 import Books from './pages/Books';
-import Lessions from './pages/Lessions';
+import Lessons from './pages/Lessons';
 import Vocabs from './pages/Vocabs';
 import Dictation from './pages/Dictation';
 import Translation from './pages/Translation';
@@ -15,7 +15,7 @@ function Routes() {
     <div className="pages">
       <Route exact path="/" component={Home} />
       <Route path="/books" component={Books} />
-      <Route path="/lessions/:bookid" component={Lessions} />
+      <Route path="/lessions/:bookid" component={Lessons} />
       <Route path="/vocabs/:lessionid" component={Vocabs} />
       <Route path="/dictation" component={Dictation} />
       <Route path="/translation" component={Translation} />
