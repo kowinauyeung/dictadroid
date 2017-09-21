@@ -1,20 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import NavBar from '../components/NavBar';
 import BackButton from '../components/BackButton';
 
 const propTypes = {
-  history: PropTypes.shape({ goBack: PropTypes.func }).isRequired,
+  match: PropTypes.shape({ url: PropTypes.string }).isRequired,
 };
 
 function Lessons(props) {
-  const { history } = props;
+  const { match } = props;
   return (
-    <div className="lessons">
+    <div className="lessons page">
       <NavBar
         pageName="Lessons"
-        left={<BackButton history={history} />}
+        left={<BackButton to="/" />}
       />
+      <div className="page-inner">
+        <Link to={`${match.url}/thisislessonid/vocabs`}>vocabs</Link>
+      </div>
     </div>
   );
 }

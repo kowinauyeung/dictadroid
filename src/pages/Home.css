@@ -73,6 +73,7 @@
 .home-menu .link > span {
   flex: 1;
   color: #672738;
+  font-size: 20px;
 }
 
 .link-books {

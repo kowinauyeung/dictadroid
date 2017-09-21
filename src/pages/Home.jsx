@@ -27,28 +27,28 @@ function Home(props) {
             <span>{activeBook.title}</span>
             <span className="subtext">Total lesson: 12</span>
           </div>
-          <Link to="books" className="link-books">
-            <i className="icon ion-ios-bookmarks-outline" />
+          <Link to="/" className="link-books">
+            <i className="ion-ios-settings" />
           </Link>
         </div>
         <div className="home-menu">
           <div className="card">
             <div className="card-content">
-              <Link to="/" className="link">
-                <i className="icon ion-ios-settings" />
-                <span>Edit</span>
+              <Link to="/books" className="link">
+                <i className="icon ion-ios-bookmarks-outline" />
+                <span>Books</span>
               </Link>
-              <Link to={`/lessions/${activeBook.id}`} className="link">
+              <Link to="/lessons" className="link">
                 <i className="icon ion-ios-list-outline" />
                 <span>Lessons</span>
               </Link>
-              <Link to="/" className="link">
+              <Link to="/history" className="link">
                 <i className="icon ion-ios-clock-outline" />
                 <span>History</span>
               </Link>
-              <Link to="/" className="link">
-                <i className="icon ion-ios-trash-outline" />
-                <span>Remove</span>
+              <Link to="/dictation" className="link">
+                <i className="icon ion-ios-play-outline" />
+                <span>Start</span>
               </Link>
             </div>
           </div>

@@ -1,9 +1,10 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 
 import Home from './pages/Home';
 import Books from './pages/Books';
 import Lessons from './pages/Lessons';
+import History from './pages/History';
 import Vocabs from './pages/Vocabs';
 import Dictation from './pages/Dictation';
 import Translation from './pages/Translation';
@@ -13,14 +14,17 @@ import Login from './pages/Login';
 function Routes() {
   return (
     <div className="pages">
-      <Route exact path="/" component={Home} />
-      <Route path="/books" component={Books} />
-      <Route path="/lessions/:bookid" component={Lessons} />
-      <Route path="/vocabs/:lessionid" component={Vocabs} />
-      <Route path="/dictation" component={Dictation} />
-      <Route path="/translation" component={Translation} />
-      <Route path="/settings" component={Settings} />
-      <Route path="/login" component={Login} />
+      <Switch>
+        <Route exact path="/" component={Home} />
+        <Route path="/books" component={Books} />
+        <Route path="/lessons/:lessionId/vocabs" component={Vocabs} />
+        <Route path="/lessons" component={Lessons} />
+        <Route path="/history" component={History} />
+        <Route path="/dictation" component={Dictation} />
+        <Route path="/translation" component={Translation} />
+        <Route path="/settings" component={Settings} />
+        <Route path="/login" component={Login} />
+      </Switch>
     </div>
   );
 }

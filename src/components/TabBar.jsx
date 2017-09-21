@@ -1,21 +1,20 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import _ from 'lodash';
 import './TabBar.css';
 
+const homePageMatchPath = [
+  '/',
+  'books',
+  'lessons',
+  'history',
+  'login',
+];
+
 const isHomePage = (match, location) => {
-  if (!match) {
-    return false;
-  }
-  const path = location.pathname;
-  if (
-    path === '/' ||
-    path.indexOf('books') > 0 ||
-    path.indexOf('lessions') > 0 ||
-    path.indexOf('vocabs') > 0
-  ) {
-    return true;
-  }
-  return false;
+  if (!match) return false;
+  const path = location.pathname.split('/')[1] || '/';
+  return (_.indexOf(homePageMatchPath, path) >= 0);
 };
 
 function TabBar() {

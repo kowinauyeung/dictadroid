@@ -1,21 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 const propTypes = {
-  history: PropTypes.shape({ goBack: PropTypes.func }).isRequired,
+  to: PropTypes.string.isRequired,
 };
 
 function BackButton(props) {
-  const { goBack } = props.history;
+  const { to } = props;
   return (
-    <div
+    <Link
+      to={to}
       className="link"
-      role="presentation"
-      onClick={goBack}
     >
       <i className="icon ion-ios-arrow-back" />
       <span>Back</span>
-    </div>
+    </Link>
   );
 }
 

@@ -56,6 +56,10 @@
   float: right;
 }
 
+.navbar .link {
+  color: inherit;
+}
+
 .navbar .icon {
   line-height: inherit;
   display: block;
