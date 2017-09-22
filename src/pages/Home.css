@@ -76,7 +76,7 @@
   font-size: 20px;
 }
 
-.link-books {
+.link-right-top {
   display: block;
   color: #fff;
   position: absolute;
@@ -87,6 +87,6 @@
   line-height: 40px;
 }
 
-.link-books .icon {
+.link-right-top .icon {
   line-height: inherit;
 }

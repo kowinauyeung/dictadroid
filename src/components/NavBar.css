@@ -46,6 +46,10 @@
   line-height: 44px;
 }
 
+.navbar .left .light, .navbar .right .light {
+  font-weight: 300;
+}
+
 .navbar .left {
   margin-right: 10px;
   float: left;

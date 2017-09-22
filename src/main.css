@@ -59,6 +59,10 @@ a {
   box-sizing: border-box;
 }
 
+.page.without-tabbar {
+  padding-bottom: 0;
+}
+
 .page-inner {
   position: relative;
 }
