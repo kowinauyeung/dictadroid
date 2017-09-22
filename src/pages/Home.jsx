@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { Popup } from '../components/Modal';
+import EditBookForm from '../components/EditBookForm';
 import './Home.css';
 
 const propTypes = {
   activeBook: PropTypes.shape({
     id: PropTypes.string,
     title: PropTypes.string,
+    lang: PropTypes.string,
   }).isRequired,
 };
 
@@ -15,14 +16,17 @@ const defaultProps = {
   activeBook: {
     id: 'thisisanid',
     title: '大家的日本語初級I',
+    lang: 'ja',
   },
 };
 
 class Home extends Component {
-  constructor() {
+  constructor({ activeBook }) {
     super();
     this.state = {
       isShowEditPopUp: false,
+      formTitle: activeBook.title,
+      formLang: activeBook.lang,
     };
     this.showEditPopUp = this.showEditPopUp.bind(this);
     this.hideEditPopUp = this.hideEditPopUp.bind(this);
@@ -82,14 +86,11 @@ class Home extends Component {
             </div>
           </div>
         </div>
-        <Popup
-          header="Edit book"
-          visible={isShowEditPopUp}
-          onLeftClick={this.hideEditPopUp}
-          onRightClick={this.hideEditPopUp}
-        >
-          <div>Hello, World!</div>
-        </Popup>
+        <EditBookForm
+          activeBook={activeBook}
+          isShowEditPopUp={isShowEditPopUp}
+          hide={this.hideEditPopUp}
+        />
       </div>
     );
   }
