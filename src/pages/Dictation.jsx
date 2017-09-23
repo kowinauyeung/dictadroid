@@ -3,7 +3,7 @@ import NavBar from '../components/NavBar';
 
 function Dictation() {
   return (
-    <div className="dictation">
+    <div className="dictation page">
       <NavBar pageName="Dictation" />
     </div>
   );
