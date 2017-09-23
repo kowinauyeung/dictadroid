@@ -56,44 +56,42 @@ class EditBookForm extends Component {
         onRightClick={this.onClickSave}
       >
         <div className="page-inner form-box">
-          <div className="form-box">
-            <ListFormm>
-              <ListItem label="Title">
-                <input
-                  type="text"
-                  placeholder="e.g. 大家的日本語初級I"
-                  value={formTitle}
-                  onChange={(e) => {
-                    this.setState({ formTitle: e.target.value });
-                  }}
-                />
-              </ListItem>
-              <ListItem label="Language">
-                <select
-                  value={formLang}
-                  onChange={(e) => {
-                    this.setState({ formLang: e.target.value });
-                  }}
-                >
-                  <option value="ja">日本語</option>
-                  <option value="en">English</option>
-                  <option value="zh">中文</option>
-                </select>
-              </ListItem>
-              <ListItem label="Translate from">
-                <select
-                  value={formTranslateFrom}
-                  onChange={(e) => {
-                    this.setState({ formTranslateFrom: e.target.value });
-                  }}
-                >
-                  <option value="ja">日本語</option>
-                  <option value="en">English</option>
-                  <option value="zh">中文</option>
-                </select>
-              </ListItem>
-            </ListFormm>
-          </div>
+          <ListFormm>
+            <ListItem label="Title">
+              <input
+                type="text"
+                placeholder="e.g. 大家的日本語初級I"
+                value={formTitle}
+                onChange={(e) => {
+                  this.setState({ formTitle: e.target.value });
+                }}
+              />
+            </ListItem>
+            <ListItem label="Language">
+              <select
+                value={formLang}
+                onChange={(e) => {
+                  this.setState({ formLang: e.target.value });
+                }}
+              >
+                <option value="ja">日本語</option>
+                <option value="en">English</option>
+                <option value="zh">中文</option>
+              </select>
+            </ListItem>
+            <ListItem label="Translate from">
+              <select
+                value={formTranslateFrom}
+                onChange={(e) => {
+                  this.setState({ formTranslateFrom: e.target.value });
+                }}
+              >
+                <option value="ja">日本語</option>
+                <option value="en">English</option>
+                <option value="zh">中文</option>
+              </select>
+            </ListItem>
+          </ListFormm>
         </div>
       </Popup>
     );
