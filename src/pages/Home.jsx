@@ -9,6 +9,7 @@ const propTypes = {
     id: PropTypes.string,
     title: PropTypes.string,
     lang: PropTypes.string,
+    transFrm: PropTypes.string,
   }).isRequired,
 };
 
@@ -17,6 +18,7 @@ const defaultProps = {
     id: 'thisisanid',
     title: '大家的日本語初級I',
     lang: 'ja',
+    transFrm: 'zh',
   },
 };
 

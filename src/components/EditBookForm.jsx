@@ -8,6 +8,7 @@ const propTypes = {
     id: PropTypes.string,
     title: PropTypes.string,
     lang: PropTypes.string,
+    transFrm: PropTypes.string,
   }).isRequired,
   isShowEditPopUp: PropTypes.bool.isRequired,
   hide: PropTypes.func.isRequired,
@@ -18,6 +19,7 @@ const defaultProps = {
     id: 'thisisanid',
     title: '大家的日本語初級I',
     lang: 'ja',
+    transFrm: 'zh',
   },
 };
 
@@ -27,6 +29,7 @@ class EditBookForm extends Component {
     this.state = {
       formTitle: activeBook.title,
       formLang: activeBook.lang,
+      formTranslateFrom: activeBook.transFrm,
     };
     this.onClickSave = this.onClickSave.bind(this);
     this.hideEditPopUp = this.hideEditPopUp.bind(this);
@@ -43,7 +46,7 @@ class EditBookForm extends Component {
   }
 
   render() {
-    const { formTitle, formLang } = this.state;
+    const { formTitle, formLang, formTranslateFrom } = this.state;
     const { isShowEditPopUp } = this.props;
     return (
       <Popup
@@ -72,9 +75,21 @@ class EditBookForm extends Component {
                     this.setState({ formLang: e.target.value });
                   }}
                 >
-                  <option value="ja">Japanese</option>
+                  <option value="ja">日本語</option>
                   <option value="en">English</option>
-                  <option value="zh">Chinese</option>
+                  <option value="zh">中文</option>
+                </select>
+              </ListItem>
+              <ListItem label="Translate from">
+                <select
+                  value={formTranslateFrom}
+                  onChange={(e) => {
+                    this.setState({ formTranslateFrom: e.target.value });
+                  }}
+                >
+                  <option value="ja">日本語</option>
+                  <option value="en">English</option>
+                  <option value="zh">中文</option>
                 </select>
               </ListItem>
             </ListFormm>
