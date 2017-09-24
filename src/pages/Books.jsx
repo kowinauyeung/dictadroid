@@ -52,6 +52,34 @@ const defaultProps = {
       transFrm: 'zh',
       lessons: [1, 2, 3, 4, 5, 6, 6, 6, 6, 6, 6],
     },
+    {
+      id: 'thisisanid05',
+      title: '大家的日本語初級I',
+      lang: 'ja',
+      transFrm: 'zh',
+      lessons: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+    },
+    {
+      id: 'thisisanid06',
+      title: '大家的日本語初級II',
+      lang: 'ja',
+      transFrm: 'zh',
+      lessons: [1, 2, 3, 4, 5],
+    },
+    {
+      id: 'thisisanid07',
+      title: '大家的日本語進階I',
+      lang: 'ja',
+      transFrm: 'zh',
+      lessons: [1, 2, 3, 4, 5, 14, 15, 16],
+    },
+    {
+      id: 'thisisanid08',
+      title: '大家的日本語進階II',
+      lang: 'ja',
+      transFrm: 'zh',
+      lessons: [1, 2, 3, 4, 5, 6, 6, 6, 6, 6, 6],
+    },
   ],
   removeBook: (book) => { console.log(book); },
   activeBook: 'thisisanid03',
@@ -76,6 +104,7 @@ class Books extends Component {
   }
 
   setSelectedBook(id) {
+    if (this.state.editMode) return;
     this.props.setActiveBook(id);
     this.setState({ selectedBook: id });
   }
