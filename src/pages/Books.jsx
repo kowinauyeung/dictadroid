@@ -95,6 +95,7 @@ class Books extends Component {
       editingBook: undefined,
       selectedBook: activeBook,
     };
+    this.noDataMsg = 'You do not have any book yet.';
     this.switchOnEditMode = this.switchOnEditMode.bind(this);
     this.switchOffEditMode = this.switchOffEditMode.bind(this);
     this.showAddBookPopUp = this.showAddBookPopUp.bind(this);
@@ -175,8 +176,70 @@ class Books extends Component {
     );
   }
 
+  renderBookList() {
+    const { editMode, selectedBook } = this.state;
+    const { books } = this.props;
+    return (
+      <div className="list-block media-list">
+        <ul>
+          {
+            books.map(book => (
+              <EditableItem
+                key={book.id}
+                showButtons={editMode}
+                onRemoveClick={() => {
+                  this.removeBook(book);
+                }}
+                onEditClick={() => {
+                  this.editBook(book);
+                }}
+              >
+                <label className="label-radio" htmlFor={`book-item-${book.id}`}>
+                  <input
+                    id={`book-item-${book.id}`}
+                    type="radio"
+                    name="activeBook"
+                    value={book.id}
+                    checked={(selectedBook === book.id)}
+                    onChange={(e) => {
+                      this.setSelectedBook(e.target.value);
+                    }}
+                  />
+                  {
+                    !editMode ?
+                      (
+                        <div className="check-box">
+                          <i className="icon ion-ios-checkmark-empty" />
+                        </div>
+                      )
+                      :
+                      ''
+                  }
+                  <div className="item-title-row">
+                    <div className="item-title">{book.title}</div>
+                  </div>
+                  <div className="item-subtitle grey">
+                    {Lang[book.lang]}, {book.lessons.length} lessons
+                  </div>
+                </label>
+              </EditableItem>
+            ))
+          }
+        </ul>
+      </div>
+    );
+  }
+
+  renderNoData() {
+    return (
+      <div className="content-block">
+        <p className="text-center">{this.noDataMsg}</p>
+      </div>
+    );
+  }
+
   render() {
-    const { editMode, isShowAddBookPopUp, editingBook, selectedBook } = this.state;
+    const { isShowAddBookPopUp, editingBook } = this.state;
     const { books } = this.props;
     return (
       <div className="books page">
@@ -186,64 +249,7 @@ class Books extends Component {
           right={this.renderRightControl()}
         />
         <div className="page-inner">
-          {
-            books.length <= 0 ?
-              (
-                <div className="content-block">
-                  <p className="text-center">You do not have any book yet.</p>
-                </div>
-              )
-              :
-              (
-                <div className="list-block media-list">
-                  <ul>
-                    {
-                      books.map(book => (
-                        <EditableItem
-                          key={book.id}
-                          showButtons={editMode}
-                          onRemoveClick={() => {
-                            this.removeBook(book);
-                          }}
-                          onEditClick={() => {
-                            this.editBook(book);
-                          }}
-                        >
-                          <label className="label-radio" htmlFor={`book-item-${book.id}`}>
-                            <input
-                              id={`book-item-${book.id}`}
-                              type="radio"
-                              name="activeBook"
-                              value={book.id}
-                              checked={(selectedBook === book.id)}
-                              onChange={(e) => {
-                                this.setSelectedBook(e.target.value);
-                              }}
-                            />
-                            {
-                              !editMode ?
-                                (
-                                  <div className="check-box">
-                                    <i className="icon ion-ios-checkmark-empty" />
-                                  </div>
-                                )
-                                :
-                                ''
-                            }
-                            <div className="item-title-row">
-                              <div className="item-title">{book.title}</div>
-                            </div>
-                            <div className="item-subtitle grey">
-                              {Lang[book.lang]}, {book.lessons.length} lessons
-                            </div>
-                          </label>
-                        </EditableItem>
-                      ))
-                    }
-                  </ul>
-                </div>
-              )
-          }
+          {books.length <= 0 ? (this.renderNoData()) : (this.renderBookList())}
         </div>
         <AddBookForm
           isShowEditPopUp={isShowAddBookPopUp}
