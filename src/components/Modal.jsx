@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import ClassNames from 'classnames';
 import NavBar from './NavBar';
 import './Modal.css';
 
 function Modal(props) {
   const { visible } = props;
-  const cssClass = classNames('modal-overlay', { 'modal-overlay-visible': visible });
+  const cssClass = ClassNames('modal-overlay', { 'modal-overlay-visible': visible });
   return <div className={cssClass} />;
 }
 
@@ -48,13 +48,17 @@ export class Popup extends Component {
   }
 
   renderRightButton() {
-    return <div className="link" onClick={this.onRightClick} role="presentation">OK</div>;
+    return (
+      <div className="link" onClick={this.onRightClick} role="presentation">
+        {this.props.rightText}
+      </div>
+    );
   }
 
   render() {
     const { children, header, visible } = this.props;
-    const popUpCssClass = classNames('popup', { show: visible });
-    const popUpBoxCssClass = classNames('popup-box', { 'modal-in': visible });
+    const popUpCssClass = ClassNames('popup', { show: visible });
+    const popUpBoxCssClass = ClassNames('popup-box', { 'modal-in': visible });
     return (
       <div className={popUpCssClass} ref={(ref) => { this.popup = ref; }}>
         <Modal visible={visible} />
@@ -81,12 +85,14 @@ Popup.propTypes = {
   header: PropTypes.string.isRequired,
   onLeftClick: PropTypes.func,
   onRightClick: PropTypes.func,
+  rightText: PropTypes.string,
 };
 
 Popup.defaultProps = {
   visible: false,
   onLeftClick: null,
   onRightClick: null,
+  rightText: 'OK',
 };
 
 export default Modal;
