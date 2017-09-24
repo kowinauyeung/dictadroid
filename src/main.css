@@ -308,3 +308,40 @@ p {
   color: #6d6d72;
   box-sizing: border-box;
 }
+
+.list-block .item-after {
+  white-space: nowrap;
+  color: #8e8e93;
+  flex-shrink: 0;
+  margin-left: auto;
+  padding-left: 5px;
+  display: flex;
+  max-height: 28px;
+}
+
+.item-inner .check-box {
+  font-size: 40px;
+  color: #ef3c6c;
+  position: absolute;
+  right: 10px;
+  line-height: 100%;
+  top: 50%;
+  margin-top: -15px;
+}
+
+input[type=radio]:not(:checked) + .check-box {
+  display: none;
+}
+
+.item-inner .check-box .icon,
+.item-inner .check-box .icon:before {
+  line-height: 30px;
+  height: 30px;
+  width: 30px;
+  display: block;
+  text-align: center;
+}
+
+.item-inner input[type=radio] {
+  display: none;
+}

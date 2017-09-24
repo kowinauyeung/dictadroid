@@ -18,6 +18,8 @@ const propTypes = {
     }),
   ).isRequired,
   removeBook: PropTypes.func.isRequired,
+  activeBook: PropTypes.string.isRequired,
+  setActiveBook: PropTypes.func.isRequired,
 };
 
 const defaultProps = {
@@ -52,15 +54,18 @@ const defaultProps = {
     },
   ],
   removeBook: (book) => { console.log(book); },
+  activeBook: 'thisisanid03',
+  setActiveBook: (bookId) => { console.log(bookId); },
 };
 
 class Books extends Component {
-  constructor() {
+  constructor({ activeBook }) {
     super();
     this.state = {
       editMode: false,
       isShowAddBookPopUp: false,
       editingBook: undefined,
+      selectedBook: activeBook,
     };
     this.switchOnEditMode = this.switchOnEditMode.bind(this);
     this.switchOffEditMode = this.switchOffEditMode.bind(this);
@@ -68,6 +73,11 @@ class Books extends Component {
     this.hideAddBookPopUp = this.hideAddBookPopUp.bind(this);
     this.endEditBook = this.endEditBook.bind(this);
     this.removeBook = this.removeBook.bind(this);
+  }
+
+  setSelectedBook(id) {
+    this.props.setActiveBook(id);
+    this.setState({ selectedBook: id });
   }
 
   editBook(targetBook) {
@@ -137,7 +147,7 @@ class Books extends Component {
   }
 
   render() {
-    const { editMode, isShowAddBookPopUp, editingBook } = this.state;
+    const { editMode, isShowAddBookPopUp, editingBook, selectedBook } = this.state;
     const { books } = this.props;
     return (
       <div className="books page">
@@ -170,12 +180,34 @@ class Books extends Component {
                             this.editBook(book);
                           }}
                         >
-                          <div className="item-title-row">
-                            <div className="item-title">{book.title}</div>
-                          </div>
-                          <div className="item-subtitle grey">
-                            {Lang[book.lang]}, {book.lessons.length} lessons
-                          </div>
+                          <label className="label-radio" htmlFor={`book-item-${book.id}`}>
+                            <input
+                              id={`book-item-${book.id}`}
+                              type="radio"
+                              name="activeBook"
+                              value={book.id}
+                              checked={(selectedBook === book.id)}
+                              onChange={(e) => {
+                                this.setSelectedBook(e.target.value);
+                              }}
+                            />
+                            {
+                              !editMode ?
+                                (
+                                  <div className="check-box">
+                                    <i className="icon ion-ios-checkmark-empty" />
+                                  </div>
+                                )
+                                :
+                                ''
+                            }
+                            <div className="item-title-row">
+                              <div className="item-title">{book.title}</div>
+                            </div>
+                            <div className="item-subtitle grey">
+                              {Lang[book.lang]}, {book.lessons.length} lessons
+                            </div>
+                          </label>
                         </EditableItem>
                       ))
                     }
