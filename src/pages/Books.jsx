@@ -5,6 +5,7 @@ import BackButton from '../components/BackButton';
 import EditableItem from '../components/EditableItem';
 import AddBookForm from '../components/AddBookForm';
 import EditBookForm from '../components/EditBookForm';
+import { Lang } from '../utils/Dictionary';
 
 const propTypes = {
   books: PropTypes.arrayOf(
@@ -13,6 +14,7 @@ const propTypes = {
       title: PropTypes.string,
       lang: PropTypes.string,
       transFrm: PropTypes.string,
+      lessons: PropTypes.array,
     }),
   ).isRequired,
   removeBook: PropTypes.func.isRequired,
@@ -25,27 +27,31 @@ const defaultProps = {
       title: '大家的日本語初級I',
       lang: 'ja',
       transFrm: 'zh',
+      lessons: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
     },
     {
       id: 'thisisanid02',
       title: '大家的日本語初級II',
       lang: 'ja',
       transFrm: 'zh',
+      lessons: [1, 2, 3, 4, 5],
     },
     {
       id: 'thisisanid03',
       title: '大家的日本語進階I',
       lang: 'ja',
       transFrm: 'zh',
+      lessons: [1, 2, 3, 4, 5, 14, 15, 16],
     },
     {
       id: 'thisisanid04',
       title: '大家的日本語進階II',
       lang: 'ja',
       transFrm: 'zh',
+      lessons: [1, 2, 3, 4, 5, 6, 6, 6, 6, 6, 6],
     },
   ],
-  removeBook: book => { console.log(book); },
+  removeBook: (book) => { console.log(book); },
 };
 
 class Books extends Component {
@@ -95,6 +101,7 @@ class Books extends Component {
 
   renderRightControl() {
     const { editMode } = this.state;
+    const { books } = this.props;
 
     if (editMode) {
       return (
@@ -111,13 +118,20 @@ class Books extends Component {
         >
           <i className="icon ion-ios-plus-empty" />
         </div>
-        <div
-          onClick={this.switchOnEditMode}
-          role="presentation"
-          className="link icon-only"
-        >
-          <i className="icon ion-ios-compose-outline" />
-        </div>
+        {
+          books.length > 0 ?
+            (
+              <div
+                onClick={this.switchOnEditMode}
+                role="presentation"
+                className="link icon-only"
+              >
+                <i className="icon ion-ios-compose-outline" />
+              </div>
+            )
+            :
+            ''
+        }
       </div>
     );
   }
@@ -135,37 +149,39 @@ class Books extends Component {
         <div className="page-inner">
           {
             books.length <= 0 ?
-            (
-              <div className="content-block">
-                <p className="text-center">Please click the '+' button for adding book.</p>
-              </div>
-            ) 
-            :
-            (
-              <div className="list-block media-list">
-                <ul>
-                  {
-                    books.map(book => (
-                      <EditableItem
-                        key={book.id}
-                        showButtons={editMode}
-                        onRemoveClick={() => {
-                          this.removeBook(book);
-                        }}
-                        onEditClick={() => {
-                          this.editBook(book);
-                        }}
-                      >
-                        <div className="item-title-row">
-                          <div className="item-title">{book.title}</div>
-                        </div>
-                        <div className="item-subtitle grey">{book.lang}, 共13課</div>
-                      </EditableItem>
-                    ))
-                  }
-                </ul>
-              </div>
-            )
+              (
+                <div className="content-block">
+                  <p className="text-center">You do not have any book yet.</p>
+                </div>
+              )
+              :
+              (
+                <div className="list-block media-list">
+                  <ul>
+                    {
+                      books.map(book => (
+                        <EditableItem
+                          key={book.id}
+                          showButtons={editMode}
+                          onRemoveClick={() => {
+                            this.removeBook(book);
+                          }}
+                          onEditClick={() => {
+                            this.editBook(book);
+                          }}
+                        >
+                          <div className="item-title-row">
+                            <div className="item-title">{book.title}</div>
+                          </div>
+                          <div className="item-subtitle grey">
+                            {Lang[book.lang]}, {book.lessons.length} lessons
+                          </div>
+                        </EditableItem>
+                      ))
+                    }
+                  </ul>
+                </div>
+              )
           }
         </div>
         <AddBookForm

@@ -2,8 +2,5 @@
   "extends": "airbnb",
   "env": {
     "browser": true
-  },
-  "rules": {
-    "no-alert": false
   }
 }
