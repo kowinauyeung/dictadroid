@@ -4,7 +4,7 @@ import ListForm, { ListItem } from '../components/ListForm';
 import { Popup } from '../components/Modal';
 
 const propTypes = {
-  isShowEditPopUp: PropTypes.bool.isRequired,
+  isPopUp: PropTypes.bool.isRequired,
   hide: PropTypes.func.isRequired,
   addBook: PropTypes.func.isRequired,
 };
@@ -21,8 +21,15 @@ class AddBookForm extends Component {
       formLang: '',
       formTranslateFrom: '',
     };
-    this.onClickSave = this.onClickSave.bind(this);
+    this.onClickAdd = this.onClickAdd.bind(this);
     this.hideEditPopUp = this.hideEditPopUp.bind(this);
+  }
+
+  onClickAdd() {
+    const { formTitle, formLang, formTranslateFrom } = this.state;
+    this.props.addBook(formTitle, formLang, formTranslateFrom);
+    this.resetForm();
+    this.hideEditPopUp();
   }
 
   resetForm() {
@@ -33,30 +40,29 @@ class AddBookForm extends Component {
     });
   }
 
-  onClickSave() {
-    const { formTitle, formLang, formTranslateFrom } = this.state;
-    this.props.addBook(formTitle, formLang, formTranslateFrom);
-    this.resetForm();
-    this.hideEditPopUp();
-  }
-
   hideEditPopUp() {
     this.props.hide();
   }
 
   render() {
     const { formTitle, formLang, formTranslateFrom } = this.state;
-    const { isShowEditPopUp } = this.props;
+    const { isPopUp } = this.props;
     return (
       <Popup
-        header="Edit book"
-        visible={isShowEditPopUp}
+        header="Add book"
+        visible={isPopUp}
         onLeftClick={this.hideEditPopUp}
-        onRightClick={this.onClickSave}
+        onRightClick={this.onClickAdd}
         rightText="Add"
       >
         <div className="page-inner form-box">
-          <ListForm>
+          <ListForm
+            onSubmit={(e) => {
+              e.preventDefault();
+              this.onClickAdd();
+              return false;
+            }}
+          >
             <ListItem label="Title">
               <input
                 type="text"

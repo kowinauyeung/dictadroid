@@ -65,13 +65,19 @@ class EditBookForm extends Component {
     return (
       <Popup
         header="Edit book"
-        visible={targetBook.id != null}
+        visible={targetBook.id !== null}
         onLeftClick={this.hideEditPopUp}
         onRightClick={this.onClickSave}
         rightText="Save"
       >
         <div className="page-inner form-box">
-          <ListForm>
+          <ListForm
+            onSubmit={(e) => {
+              e.preventDefault();
+              this.onClickSave();
+              return false;
+            }}
+          >
             <ListItem label="Title">
               <input
                 type="text"

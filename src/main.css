@@ -346,3 +346,7 @@ input[type=radio]:not(:checked) + .check-box {
 .item-inner input[type=radio] {
   display: none;
 }
+
+.item-inner a {
+  color: initial;
+}
