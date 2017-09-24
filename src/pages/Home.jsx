@@ -10,6 +10,7 @@ const propTypes = {
     title: PropTypes.string,
     lang: PropTypes.string,
     transFrm: PropTypes.string,
+    lessons: PropTypes.array,
   }).isRequired,
 };
 
@@ -19,6 +20,7 @@ const defaultProps = {
     title: '大家的日本語初級I',
     lang: 'ja',
     transFrm: 'zh',
+    lessons: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
   },
 };
 
@@ -55,7 +57,7 @@ class Home extends Component {
           <div className="home-header">
             <div className="home-header-inner">
               <span>{activeBook.title}</span>
-              <span className="subtext">Total lesson: 12</span>
+              <span className="subtext">Total lesson: {activeBook.lessons.length}</span>
             </div>
             <div
               className="link-right-top"
