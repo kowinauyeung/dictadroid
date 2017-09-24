@@ -7,7 +7,7 @@ function Vocabs() {
     <div className="vocabs page">
       <NavBar
         pageName="Vocabs"
-        left={<BackButton to="/lessons" />}
+        left={<BackButton to="/lessons" text="Lessons" />}
       />
     </div>
   );
