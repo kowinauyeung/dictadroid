@@ -4,7 +4,7 @@ import './ListForm.css';
 
 function ListForm(props) {
   return (
-    <form className="list-block">
+    <form className="list-block" onSubmit={props.onSubmit}>
       <ul>{props.children}</ul>
     </form>
   );
@@ -15,6 +15,7 @@ ListForm.propTypes = {
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
   ]).isRequired,
+  onSubmit: PropTypes.func.isRequired,
 };
 
 export const ListItem = (props) => {

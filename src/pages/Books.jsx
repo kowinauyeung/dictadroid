@@ -252,7 +252,7 @@ class Books extends Component {
           {books.length <= 0 ? (this.renderNoData()) : (this.renderBookList())}
         </div>
         <AddBookForm
-          isShowEditPopUp={isShowAddBookPopUp}
+          isPopUp={isShowAddBookPopUp}
           hide={this.hideAddBookPopUp}
         />
         <EditBookForm
