@@ -25,9 +25,18 @@ class AddBookForm extends Component {
     this.hideEditPopUp = this.hideEditPopUp.bind(this);
   }
 
+  resetForm() {
+    this.setState({
+      formTitle: '',
+      formLang: '',
+      formTranslateFrom: '',
+    });
+  }
+
   onClickSave() {
     const { formTitle, formLang, formTranslateFrom } = this.state;
     this.props.addBook(formTitle, formLang, formTranslateFrom);
+    this.resetForm();
     this.hideEditPopUp();
   }
 
