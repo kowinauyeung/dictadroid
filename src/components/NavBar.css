@@ -60,6 +60,11 @@
   float: right;
 }
 
+.navbar .right .control-group,
+.navbar .left .control-group {
+  display: flex;
+}
+
 .navbar .link {
   color: inherit;
 }

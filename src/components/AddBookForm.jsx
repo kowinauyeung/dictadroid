@@ -4,54 +4,30 @@ import ListForm, { ListItem } from '../components/ListForm';
 import { Popup } from '../components/Modal';
 
 const propTypes = {
-  targetBook: PropTypes.shape({
-    id: PropTypes.string,
-    title: PropTypes.string,
-    lang: PropTypes.string,
-    transFrm: PropTypes.string,
-  }),
+  isShowEditPopUp: PropTypes.bool.isRequired,
   hide: PropTypes.func.isRequired,
-  saveBook: PropTypes.func.isRequired,
+  addBook: PropTypes.func.isRequired,
 };
 
 const defaultProps = {
-  targetBook: {
-    id: null,
-    title: '',
-    lang: '',
-    transFrm: '',
-  },
-  saveBook: (a, b, c, d) => {
-    console.log(a, b, c, d);
-  },
+  addBook: (a, b, c) => { console.log(a, b, c); },
 };
 
-class EditBookForm extends Component {
-  constructor({ targetBook }) {
+class AddBookForm extends Component {
+  constructor() {
     super();
     this.state = {
-      formTitle: targetBook.title,
-      formLang: targetBook.lang,
-      formTranslateFrom: targetBook.transFrm,
+      formTitle: '',
+      formLang: '',
+      formTranslateFrom: '',
     };
     this.onClickSave = this.onClickSave.bind(this);
     this.hideEditPopUp = this.hideEditPopUp.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (!nextProps.targetBook.id === null) return;
-    const { targetBook } = nextProps;
-    this.setState({
-      formTitle: targetBook.title,
-      formLang: targetBook.lang,
-      formTranslateFrom: targetBook.transFrm,
-    });
-  }
-
   onClickSave() {
-    const { targetBook } = this.props;
     const { formTitle, formLang, formTranslateFrom } = this.state;
-    this.props.saveBook(targetBook, formTitle, formLang, formTranslateFrom);
+    this.props.addBook(formTitle, formLang, formTranslateFrom);
     this.hideEditPopUp();
   }
 
@@ -61,14 +37,14 @@ class EditBookForm extends Component {
 
   render() {
     const { formTitle, formLang, formTranslateFrom } = this.state;
-    const { targetBook } = this.props;
+    const { isShowEditPopUp } = this.props;
     return (
       <Popup
         header="Edit book"
-        visible={targetBook.id != null}
+        visible={isShowEditPopUp}
         onLeftClick={this.hideEditPopUp}
         onRightClick={this.onClickSave}
-        rightText="Save"
+        rightText="Add"
       >
         <div className="page-inner form-box">
           <ListForm>
@@ -89,6 +65,7 @@ class EditBookForm extends Component {
                   this.setState({ formLang: e.target.value });
                 }}
               >
+                <option value="">- Please select -</option>
                 <option value="ja">日本語</option>
                 <option value="en">English</option>
                 <option value="zh">中文</option>
@@ -101,6 +78,7 @@ class EditBookForm extends Component {
                   this.setState({ formTranslateFrom: e.target.value });
                 }}
               >
+                <option value="">- Please select -</option>
                 <option value="ja">日本語</option>
                 <option value="en">English</option>
                 <option value="zh">中文</option>
@@ -113,7 +91,7 @@ class EditBookForm extends Component {
   }
 }
 
-EditBookForm.propTypes = propTypes;
-EditBookForm.defaultProps = defaultProps;
+AddBookForm.propTypes = propTypes;
+AddBookForm.defaultProps = defaultProps;
 
-export default EditBookForm;
+export default AddBookForm;

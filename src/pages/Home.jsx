@@ -89,8 +89,7 @@ class Home extends Component {
           </div>
         </div>
         <EditBookForm
-          activeBook={activeBook}
-          isShowEditPopUp={isShowEditPopUp}
+          targetBook={isShowEditPopUp ? activeBook : undefined}
           hide={this.hideEditPopUp}
         />
       </div>
