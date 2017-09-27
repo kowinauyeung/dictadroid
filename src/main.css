@@ -350,3 +350,122 @@ input[type=radio]:not(:checked) + .check-box {
 .item-inner a {
   color: initial;
 }
+
+.buttons-row {
+  align-self: center;
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.button {
+  border: 1px solid #ef3c6c;
+  color: #ef3c6c;
+  text-decoration: none;
+  text-align: center;
+  display: block;
+  border-radius: 5px;
+  line-height: 27px;
+  box-sizing: border-box;
+  appearance: none;
+  background: 0 0;
+  padding: 0 10px;
+  margin: 0;
+  height: 29px;
+  white-space: nowrap;
+  position: relative;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 14px;
+  font-family: inherit;
+  cursor: pointer;
+  outline: 0;
+}
+
+.button.active {
+  background: #ef3c6c;
+  color: #fff;
+}
+
+.buttons-row .button {
+  border-radius: 0;
+  border-left-width: 0;
+  width: 100%;
+}
+
+.buttons-row .button:first-child {
+  border-radius: 5px 0 0 5px;
+  border-left-width: 1px;
+  border-left-style: solid;
+}
+
+.buttons-row .button:last-child {
+  border-radius: 0 5px 5px 0;
+}
+
+.buttons-row.radio-wrapper .input[type=radio] {
+  display: none;
+}
+
+.input[type=radio]:checked < label {
+  background: #ef3c6c;
+  color: #fff;
+}
+
+.chip {
+  font-size: 14px;
+  font-weight: 400;
+  color: #fff;
+  background: rgba(0,0,0,.37);
+  display: inline-block;
+  height: 23px;
+  line-height: 23px;
+  border-radius: 5px;
+  padding: 0 6px;
+  box-sizing: border-box;
+  vertical-align: middle;
+  display: inline-flex;
+  align-items: center;
+  margin: 2px;
+}
+
+.chip-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  position: relative;
+  flex-shrink: 1;
+  min-width: 0;
+}
+
+.chip-delete {
+  margin-right: -6px;
+  width: 23px;
+  height: 23px;
+  text-align: center;
+  line-height: 23px;
+  cursor: pointer;
+  flex-shrink: 0;
+  opacity: .7;
+  font-size: 16px;
+}
+
+.chips input[type=text] {
+  background: none;
+  border: 0;
+  display: inline-block;
+  height: 23px;
+  line-height: 23px;
+  outline: 0;
+  margin: 0;
+  padding: 0 6px 0 0;
+  width: 50%;
+}
+
+.content-block-inner {
+  background: #fff;
+  padding: 10px 15px;
+  margin-left: -15px;
+  width: 100%;
+  position: relative;
+  color: #000;
+}
