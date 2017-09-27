@@ -59,22 +59,17 @@ class AddVocabForm extends Component {
   }
 
   onTagsChange(e) {
-    const pattern = /^[a-zA-Z\u4e00-\u9fa5]+\s+$/;
+    const pattern = /^\s*[a-zA-Z\u4e00-\u9fa5]+\s+$/;
     let val = e.target.value;
     val = _.trimStart(val);
-    e.target.value = val;
-
     if (!pattern.test(val)) return;
-
-    e.target.value = '';
-    val = val.trim();
-
     this.addChip(val);
+    e.target.value = '';
   }
 
   onTagsInputKeyDown(e) {
     if (e.keyCode === 13 && e.target.value !== '') {
-      const pattern = /^[a-zA-Z\u4e00-\u9fa5]+$/;
+      const pattern = /^\s*[a-zA-Z\u4e00-\u9fa5]+$/;
       const val = e.target.value;
       if (!pattern.test(val)) return;
       this.addChip(val);
@@ -97,10 +92,10 @@ class AddVocabForm extends Component {
   }
 
   addChip(chip) {
-    if (_.indexOf(this.state.formTags, chip) > -1) return;
+    if (_.indexOf(this.state.formTags, chip.trim()) > -1) return;
 
     this.setState({
-      formTags: [...this.state.formTags, chip],
+      formTags: [...this.state.formTags, chip.trim()],
     });
   }
 

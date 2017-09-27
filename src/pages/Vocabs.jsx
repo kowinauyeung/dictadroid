@@ -70,7 +70,7 @@ class Vocabs extends Component {
   }
 
   removeVocab(targetVocab) {
-    const firm = window.confirm(`Remove the lesson "${targetVocab.title}"?`);
+    const firm = window.confirm(`Remove the vocab "${targetVocab.title}"?`);
     if (firm) this.props.removeVocab(targetVocab);
   }
 
