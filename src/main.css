@@ -267,6 +267,10 @@ p {
   text-overflow: ellipsis;
 }
 
+.list-block .item-subtitle.small {
+  font-size: 12px;
+}
+
 .item-inner {
   transition: .3s;
 }
@@ -312,7 +316,7 @@ p {
 
 .list-block .item-after {
   white-space: nowrap;
-  color: #8e8e93;
+  color: #bb3e5f;
   flex-shrink: 0;
   margin-left: auto;
   padding-left: 5px;
@@ -468,4 +472,31 @@ input[type=radio]:not(:checked) + .check-box {
   width: 100%;
   position: relative;
   color: #000;
+}
+
+.title-only {
+  height: 39px;
+}
+
+.title-only div {
+  align-self: center;
+}
+
+.item-vocab-after {
+  position: absolute;
+  height: 100%;
+  right: 15px;
+  top: 0px;
+  display: flex;
+  color: #5f5f5f;
+}
+
+.item-vocab-after * {
+  align-self: center;
+}
+
+.item-inner .btn-speech {
+  font-size: 35px;
+  margin-left: 10px;
+  color: #ef3c6c;
 }

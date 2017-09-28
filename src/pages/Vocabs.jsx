@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import NavBar from '../components/NavBar';
 import BackButton from '../components/BackButton';
 import AddVocabForm from '../components/AddVocabForm';
+import EditableItem from '../components/EditableItem';
 
 const propTypes = {
   match: PropTypes.shape({ url: PropTypes.string }).isRequired,
@@ -37,8 +37,135 @@ const defaultProps = {
       translation: '開始',
       pron: 'はじめる',
       lesson: 'thisisalesson01',
-      type: 'verb',
-      tags: ['自動詞', '一段動詞'],
+      type: 'v',
+      tags: ['他動詞', '一段動詞'],
+    },
+    {
+      id: 'thisisavocab02',
+      vocab: '始まる',
+      translation: '開始',
+      pron: 'はじまる',
+      lesson: 'thisisalesson01',
+      type: 'v',
+      tags: ['自動詞'],
+    },
+    {
+      id: 'thisisavocab03',
+      vocab: 'そのまま',
+      translation: '就這樣',
+      pron: '',
+      lesson: 'thisisalesson01',
+      type: 'n',
+      tags: ['名詞'],
+    },
+    {
+      id: 'thisisavocab04',
+      vocab: 'パーティー',
+      translation: 'Party',
+      pron: '',
+      lesson: 'thisisalesson01',
+      type: 'n',
+      tags: [],
+    },
+    {
+      id: 'thisisavocab05',
+      vocab: '拭く',
+      translation: '擦',
+      pron: 'ふく',
+      lesson: 'thisisalesson01',
+      type: 'v',
+      tags: ['名詞', '名詞'],
+    },
+    {
+      id: 'thisisavocab06',
+      vocab: '思う',
+      translation: '想',
+      pron: 'おもう',
+      lesson: 'thisisalesson01',
+      type: 'v',
+      tags: ['他動詞', '一段動詞'],
+    },
+    {
+      id: 'thisisavocab07',
+      vocab: '貼ります',
+      translation: '貼',
+      pron: 'はります',
+      lesson: 'thisisalesson01',
+      type: 'v',
+      tags: ['他動詞', '一段動詞'],
+    },
+    {
+      id: 'thisisavocab08',
+      vocab: '掛けます',
+      translation: '掛',
+      pron: 'かけます',
+      lesson: 'thisisalesson01',
+      type: 'v',
+      tags: ['他動詞', '一段動詞'],
+    },
+    {
+      id: 'thisisavocab09',
+      vocab: '並べます',
+      translation: '並排',
+      pron: 'ならべます',
+      lesson: 'thisisalesson01',
+      type: 'v',
+      tags: ['他動詞', '一段動詞'],
+    },
+    {
+      id: 'thisisavocab10',
+      vocab: '植えます',
+      translation: '種植',
+      pron: 'うえます',
+      lesson: 'thisisalesson01',
+      type: 'v',
+      tags: ['他動詞', '一段動詞'],
+    },
+
+    {
+      id: 'thisisavocab11',
+      vocab: '予習します',
+      translation: '預習',
+      pron: 'よしゅうします',
+      lesson: 'thisisalesson01',
+      type: 'v',
+      tags: ['他動詞', '一段動詞'],
+    },
+    {
+      id: 'thisisavocab12',
+      vocab: '授業',
+      translation: '授課',
+      pron: 'じゅぎょう',
+      lesson: 'thisisalesson01',
+      type: 'n',
+      tags: ['他動詞', '一段動詞'],
+    },
+    {
+      id: 'thisisavocab13',
+      vocab: '花瓶',
+      translation: '花瓶',
+      pron: 'かびん',
+      lesson: 'thisisalesson01',
+      type: 'n',
+      tags: ['他動詞'],
+    },
+    {
+      id: 'thisisavocab14',
+      vocab: '非常袋',
+      translation: '避難袋',
+      pron: 'ひじょうぶくろ',
+      lesson: 'thisisalesson01',
+      type: 'v',
+      tags: ['他動詞', '一段動詞'],
+    },
+    {
+      id: 'thisisavocab15',
+      vocab: '懐中電灯',
+      translation: '手電筒',
+      pron: 'かいちゅうでんとう',
+      lesson: 'thisisalesson01',
+      type: 'v',
+      tags: ['他動詞', '一段動詞'],
     },
   ],
   removeVocab: (vocab) => { console.log(vocab); },
@@ -61,6 +188,10 @@ class Vocabs extends Component {
     this.removeVocab = this.removeVocab.bind(this);
   }
 
+  speech(vocab) {
+    console.log(vocab);
+  }
+
   editVocab(targetVocab) {
     this.setState({ editingVocab: targetVocab });
   }
@@ -70,7 +201,7 @@ class Vocabs extends Component {
   }
 
   removeVocab(targetVocab) {
-    const firm = window.confirm(`Remove the vocab "${targetVocab.title}"?`);
+    const firm = window.confirm(`Remove the vocab "${targetVocab.vocab}"?`);
     if (firm) this.props.removeVocab(targetVocab);
   }
 
@@ -127,6 +258,44 @@ class Vocabs extends Component {
     );
   }
 
+  renderVocabList() {
+    const { editMode } = this.state;
+    const { vocabs } = this.props;
+    return (
+      <div className="list-block media-list">
+        <ul>
+          {
+            vocabs.map(vocab => (
+              <EditableItem
+                key={vocab.id}
+                showButtons={editMode}
+                onRemoveClick={() => {
+                  this.removeVocab(vocab);
+                }}
+                onEditClick={() => {
+                  this.editVocab(vocab);
+                }}
+              >
+                <div className={`item-title-row${vocab.pron ? '' : ' title-only'}`}>
+                  <div className="item-title">{vocab.vocab}</div>
+                </div>
+                {vocab.pron ? <div className="item-subtitle small">{vocab.pron}</div> : ''}
+                <div className="item-vocab-after">
+                  <span>{`[${vocab.type}] ${vocab.translation}`}</span>
+                  <div
+                    className="btn-speech icon ion-ios-volume-high"
+                    onClick={() => { this.speech(vocab); }}
+                    role="presentation"
+                  />
+                </div>
+              </EditableItem>
+            ))
+          }
+        </ul>
+      </div>
+    );
+  }
+
   renderNoData() {
     return (
       <div className="content-block">
@@ -146,7 +315,7 @@ class Vocabs extends Component {
           right={this.renderRightControl()}
         />
         <div className="page-inner">
-          {vocabs.length <= 0 ? (this.renderNoData()) : (this.renderNoData())}
+          {vocabs.length <= 0 ? (this.renderNoData()) : (this.renderVocabList())}
         </div>
         <AddVocabForm
           lessonId={match.params.lessionId}
