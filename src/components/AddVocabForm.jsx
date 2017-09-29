@@ -24,6 +24,7 @@ class AddVocabForm extends Component {
       formVocab: '',
       formTranslation: '',
       formPron: '',
+      formUseSpeech: false,
       formType: '',
       formTags: [],
     };
@@ -39,6 +40,7 @@ class AddVocabForm extends Component {
       formVocab,
       formTranslation,
       formPron,
+      formUseSpeech,
       formType,
       formTags,
     } = this.state;
@@ -49,6 +51,7 @@ class AddVocabForm extends Component {
       vocab: formVocab,
       translation: formTranslation,
       pron: formPron,
+      useSpeech: formUseSpeech,
       type: formType,
       tags: formTags,
     });
@@ -109,6 +112,7 @@ class AddVocabForm extends Component {
       formVocab,
       formTranslation,
       formPron,
+      formUseSpeech,
       formType,
       formTags,
     } = this.state;
@@ -163,6 +167,20 @@ class AddVocabForm extends Component {
                 value={formPron}
                 onChange={(e) => { this.setState({ formPron: e.target.value }); }}
               />
+            </ListItem>
+            <ListItem
+              label="Use for speech"
+              className={`hidden-field${formPron !== '' ? ' show' : ''}`}
+            >
+              <label className="label-switch" htmlFor="form-use-speech">
+                <input
+                  type="checkbox"
+                  id="form-use-speech"
+                  checked={formUseSpeech}
+                  onChange={(e) => { this.setState({ formUseSpeech: e.target.checked }); }}
+                />
+                <div className="checkbox" />
+              </label>
             </ListItem>
             <ListItem label="Translation">
               <input
