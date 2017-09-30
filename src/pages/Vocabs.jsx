@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import NavBar from '../components/NavBar';
 import BackButton from '../components/BackButton';
 import AddVocabForm from '../components/AddVocabForm';
@@ -288,7 +289,7 @@ class Vocabs extends Component {
 
   renderVocabList() {
     const { editMode } = this.state;
-    const { vocabs } = this.props;
+    const { vocabs, match } = this.props;
     return (
       <div className="list-block media-list">
         <ul>
@@ -304,18 +305,27 @@ class Vocabs extends Component {
                   this.editVocab(vocab);
                 }}
               >
-                <div className={`item-title-row${vocab.pron ? '' : ' title-only'}`}>
-                  <div className="item-title">{vocab.vocab}</div>
-                </div>
-                {vocab.pron ? <div className="item-subtitle small">{vocab.pron}</div> : ''}
-                <div className="item-vocab-after">
-                  <span>{`[${vocab.type}] ${vocab.translation}`}</span>
-                  <div
-                    className="btn-speech icon ion-ios-volume-high"
-                    onClick={() => { this.speech(vocab); }}
-                    role="presentation"
-                  />
-                </div>
+                <Link
+                  to={
+                    editMode ?
+                      `${match.url}`
+                      :
+                      `${match.url}/${vocab.id}`
+                  }
+                >
+                  <div className={`item-title-row${vocab.pron ? '' : ' title-only'}`}>
+                    <div className="item-title">{vocab.vocab}</div>
+                  </div>
+                  {vocab.pron ? <div className="item-subtitle small">{vocab.pron}</div> : ''}
+                  <div className="item-vocab-after">
+                    <span>{`[${vocab.type}] ${vocab.translation}`}</span>
+                    <div
+                      className="btn-speech icon ion-ios-volume-high"
+                      onClick={() => { this.speech(vocab); }}
+                      role="presentation"
+                    />
+                  </div>
+                </Link>
               </EditableItem>
             ))
           }
