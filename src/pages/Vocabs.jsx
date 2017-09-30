@@ -317,15 +317,15 @@ class Vocabs extends Component {
                     <div className="item-title">{vocab.vocab}</div>
                   </div>
                   {vocab.pron ? <div className="item-subtitle small">{vocab.pron}</div> : ''}
-                  <div className="item-vocab-after">
-                    <span>{`[${vocab.type}] ${vocab.translation}`}</span>
-                    <div
-                      className="btn-speech icon ion-ios-volume-high"
-                      onClick={() => { this.speech(vocab); }}
-                      role="presentation"
-                    />
-                  </div>
                 </Link>
+                <div className="item-vocab-after">
+                  <span>{`[${vocab.type}] ${vocab.translation}`}</span>
+                  <div
+                    className="btn-speech icon ion-ios-volume-high"
+                    onClick={() => { this.speech(vocab); }}
+                    role="presentation"
+                  />
+                </div>
               </EditableItem>
             ))
           }
