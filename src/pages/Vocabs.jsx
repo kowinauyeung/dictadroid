@@ -4,9 +4,14 @@ import NavBar from '../components/NavBar';
 import BackButton from '../components/BackButton';
 import AddVocabForm from '../components/AddVocabForm';
 import EditableItem from '../components/EditableItem';
+import Speech from '../utils/Speech';
 
 const propTypes = {
   match: PropTypes.shape({ url: PropTypes.string }).isRequired,
+  book: PropTypes.shape({
+    lang: PropTypes.string,
+    transFrm: PropTypes.string,
+  }).isRequired,
   lesson: PropTypes.shape({
     id: PropTypes.string,
     title: PropTypes.string,
@@ -17,6 +22,7 @@ const propTypes = {
       vocab: PropTypes.string,
       translation: PropTypes.string,
       pron: PropTypes.string,
+      useSpeech: PropTypes.bool,
       lesson: PropTypes.string,
       type: PropTypes.string,
       tags: PropTypes.arrayOf(PropTypes.string),
@@ -26,6 +32,12 @@ const propTypes = {
 };
 
 const defaultProps = {
+  book: {
+    id: 'thisisanid01',
+    title: '大家的日本語初級I',
+    lang: 'ja',
+    transFrm: 'zh',
+  },
   lesson: {
     id: 'thisisalesson01',
     title: '第一課',
@@ -33,9 +45,10 @@ const defaultProps = {
   vocabs: [
     {
       id: 'thisisavocab01',
-      vocab: '始める',
-      translation: '開始',
-      pron: 'はじめる',
+      vocab: '開きます',
+      translation: '開',
+      pron: 'あきます',
+      useSpeech: true,
       lesson: 'thisisalesson01',
       type: 'v',
       tags: ['他動詞', '一段動詞'],
@@ -45,6 +58,7 @@ const defaultProps = {
       vocab: '始まる',
       translation: '開始',
       pron: 'はじまる',
+      useSpeech: false,
       lesson: 'thisisalesson01',
       type: 'v',
       tags: ['自動詞'],
@@ -54,6 +68,7 @@ const defaultProps = {
       vocab: 'そのまま',
       translation: '就這樣',
       pron: '',
+      useSpeech: false,
       lesson: 'thisisalesson01',
       type: 'n',
       tags: ['名詞'],
@@ -63,6 +78,7 @@ const defaultProps = {
       vocab: 'パーティー',
       translation: 'Party',
       pron: '',
+      useSpeech: false,
       lesson: 'thisisalesson01',
       type: 'n',
       tags: [],
@@ -72,6 +88,7 @@ const defaultProps = {
       vocab: '拭く',
       translation: '擦',
       pron: 'ふく',
+      useSpeech: false,
       lesson: 'thisisalesson01',
       type: 'v',
       tags: ['名詞', '名詞'],
@@ -81,6 +98,7 @@ const defaultProps = {
       vocab: '思う',
       translation: '想',
       pron: 'おもう',
+      useSpeech: false,
       lesson: 'thisisalesson01',
       type: 'v',
       tags: ['他動詞', '一段動詞'],
@@ -90,6 +108,7 @@ const defaultProps = {
       vocab: '貼ります',
       translation: '貼',
       pron: 'はります',
+      useSpeech: false,
       lesson: 'thisisalesson01',
       type: 'v',
       tags: ['他動詞', '一段動詞'],
@@ -99,6 +118,7 @@ const defaultProps = {
       vocab: '掛けます',
       translation: '掛',
       pron: 'かけます',
+      useSpeech: false,
       lesson: 'thisisalesson01',
       type: 'v',
       tags: ['他動詞', '一段動詞'],
@@ -108,6 +128,7 @@ const defaultProps = {
       vocab: '並べます',
       translation: '並排',
       pron: 'ならべます',
+      useSpeech: false,
       lesson: 'thisisalesson01',
       type: 'v',
       tags: ['他動詞', '一段動詞'],
@@ -117,6 +138,7 @@ const defaultProps = {
       vocab: '植えます',
       translation: '種植',
       pron: 'うえます',
+      useSpeech: false,
       lesson: 'thisisalesson01',
       type: 'v',
       tags: ['他動詞', '一段動詞'],
@@ -127,6 +149,7 @@ const defaultProps = {
       vocab: '予習します',
       translation: '預習',
       pron: 'よしゅうします',
+      useSpeech: false,
       lesson: 'thisisalesson01',
       type: 'v',
       tags: ['他動詞', '一段動詞'],
@@ -136,6 +159,7 @@ const defaultProps = {
       vocab: '授業',
       translation: '授課',
       pron: 'じゅぎょう',
+      useSpeech: false,
       lesson: 'thisisalesson01',
       type: 'n',
       tags: ['他動詞', '一段動詞'],
@@ -145,6 +169,7 @@ const defaultProps = {
       vocab: '花瓶',
       translation: '花瓶',
       pron: 'かびん',
+      useSpeech: false,
       lesson: 'thisisalesson01',
       type: 'n',
       tags: ['他動詞'],
@@ -154,6 +179,7 @@ const defaultProps = {
       vocab: '非常袋',
       translation: '避難袋',
       pron: 'ひじょうぶくろ',
+      useSpeech: false,
       lesson: 'thisisalesson01',
       type: 'v',
       tags: ['他動詞', '一段動詞'],
@@ -163,6 +189,7 @@ const defaultProps = {
       vocab: '懐中電灯',
       translation: '手電筒',
       pron: 'かいちゅうでんとう',
+      useSpeech: false,
       lesson: 'thisisalesson01',
       type: 'v',
       tags: ['他動詞', '一段動詞'],
@@ -189,7 +216,8 @@ class Vocabs extends Component {
   }
 
   speech(vocab) {
-    console.log(vocab);
+    const { lang } = this.props.book;
+    Speech.pron(vocab, lang);
   }
 
   editVocab(targetVocab) {
