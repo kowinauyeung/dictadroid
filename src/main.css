@@ -593,3 +593,10 @@ input[type=radio]:not(:checked) + .check-box {
 .hidden-field.show {
   height: 44px;
 }
+
+.line {
+  width: 100%;
+  height: 1px;
+  background: #e1e1e1;
+  margin: 10px 0;
+}
