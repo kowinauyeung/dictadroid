@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import NavBar from '../components/NavBar';
 import BackButton from '../components/BackButton';
 import AddVocabForm from '../components/AddVocabForm';
+import EditVocabForm from '../components/EditVocabForm';
 import EditableItem from '../components/EditableItem';
 import Speech from '../utils/Speech';
 
@@ -359,6 +360,10 @@ class Vocabs extends Component {
           lessonId={match.params.lessionId}
           isPopUp={isShowAddVocabPopUp}
           hide={this.hideAddVocabPopUp}
+        />
+        <EditVocabForm
+          targetVocab={editingVocab}
+          hide={this.endEditVocab}
         />
       </div>
     );

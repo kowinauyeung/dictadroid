@@ -5,37 +5,68 @@ import ListForm, { ListItem } from '../components/ListForm';
 import { Popup } from '../components/Modal';
 
 const propTypes = {
-  isPopUp: PropTypes.bool.isRequired,
+  targetVocab: PropTypes.shape({
+    id: PropTypes.string,
+    vocab: PropTypes.string,
+    translation: PropTypes.string,
+    pron: PropTypes.string,
+    useSpeech: PropTypes.bool,
+    lesson: PropTypes.string,
+    type: PropTypes.string,
+    tags: PropTypes.arrayOf(PropTypes.string),
+  }),
   hide: PropTypes.func.isRequired,
-  addVocab: PropTypes.func.isRequired,
-  lessonId: PropTypes.string.isRequired,
+  saveVocab: PropTypes.func.isRequired,
 };
 
 const defaultProps = {
-  addVocab: (a) => { console.log(a); },
+  targetVocab: {
+    id: null,
+    vocab: '',
+    translation: '',
+    pron: '',
+    useSpeech: false,
+    lesson: '',
+    type: '',
+    tags: [],
+  },
+  saveVocab: (vocab, formValue) => console.log(vocab, formValue),
 };
 
 const vocabTypes = ['n', 'v', 'adj', 'adv', 'pn', 'other'];
 
-class AddVocabForm extends Component {
-  constructor() {
+class EditVocabForm extends Component {
+  constructor({ targetVocab }) {
     super();
-    this.defaulatState = {
-      formVocab: '',
-      formTranslation: '',
-      formPron: '',
-      formUseSpeech: false,
-      formType: '',
-      formTags: [],
+    this.state = {
+      formVocab: targetVocab.vocab,
+      formTranslation: targetVocab.translation,
+      formPron: targetVocab.pron || false,
+      formUseSpeech: targetVocab.useSpeech,
+      formType: targetVocab.type,
+      formTags: targetVocab.tags || [],
     };
-    this.state = { ...this.defaulatState };
-    this.onClickAdd = this.onClickAdd.bind(this);
+    this.onClickSave = this.onClickSave.bind(this);
     this.hideEditPopUp = this.hideEditPopUp.bind(this);
     this.onTagsChange = this.onTagsChange.bind(this);
     this.onTagsInputKeyDown = this.onTagsInputKeyDown.bind(this);
   }
 
-  onClickAdd() {
+  componentWillReceiveProps(nextProps) {
+    if (!nextProps.targetVocab.id === null) return;
+    const { targetVocab } = nextProps;
+    this.setState({
+      formVocab: targetVocab.vocab,
+      formTranslation: targetVocab.translation,
+      formPron: targetVocab.pron || false,
+      formUseSpeech: targetVocab.useSpeech,
+      formType: targetVocab.type,
+      formTags: targetVocab.tags || [],
+    });
+  }
+
+  onClickSave() {
+    const { targetVocab } = this.props;
     const {
       formVocab,
       formTranslation,
@@ -44,21 +75,16 @@ class AddVocabForm extends Component {
       formType,
       formTags,
     } = this.state;
-    const { lessonId } = this.props;
-
-    this.props.addVocab({
-      lessonId,
-      vocab: formVocab,
-      translation: formTranslation,
-      pron: formPron,
-      useSpeech: formUseSpeech,
-      type: formType,
-      tags: formTags,
-    });
-
-    this.resetForm();
+    const formValue = {
+      formVocab,
+      formTranslation,
+      formPron,
+      formUseSpeech,
+      formType,
+      formTags,
+    };
+    this.props.saveVocab(targetVocab, formValue);
     this.hideEditPopUp();
-    return false;
   }
 
   onTagsChange(e) {
@@ -84,10 +110,6 @@ class AddVocabForm extends Component {
     }
   }
 
-  resetForm() {
-    this.setState({ ...this.defaulatState });
-  }
-
   removeChip(chip) {
     this.setState({
       formTags: this.state.formTags.filter(val => val !== chip),
@@ -103,7 +125,6 @@ class AddVocabForm extends Component {
   }
 
   hideEditPopUp() {
-    this.resetForm();
     this.props.hide();
   }
 
@@ -116,20 +137,20 @@ class AddVocabForm extends Component {
       formType,
       formTags,
     } = this.state;
-    const { isPopUp } = this.props;
+    const { targetVocab } = this.props;
     return (
       <Popup
-        header="Add Vocabulary"
-        visible={isPopUp}
+        header="Edit vocab"
+        visible={targetVocab.id !== null}
         onLeftClick={this.hideEditPopUp}
-        onRightClick={this.onClickAdd}
-        rightText="Add"
+        onRightClick={this.onClickSave}
+        rightText="Save"
       >
         <div className="page-inner form-box">
           <ListForm
             onSubmit={(e) => {
               e.preventDefault();
-              this.onClickAdd();
+              this.onClickSave();
               return false;
             }}
           >
@@ -223,7 +244,7 @@ class AddVocabForm extends Component {
   }
 }
 
-AddVocabForm.propTypes = propTypes;
-AddVocabForm.defaultProps = defaultProps;
+EditVocabForm.propTypes = propTypes;
+EditVocabForm.defaultProps = defaultProps;
 
-export default AddVocabForm;
+export default EditVocabForm;

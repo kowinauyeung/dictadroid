@@ -12,7 +12,6 @@ const defaultProps = {
 
 function Vocab(props) {
   const { match } = props;
-  console.log(match);
   return (
     <div className="vocab page">
       <NavBar
