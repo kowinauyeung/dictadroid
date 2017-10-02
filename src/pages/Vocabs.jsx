@@ -25,7 +25,6 @@ const propTypes = {
       translation: PropTypes.string,
       pron: PropTypes.string,
       useSpeech: PropTypes.bool,
-      lesson: PropTypes.string,
       type: PropTypes.string,
       tags: PropTypes.arrayOf(PropTypes.string),
     }),
