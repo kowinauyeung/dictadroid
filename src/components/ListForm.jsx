@@ -19,12 +19,12 @@ ListForm.propTypes = {
 };
 
 export const ListItem = (props) => {
-  const { children, label } = props;
+  const { children, label, className } = props;
   return (
-    <li>
+    <li className={className}>
       <div className="item-content">
         <div className="item-inner">
-          <div className="item-title label">{label}</div>
+          { label !== null ? <div className="item-title label">{label}</div> : '' }
           <div className="item-input">{children}</div>
         </div>
       </div>
@@ -37,7 +37,13 @@ ListItem.propTypes = {
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
   ]).isRequired,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
+  className: PropTypes.string,
+};
+
+ListItem.defaultProps = {
+  label: null,
+  className: '',
 };
 
 export default ListForm;
