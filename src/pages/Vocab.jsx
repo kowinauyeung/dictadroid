@@ -45,6 +45,15 @@ const defaultProps = {
   },
 };
 
+const typeMap = {
+  n: 'Noun',
+  v: 'Verb',
+  adj: 'Adjective',
+  adv: 'Adverb',
+  pn: 'pronoun',
+  other: 'Other',
+};
+
 class Vocab extends Component {
   constructor() {
     super();
@@ -85,7 +94,7 @@ class Vocab extends Component {
                   onClick={() => { Speech.pron(vocab, book.lang); }}
                 />
               </p>
-              <p className="text-center type-display">[{vocab.type}]</p>
+              <p className="text-center type-display">[{typeMap[vocab.type]}]</p>
               <div className="line" />
               <p className="text-center translate-display">{vocab.translation}</p>
               {
