@@ -11,12 +11,11 @@ const propTypes = {
     translation: PropTypes.string,
     pron: PropTypes.string,
     useSpeech: PropTypes.bool,
-    lesson: PropTypes.string,
     type: PropTypes.string,
     tags: PropTypes.arrayOf(PropTypes.string),
   }),
   hide: PropTypes.func.isRequired,
-  saveVocab: PropTypes.func.isRequired,
+  editVocab: PropTypes.func.isRequired,
 };
 
 const defaultProps = {
@@ -26,11 +25,9 @@ const defaultProps = {
     translation: '',
     pron: '',
     useSpeech: false,
-    lesson: '',
     type: '',
     tags: [],
   },
-  saveVocab: (vocab, formValue) => console.log(vocab, formValue),
 };
 
 const vocabTypes = ['n', 'v', 'adj', 'adv', 'pn', 'other'];
@@ -83,12 +80,12 @@ class EditVocabForm extends Component {
       formType,
       formTags,
     };
-    this.props.saveVocab(targetVocab, formValue);
+    this.props.editVocab(targetVocab, formValue);
     this.hideEditPopUp();
   }
 
   onTagsChange(e) {
-    const pattern = /^\s*[a-zA-Z\u4e00-\u9fa5]+\s+$/;
+    const pattern = /^\s*[a-zA-Z\d\u4e00-\u9fa5]+\s+$/;
     let val = e.target.value;
     val = _.trimStart(val);
     if (!pattern.test(val)) return;
@@ -98,7 +95,7 @@ class EditVocabForm extends Component {
 
   onTagsInputKeyDown(e) {
     if (e.keyCode === 13 && e.target.value !== '') {
-      const pattern = /^\s*[a-zA-Z\u4e00-\u9fa5]+$/;
+      const pattern = /^\s*[a-zA-Z\d\u4e00-\u9fa5]+$/;
       const val = e.target.value;
       if (!pattern.test(val)) return;
       this.addChip(val);
@@ -193,10 +190,10 @@ class EditVocabForm extends Component {
               label="Use for speech"
               className={`hidden-field${formPron !== '' ? ' show' : ''}`}
             >
-              <label className="label-switch" htmlFor="form-use-speech">
+              <label className="label-switch" htmlFor={`form-use-speech-${targetVocab.id}`}>
                 <input
                   type="checkbox"
-                  id="form-use-speech"
+                  id={`form-use-speech-${targetVocab.id}`}
                   checked={formUseSpeech}
                   onChange={(e) => { this.setState({ formUseSpeech: e.target.checked }); }}
                 />
