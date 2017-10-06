@@ -10,90 +10,24 @@ import EditableItem from '../components/EditableItem';
 const propTypes = {
   match: PropTypes.shape({ url: PropTypes.string }).isRequired,
   book: PropTypes.shape({
+    id: PropTypes.string,
     title: PropTypes.string,
   }).isRequired,
-  lessons: PropTypes.arrayOf(
+  lessons: PropTypes.objectOf(
     PropTypes.shape({
       id: PropTypes.string,
       title: PropTypes.string,
-      vocabs: PropTypes.array,
+      vocabs: PropTypes.object,
     }),
   ).isRequired,
+  addLesson: PropTypes.func.isRequired,
   removeLesson: PropTypes.func.isRequired,
+  editLesson: PropTypes.func.isRequired,
 };
 
 const defaultProps = {
-  book: {
-    title: '大家的日本語初級I',
-  },
-  lessons: [
-    {
-      id: 'thisisalesson01',
-      title: '第一課',
-      vocabs: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    },
-    {
-      id: 'thisisalesson02',
-      title: '第二課',
-      vocabs: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    },
-    {
-      id: 'thisisalesson03',
-      title: '第三課',
-      vocabs: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    },
-    {
-      id: 'thisisalesson04',
-      title: '第四課',
-      vocabs: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    },
-    {
-      id: 'thisisalesson05',
-      title: '第五課',
-      vocabs: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    },
-    {
-      id: 'thisisalesson06',
-      title: '第六課',
-      vocabs: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    },
-    {
-      id: 'thisisalesson07',
-      title: '第七課',
-      vocabs: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    },
-    {
-      id: 'thisisalesson08',
-      title: '第八課',
-      vocabs: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    },
-    {
-      id: 'thisisalesson09',
-      title: '第九課',
-      vocabs: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    },
-    {
-      id: 'thisisalesson10',
-      title: '第十課',
-      vocabs: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    },
-    {
-      id: 'thisisalesson11',
-      title: '第十一課',
-      vocabs: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    },
-    {
-      id: 'thisisalesson12',
-      title: '第十二課',
-      vocabs: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    },
-    {
-      id: 'thisisalesson13',
-      title: '第十三課',
-      vocabs: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    },
-  ],
-  removeLesson: (lesson) => { console.log(lesson); },
+  book: {},
+  lessons: {},
 };
 
 class Lessons extends Component {
@@ -162,7 +96,7 @@ class Lessons extends Component {
           <i className="icon ion-ios-plus-empty" />
         </div>
         {
-          lessons.length > 0 ?
+          Object.keys(lessons).length > 0 ?
             (
               <div
                 onClick={this.switchOnEditMode}
@@ -186,34 +120,37 @@ class Lessons extends Component {
       <div className="list-block media-list">
         <ul>
           {
-            lessons.map(lesson => (
-              <EditableItem
-                key={lesson.id}
-                showButtons={editMode}
-                onRemoveClick={() => {
-                  this.removeLesson(lesson);
-                }}
-                onEditClick={() => {
-                  this.editLesson(lesson);
-                }}
-              >
-                <Link
-                  to={
-                    editMode ?
-                      `${match.url}`
-                      :
-                      `${match.url}/${lesson.id}/vocabs`
-                  }
+            Object.keys(lessons).map((key) => {
+              const lesson = lessons[key];
+              return (
+                <EditableItem
+                  key={lesson.id}
+                  showButtons={editMode}
+                  onRemoveClick={() => {
+                    this.removeLesson(lesson);
+                  }}
+                  onEditClick={() => {
+                    this.editLesson(lesson);
+                  }}
                 >
-                  <div className="item-title-row">
-                    <div className="item-title">{lesson.title}</div>
-                  </div>
-                  <div className="item-subtitle grey">
-                    {lesson.vocabs.length} vocabs
-                  </div>
-                </Link>
-              </EditableItem>
-            ))
+                  <Link
+                    to={
+                      editMode ?
+                        `${match.url}`
+                        :
+                        `${match.url}/${lesson.id}/vocabs`
+                    }
+                  >
+                    <div className="item-title-row">
+                      <div className="item-title">{lesson.title}</div>
+                    </div>
+                    <div className="item-subtitle grey">
+                      {Object.keys(lesson.vocabs).length} vocabs
+                    </div>
+                  </Link>
+                </EditableItem>
+              );
+            })
           }
         </ul>
       </div>
@@ -230,7 +167,7 @@ class Lessons extends Component {
 
   render() {
     const { isShowAddLessonPopUp, editingLesson } = this.state;
-    const { book, lessons } = this.props;
+    const { book, lessons, addLesson, editLesson } = this.props;
     return (
       <div className="lessons page">
         <NavBar
@@ -239,15 +176,18 @@ class Lessons extends Component {
           right={this.renderRightControl()}
         />
         <div className="page-inner">
-          {lessons.length <= 0 ? (this.renderNoData()) : (this.renderLessonList())}
+          {Object.keys(lessons).length <= 0 ? (this.renderNoData()) : (this.renderLessonList())}
         </div>
         <AddLessonForm
           isPopUp={isShowAddLessonPopUp}
           hide={this.hideAddLessonPopUp}
+          bookId={book.id}
+          addLesson={addLesson}
         />
         <EditLessonForm
           targetLesson={editingLesson}
           hide={this.endEditLesson}
+          editLesson={editLesson}
         />
       </div>
     );

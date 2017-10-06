@@ -11,10 +11,6 @@ const propTypes = {
   lessonId: PropTypes.string.isRequired,
 };
 
-const defaultProps = {
-  addVocab: (a) => { console.log(a); },
-};
-
 const vocabTypes = ['n', 'v', 'adj', 'adv', 'pn', 'other'];
 
 class AddVocabForm extends Component {
@@ -62,7 +58,7 @@ class AddVocabForm extends Component {
   }
 
   onTagsChange(e) {
-    const pattern = /^\s*[a-zA-Z\u4e00-\u9fa5]+\s+$/;
+    const pattern = /^\s*[a-zA-Z\d\u4e00-\u9fa5]+\s+$/;
     let val = e.target.value;
     val = _.trimStart(val);
     if (!pattern.test(val)) return;
@@ -72,7 +68,7 @@ class AddVocabForm extends Component {
 
   onTagsInputKeyDown(e) {
     if (e.keyCode === 13 && e.target.value !== '') {
-      const pattern = /^\s*[a-zA-Z\u4e00-\u9fa5]+$/;
+      const pattern = /^\s*[a-zA-Z\d\u4e00-\u9fa5]+$/;
       const val = e.target.value;
       if (!pattern.test(val)) return;
       this.addChip(val);
@@ -224,6 +220,5 @@ class AddVocabForm extends Component {
 }
 
 AddVocabForm.propTypes = propTypes;
-AddVocabForm.defaultProps = defaultProps;
 
 export default AddVocabForm;
