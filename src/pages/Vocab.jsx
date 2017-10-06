@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Redirect } from 'react-router-dom';
 import NavBar from '../components/NavBar';
 import BackButton from '../components/BackButton';
 import EditVocabForm from '../components/EditVocabForm';
@@ -11,38 +12,29 @@ const propTypes = {
   book: PropTypes.shape({
     title: PropTypes.string,
     lang: PropTypes.string,
-  }).isRequired,
-  lesson: PropTypes.shape({
-    title: PropTypes.string,
-  }).isRequired,
-  vocab: PropTypes.shape({
-    id: PropTypes.string,
-    vocab: PropTypes.string,
-    translation: PropTypes.string,
-    pron: PropTypes.string,
-    useSpeech: PropTypes.bool,
-    type: PropTypes.string,
-    tags: PropTypes.arrayOf(PropTypes.string),
-  }).isRequired,
+  }),
+  lessons: PropTypes.objectOf(
+    PropTypes.shape({
+      title: PropTypes.string,
+    }),
+  ),
+  vocabs: PropTypes.objectOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      vocab: PropTypes.string,
+      translation: PropTypes.string,
+      pron: PropTypes.string,
+      useSpeech: PropTypes.bool,
+      type: PropTypes.string,
+      tags: PropTypes.arrayOf(PropTypes.string),
+    }),
+  ).isRequired,
+  editVocab: PropTypes.func.isRequired,
 };
 
 const defaultProps = {
-  book: {
-    title: '大家的日本語初級I',
-    lang: 'ja',
-  },
-  lesson: {
-    title: '第4課',
-  },
-  vocab: {
-    id: 'thisisvocabid01',
-    vocab: '休みます',
-    translation: '休息',
-    pron: 'やすみます',
-    useSpeech: false,
-    type: 'v',
-    tags: ['Ⅰ類動詞'],
-  },
+  book: null,
+  lessons: null,
 };
 
 const typeMap = {
@@ -73,13 +65,28 @@ class Vocab extends Component {
   }
 
   render() {
-    const { match, vocab, book, lesson } = this.props;
+    const { match, vocabs, book, lessons, editVocab } = this.props;
     const { editMode } = this.state;
+    const lesson = lessons[match.params.lessonId];
+    const vocab = vocabs[match.params.vocabId];
+
+    if (!lesson) {
+      return <Redirect to="/lessons" />;
+    }
+
+    if (!book) {
+      return <Redirect to="/books" />;
+    }
+
+    if (!vocab) {
+      return <Redirect to={`/lessons/${match.params.lessonId}/vocabs`} />;
+    }
+
     return (
       <div className="vocab page">
         <NavBar
           pageName={`${book.title} - ${lesson.title}`}
-          left={<BackButton to={`/lessons/${match.params.lessionId}/vocabs`} text="back" />}
+          left={<BackButton to={`/lessons/${lesson.id}/vocabs`} text="back" />}
           right={<div onClick={this.startEditVocab} role="presentation">Edit</div>}
         />
         <div className="page-inner">
@@ -140,6 +147,7 @@ class Vocab extends Component {
         <EditVocabForm
           targetVocab={editMode ? vocab : undefined}
           hide={this.endEditVocab}
+          editVocab={editVocab}
         />
       </div>
     );

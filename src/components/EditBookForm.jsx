@@ -11,7 +11,7 @@ const propTypes = {
     transFrm: PropTypes.string,
   }),
   hide: PropTypes.func.isRequired,
-  saveBook: PropTypes.func.isRequired,
+  editBook: PropTypes.func.isRequired,
 };
 
 const defaultProps = {
@@ -20,9 +20,6 @@ const defaultProps = {
     title: '',
     lang: '',
     transFrm: '',
-  },
-  saveBook: (a, b, c, d) => {
-    console.log(a, b, c, d);
   },
 };
 
@@ -51,7 +48,7 @@ class EditBookForm extends Component {
   onClickSave() {
     const { targetBook } = this.props;
     const { formTitle, formLang, formTranslateFrom } = this.state;
-    this.props.saveBook(targetBook, formTitle, formLang, formTranslateFrom);
+    this.props.editBook(targetBook, formTitle, formLang, formTranslateFrom);
     this.hideEditPopUp();
   }
 

@@ -8,92 +8,34 @@ import EditBookForm from '../components/EditBookForm';
 import { Lang } from '../utils/Dictionary';
 
 const propTypes = {
-  books: PropTypes.arrayOf(
+  activeBookId: PropTypes.string,
+  books: PropTypes.objectOf(
     PropTypes.shape({
       id: PropTypes.string,
       title: PropTypes.string,
       lang: PropTypes.string,
       transFrm: PropTypes.string,
-      lessons: PropTypes.array,
+      lessons: PropTypes.object,
     }),
   ).isRequired,
+  addBook: PropTypes.func.isRequired,
   removeBook: PropTypes.func.isRequired,
-  activeBook: PropTypes.string.isRequired,
+  editBook: PropTypes.func.isRequired,
   setActiveBook: PropTypes.func.isRequired,
 };
 
 const defaultProps = {
-  books: [
-    {
-      id: 'thisisanid01',
-      title: '大家的日本語初級I',
-      lang: 'ja',
-      transFrm: 'zh',
-      lessons: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
-    },
-    {
-      id: 'thisisanid02',
-      title: '大家的日本語初級II',
-      lang: 'ja',
-      transFrm: 'zh',
-      lessons: [1, 2, 3, 4, 5],
-    },
-    {
-      id: 'thisisanid03',
-      title: '大家的日本語進階I',
-      lang: 'ja',
-      transFrm: 'zh',
-      lessons: [1, 2, 3, 4, 5, 14, 15, 16],
-    },
-    {
-      id: 'thisisanid04',
-      title: '大家的日本語進階II',
-      lang: 'ja',
-      transFrm: 'zh',
-      lessons: [1, 2, 3, 4, 5, 6, 6, 6, 6, 6, 6],
-    },
-    {
-      id: 'thisisanid05',
-      title: '大家的日本語初級I',
-      lang: 'ja',
-      transFrm: 'zh',
-      lessons: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
-    },
-    {
-      id: 'thisisanid06',
-      title: '大家的日本語初級II',
-      lang: 'ja',
-      transFrm: 'zh',
-      lessons: [1, 2, 3, 4, 5],
-    },
-    {
-      id: 'thisisanid07',
-      title: '大家的日本語進階I',
-      lang: 'ja',
-      transFrm: 'zh',
-      lessons: [1, 2, 3, 4, 5, 14, 15, 16],
-    },
-    {
-      id: 'thisisanid08',
-      title: '大家的日本語進階II',
-      lang: 'ja',
-      transFrm: 'zh',
-      lessons: [1, 2, 3, 4, 5, 6, 6, 6, 6, 6, 6],
-    },
-  ],
-  removeBook: (book) => { console.log(book); },
-  activeBook: 'thisisanid03',
-  setActiveBook: (bookId) => { console.log(bookId); },
+  activeBookId: null,
+  books: {},
 };
 
 class Books extends Component {
-  constructor({ activeBook }) {
+  constructor() {
     super();
     this.state = {
       editMode: false,
       isShowAddBookPopUp: false,
       editingBook: undefined,
-      selectedBook: activeBook,
     };
     this.noDataMsg = 'You do not have any book yet.';
     this.switchOnEditMode = this.switchOnEditMode.bind(this);
@@ -107,7 +49,6 @@ class Books extends Component {
   setSelectedBook(id) {
     if (this.state.editMode) return;
     this.props.setActiveBook(id);
-    this.setState({ selectedBook: id });
   }
 
   editBook(targetBook) {
@@ -159,7 +100,7 @@ class Books extends Component {
           <i className="icon ion-ios-plus-empty" />
         </div>
         {
-          books.length > 0 ?
+          Object.keys(books).length > 0 ?
             (
               <div
                 onClick={this.switchOnEditMode}
@@ -177,53 +118,64 @@ class Books extends Component {
   }
 
   renderBookList() {
-    const { editMode, selectedBook } = this.state;
-    const { books } = this.props;
+    const { editMode } = this.state;
+    const { books, activeBookId } = this.props;
     return (
       <div className="list-block media-list">
+        {
+          activeBookId ?
+            ''
+            :
+            (
+              <div className="content-block-title">Please select a book to continue.</div>
+            )
+        }
         <ul>
           {
-            books.map(book => (
-              <EditableItem
-                key={book.id}
-                showButtons={editMode}
-                onRemoveClick={() => {
-                  this.removeBook(book);
-                }}
-                onEditClick={() => {
-                  this.editBook(book);
-                }}
-              >
-                <label className="label-radio" htmlFor={`book-item-${book.id}`}>
-                  <input
-                    id={`book-item-${book.id}`}
-                    type="radio"
-                    name="activeBook"
-                    value={book.id}
-                    checked={(selectedBook === book.id)}
-                    onChange={(e) => {
-                      this.setSelectedBook(e.target.value);
-                    }}
-                  />
-                  {
-                    !editMode ?
-                      (
-                        <div className="check-box">
-                          <i className="icon ion-ios-checkmark-empty" />
-                        </div>
-                      )
-                      :
-                      ''
-                  }
-                  <div className="item-title-row">
-                    <div className="item-title">{book.title}</div>
-                  </div>
-                  <div className="item-subtitle grey">
-                    {Lang[book.lang]}, {book.lessons.length} lessons
-                  </div>
-                </label>
-              </EditableItem>
-            ))
+            Object.keys(books).map((key) => {
+              const book = books[key];
+              return (
+                <EditableItem
+                  key={book.id}
+                  showButtons={editMode}
+                  onRemoveClick={() => {
+                    this.removeBook(book);
+                  }}
+                  onEditClick={() => {
+                    this.editBook(book);
+                  }}
+                >
+                  <label className="label-radio" htmlFor={`book-item-${book.id}`}>
+                    <input
+                      id={`book-item-${book.id}`}
+                      type="radio"
+                      name="activeBook"
+                      value={book.id}
+                      checked={(activeBookId === book.id)}
+                      onChange={(e) => {
+                        this.setSelectedBook(e.target.value);
+                      }}
+                    />
+                    {
+                      !editMode ?
+                        (
+                          <div className="check-box">
+                            <i className="icon ion-ios-checkmark-empty" />
+                          </div>
+                        )
+                        :
+                        ''
+                    }
+                    <div className="item-title-row">
+                      <div className="item-title">{book.title}</div>
+                    </div>
+                    <div className="item-subtitle grey">
+                      {Lang[book.lang]}, {Object.keys(book.lessons).length} lessons
+                    </div>
+                  </label>
+                </EditableItem>
+              );
+            })
           }
         </ul>
       </div>
@@ -240,7 +192,7 @@ class Books extends Component {
 
   render() {
     const { isShowAddBookPopUp, editingBook } = this.state;
-    const { books } = this.props;
+    const { books, editBook, addBook } = this.props;
     return (
       <div className="books page">
         <NavBar
@@ -249,15 +201,17 @@ class Books extends Component {
           right={this.renderRightControl()}
         />
         <div className="page-inner">
-          {books.length <= 0 ? (this.renderNoData()) : (this.renderBookList())}
+          {Object.keys(books).length <= 0 ? (this.renderNoData()) : (this.renderBookList())}
         </div>
         <AddBookForm
           isPopUp={isShowAddBookPopUp}
           hide={this.hideAddBookPopUp}
+          addBook={addBook}
         />
         <EditBookForm
           targetBook={editingBook}
           hide={this.endEditBook}
+          editBook={editBook}
         />
       </div>
     );

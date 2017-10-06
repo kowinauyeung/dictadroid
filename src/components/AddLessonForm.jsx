@@ -7,10 +7,7 @@ const propTypes = {
   isPopUp: PropTypes.bool.isRequired,
   hide: PropTypes.func.isRequired,
   addLesson: PropTypes.func.isRequired,
-};
-
-const defaultProps = {
-  addLesson: (a) => { console.log(a); },
+  bookId: PropTypes.string.isRequired,
 };
 
 class AddLessonForm extends Component {
@@ -25,7 +22,8 @@ class AddLessonForm extends Component {
 
   onClickAdd() {
     const { formTitle } = this.state;
-    this.props.addLesson(formTitle);
+    const { bookId } = this.props;
+    this.props.addLesson(bookId, formTitle);
     this.resetForm();
     this.hideEditPopUp();
     return false;
@@ -78,6 +76,5 @@ class AddLessonForm extends Component {
 }
 
 AddLessonForm.propTypes = propTypes;
-AddLessonForm.defaultProps = defaultProps;
 
 export default AddLessonForm;
