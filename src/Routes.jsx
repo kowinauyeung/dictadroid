@@ -9,7 +9,7 @@ import Vocab from './containers/VocabContainer';
 import History from './pages/History';
 import Dictation from './pages/Dictation';
 import Translation from './pages/Translation';
-import Settings from './pages/Settings';
+import Settings from './containers/SettingsContainer';
 
 function Routes() {
   return (

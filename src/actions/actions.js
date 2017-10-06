@@ -1,7 +1,8 @@
 import actionTypes from './actionTypes';
+import firebase, { database } from '../utils/Firebase';
+
 
 // user action
-
 export const setActiveBook = activeBookId => ({
   type: actionTypes.SET_ACTIVE_BOOK,
   activeBookId,
@@ -21,6 +22,79 @@ export const login = user => ({
 export const logout = () => ({
   type: actionTypes.LOGOUT,
 });
+
+export const loginWithGoogle = () => (
+  () => {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    firebase.auth().signInWithPopup(provider);
+  }
+);
+
+export const loginWithFacebook = () => (
+  () => {
+    const provider = new firebase.auth.FacebookAuthProvider();
+    firebase.auth().signInWithPopup(provider);
+  }
+);
+
+export const loginWithTwitter = () => (
+  () => {
+    const provider = new firebase.auth.TwitterAuthProvider();
+    firebase.auth().signInWithPopup(provider);
+  }
+);
+
+export const loginWithGithub = () => (
+  () => {
+    const provider = new firebase.auth.GithubAuthProvider();
+    firebase.auth().signInWithPopup(provider);
+  }
+);
+
+export const logoutOfFirebase = () => (
+  () => {
+    firebase.auth().signOut();
+  }
+);
+
+export const showLoading = () => ({
+  type: actionTypes.SHOW_LOADING,
+});
+
+export const hideLoading = () => ({
+  type: actionTypes.HIDE_LOADING,
+});
+
+export const initApp = () => (
+  (dispatch) => {
+    dispatch(showLoading());
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        const userRef = `user/${user.uid}`;
+        const userObj = {
+          id: user.uid,
+          displayName: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+          activeBookId: null,
+        };
+        database.ref(userRef)
+          .once('value')
+          .then((snapshot) => {
+            if (snapshot.val()) {
+              userObj.activeBookId = snapshot.activeBookId || null;
+            }
+            database.ref(userRef).set(userObj);
+            dispatch(login(userObj));
+            dispatch(hideLoading());
+          });
+      } else {
+        dispatch(logout());
+        dispatch(hideLoading());
+      }
+    });
+  }
+);
 
 
 // books action

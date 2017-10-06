@@ -1,13 +1,13 @@
 import { connect } from 'react-redux';
-import LoginForm from './components/LoginForm';
+import LoadingOverlay from '../components/LoadingOverlay';
 
 const mapStateToProps = state => ({
-  isLogin: state.user.isLogin,
+  visible: state.app.isLoading,
 });
 
 const Auth = connect(
   mapStateToProps,
   null,
-)(LoginForm);
+)(LoadingOverlay);
 
 export default Auth;
