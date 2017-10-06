@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Redirect } from 'react-router-dom';
 import NavBar from '../components/NavBar';
 import BackButton from '../components/BackButton';
 import EditVocabForm from '../components/EditVocabForm';
@@ -11,12 +12,12 @@ const propTypes = {
   book: PropTypes.shape({
     title: PropTypes.string,
     lang: PropTypes.string,
-  }).isRequired,
+  }),
   lessons: PropTypes.objectOf(
     PropTypes.shape({
       title: PropTypes.string,
     }),
-  ).isRequired,
+  ),
   vocabs: PropTypes.objectOf(
     PropTypes.shape({
       id: PropTypes.string,
@@ -29,6 +30,11 @@ const propTypes = {
     }),
   ).isRequired,
   editVocab: PropTypes.func.isRequired,
+};
+
+const defaultProps = {
+  book: null,
+  lessons: null,
 };
 
 const typeMap = {
@@ -63,6 +69,19 @@ class Vocab extends Component {
     const { editMode } = this.state;
     const lesson = lessons[match.params.lessonId];
     const vocab = vocabs[match.params.vocabId];
+
+    if (!lesson) {
+      return <Redirect to="/lessons" />;
+    }
+
+    if (!book) {
+      return <Redirect to="/books" />;
+    }
+
+    if (!vocab) {
+      return <Redirect to={`/lessons/${match.params.lessonId}/vocabs`} />;
+    }
+
     return (
       <div className="vocab page">
         <NavBar
@@ -136,5 +155,6 @@ class Vocab extends Component {
 }
 
 Vocab.propTypes = propTypes;
+Vocab.defaultProps = defaultProps;
 
 export default Vocab;

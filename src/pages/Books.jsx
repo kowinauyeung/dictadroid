@@ -8,7 +8,7 @@ import EditBookForm from '../components/EditBookForm';
 import { Lang } from '../utils/Dictionary';
 
 const propTypes = {
-  activeBookId: PropTypes.string.isRequired,
+  activeBookId: PropTypes.string,
   books: PropTypes.objectOf(
     PropTypes.shape({
       id: PropTypes.string,
@@ -122,6 +122,14 @@ class Books extends Component {
     const { books, activeBookId } = this.props;
     return (
       <div className="list-block media-list">
+        {
+          activeBookId ?
+            ''
+            :
+            (
+              <div className="content-block-title">Please select a book to continue.</div>
+            )
+        }
         <ul>
           {
             Object.keys(books).map((key) => {
@@ -193,7 +201,7 @@ class Books extends Component {
           right={this.renderRightControl()}
         />
         <div className="page-inner">
-          {books.length <= 0 ? (this.renderNoData()) : (this.renderBookList())}
+          {Object.keys(books).length <= 0 ? (this.renderNoData()) : (this.renderBookList())}
         </div>
         <AddBookForm
           isPopUp={isShowAddBookPopUp}

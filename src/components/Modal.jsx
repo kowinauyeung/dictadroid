@@ -95,8 +95,8 @@ Popup.defaultProps = {
   onLeftClick: null,
   onRightClick: null,
   rightText: 'OK',
-  isHideLeft: true,
-  isHideRight: true,
+  isHideLeft: false,
+  isHideRight: false,
 };
 
 export default Modal;

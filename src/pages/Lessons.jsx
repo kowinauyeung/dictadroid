@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import NavBar from '../components/NavBar';
 import BackButton from '../components/BackButton';
 import AddLessonForm from '../components/AddLessonForm';
@@ -12,7 +12,7 @@ const propTypes = {
   book: PropTypes.shape({
     id: PropTypes.string,
     title: PropTypes.string,
-  }).isRequired,
+  }),
   lessons: PropTypes.objectOf(
     PropTypes.shape({
       id: PropTypes.string,
@@ -26,8 +26,8 @@ const propTypes = {
 };
 
 const defaultProps = {
-  book: {},
-  lessons: {},
+  book: null,
+  lessons: null,
 };
 
 class Lessons extends Component {
@@ -168,6 +168,11 @@ class Lessons extends Component {
   render() {
     const { isShowAddLessonPopUp, editingLesson } = this.state;
     const { book, lessons, addLesson, editLesson } = this.props;
+
+    if (!book) {
+      return <Redirect to="/books" />;
+    }
+
     return (
       <div className="lessons page">
         <NavBar

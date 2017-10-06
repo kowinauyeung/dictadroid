@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import EditBookForm from '../components/EditBookForm';
 import './Home.css';
 
 const propTypes = {
-  activeBookId: PropTypes.string.isRequired,
+  activeBookId: PropTypes.string,
   books: PropTypes.objectOf(
     PropTypes.shape({
       id: PropTypes.string,
@@ -41,13 +41,11 @@ class Home extends Component {
 
   render() {
     const { activeBookId, books, editBook } = this.props;
-    const activeBook = activeBookId ? books[activeBookId] : null;
     const { isShowEditPopUp } = this.state;
+    const activeBook = books[activeBookId] || null;
 
     if (!activeBook) {
-      return (
-        <div>redirect to page select</div>
-      );
+      return <Redirect to="/books" />;
     }
 
     return (

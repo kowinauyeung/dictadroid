@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import NavBar from '../components/NavBar';
 import BackButton from '../components/BackButton';
 import AddVocabForm from '../components/AddVocabForm';
@@ -13,7 +13,7 @@ const propTypes = {
   book: PropTypes.shape({
     lang: PropTypes.string,
     transFrm: PropTypes.string,
-  }).isRequired,
+  }),
   lessons: PropTypes.objectOf(
     PropTypes.shape({
       id: PropTypes.string,
@@ -34,6 +34,11 @@ const propTypes = {
   addVocab: PropTypes.func.isRequired,
   removeVocab: PropTypes.func.isRequired,
   editVocab: PropTypes.func.isRequired,
+};
+
+const defaultProps = {
+  book: null,
+  lessons: null,
 };
 
 class Vocabs extends Component {
@@ -186,6 +191,11 @@ class Vocabs extends Component {
     const { isShowAddVocabPopUp, editingVocab } = this.state;
     const { lessons, vocabs, match, addVocab, editVocab } = this.props;
     const lessonId = match.params.lessonId;
+
+    if (!lessons[lessonId]) {
+      return <Redirect to="/lessons" />;
+    }
+
     return (
       <div className="vocabs page">
         <NavBar
@@ -213,5 +223,6 @@ class Vocabs extends Component {
 }
 
 Vocabs.propTypes = propTypes;
+Vocabs.defaultProps = defaultProps;
 
 export default Vocabs;
