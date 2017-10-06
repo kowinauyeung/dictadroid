@@ -16,6 +16,16 @@ const user = (state = initState, action) => {
         ...state,
         activeBookId: action.activeBookId,
       };
+
+    case actionTypes.LOGIN:
+      return {
+        isLogin: true,
+        ...action.user,
+      };
+
+    case actionTypes.LOGOUT:
+      return initState;
+
     default:
       return state;
   }

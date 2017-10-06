@@ -7,6 +7,21 @@ export const setActiveBook = activeBookId => ({
   activeBookId,
 });
 
+export const login = user => ({
+  type: actionTypes.LOGIN,
+  user: {
+    id: user.id,
+    displayName: user.displayName,
+    email: user.email,
+    photoURL: user.photoURL,
+    activeBookId: user.activeBookId,
+  },
+});
+
+export const logout = () => ({
+  type: actionTypes.LOGOUT,
+});
+
 
 // books action
 

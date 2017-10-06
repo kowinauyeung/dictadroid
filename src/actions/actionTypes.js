@@ -1,5 +1,7 @@
 const actionTypes = {
   SET_ACTIVE_BOOK: 'SET_ACTIVE_BOOK',
+  LOGIN: 'LOGIN',
+  LOGOUT: 'LOGOUT',
 
   ADD_BOOK: 'ADD_BOOK',
   REMOVE_BOOK: 'REMOVE_BOOK',

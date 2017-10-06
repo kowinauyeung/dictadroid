@@ -6,6 +6,7 @@
   background: #fff;
   border: 0;
   font-weight: bold;
+  user-select: none;
 }
 
 .button.login-with-google {
