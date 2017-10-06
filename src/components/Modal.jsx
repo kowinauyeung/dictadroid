@@ -56,7 +56,7 @@ export class Popup extends Component {
   }
 
   render() {
-    const { children, header, visible } = this.props;
+    const { children, header, visible, isHideLeft, isHideRight } = this.props;
     const popUpCssClass = ClassNames('popup', { show: visible });
     const popUpBoxCssClass = ClassNames('popup-box', { 'modal-in': visible });
     return (
@@ -67,8 +67,8 @@ export class Popup extends Component {
             <div className="page without-tabbar">
               <NavBar
                 pageName={header}
-                left={this.renderLeftButton()}
-                right={this.renderRightButton()}
+                left={!isHideLeft ? this.renderLeftButton() : null}
+                right={!isHideRight ? this.renderRightButton() : null}
               />
               {children}
             </div>
@@ -86,6 +86,8 @@ Popup.propTypes = {
   onLeftClick: PropTypes.func,
   onRightClick: PropTypes.func,
   rightText: PropTypes.string,
+  isHideLeft: PropTypes.bool,
+  isHideRight: PropTypes.bool,
 };
 
 Popup.defaultProps = {
@@ -93,6 +95,8 @@ Popup.defaultProps = {
   onLeftClick: null,
   onRightClick: null,
   rightText: 'OK',
+  isHideLeft: true,
+  isHideRight: true,
 };
 
 export default Modal;

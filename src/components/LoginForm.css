@@ -1,0 +1,44 @@
+.button.button-login {
+  color: #fff;
+  padding: 10px;
+  height: auto;
+  line-height: 26px;
+  background: #fff;
+  border: 0;
+  font-weight: bold;
+}
+
+.button.login-with-google {
+  background-color: #4285F4;
+}
+
+.button.login-with-facebook {
+  background-color: #3B65C4;
+}
+
+.button.login-with-twitter {
+  background-color: #55ACEE;
+}
+
+.button.login-with-github {
+  background-color: #444444;
+}
+
+.button-login .icon {
+  font-size: 25px;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+.button-login .icon:before {
+  line-height: inherit;
+}
+
+.page-inner.login-bg {
+  background: #ef3c6c;
+}
+
+.logo {
+  height: 30vh;
+  display: block;
+  margin: 0 auto;
+}

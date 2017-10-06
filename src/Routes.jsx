@@ -10,7 +10,6 @@ import History from './pages/History';
 import Dictation from './pages/Dictation';
 import Translation from './pages/Translation';
 import Settings from './pages/Settings';
-import Login from './pages/Login';
 
 function Routes() {
   return (
@@ -25,7 +24,6 @@ function Routes() {
         <Route path="/dictation" component={Dictation} />
         <Route path="/translation" component={Translation} />
         <Route path="/settings" component={Settings} />
-        <Route path="/login" component={Login} />
       </Switch>
     </div>
   );
