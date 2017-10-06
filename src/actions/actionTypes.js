@@ -1,4 +1,5 @@
 const actionTypes = {
+  INIT_APP: 'INIT_APP',
   SET_ACTIVE_BOOK: 'SET_ACTIVE_BOOK',
   LOGIN: 'LOGIN',
   LOGOUT: 'LOGOUT',
