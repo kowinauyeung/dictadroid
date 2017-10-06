@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { BrowserRouter } from 'react-router-dom';
 import Routes from '../Routes';
 import LoginFormContainer from '../containers/LoginFormContainer';
+import LoadingOverlayContainer from '../containers/LoadingOverlayContainer';
 import TabBar from './TabBar';
 
 const propTypes = {
@@ -21,6 +22,7 @@ class Root extends Component {
           <Routes />
           <TabBar />
           <LoginFormContainer />
+          <LoadingOverlayContainer />
         </div>
       </BrowserRouter>
     );

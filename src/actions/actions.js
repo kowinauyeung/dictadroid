@@ -57,9 +57,17 @@ export const logoutOfFirebase = () => (
   }
 );
 
+export const showLoading = () => ({
+  type: actionTypes.SHOW_LOADING,
+});
+
+export const hideLoading = () => ({
+  type: actionTypes.HIDE_LOADING,
+});
+
 export const initApp = () => (
   (dispatch) => {
-    // TODO: Add open loading spin
+    dispatch(showLoading());
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         const userRef = `user/${user.uid}`;
@@ -78,11 +86,11 @@ export const initApp = () => (
             }
             database.ref(userRef).set(userObj);
             dispatch(login(userObj));
-            // TODO Add close loading spin
+            dispatch(hideLoading());
           });
       } else {
         dispatch(logout());
-        // TODO Add close loading spin
+        dispatch(hideLoading());
       }
     });
   }

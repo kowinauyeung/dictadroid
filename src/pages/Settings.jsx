@@ -18,7 +18,7 @@ function Settings(props) {
     <div className="settings page without-header">
       <div className="page-inner">
         <div className="profile-block">
-          <img className="avatar" src={photoURL} alt={displayName} />
+          {photoURL ? <img className="avatar" src={photoURL} alt={displayName} /> : ''}
           <h2 className="text-center">{displayName}</h2>
           <p className="text-center text-alpha">{email}</p>
         </div>
