@@ -1,13 +1,29 @@
 import actionTypes from './actionTypes';
 import firebase, { database } from '../utils/Firebase';
 
+let uid = null;
 
-// user action
-export const setActiveBook = activeBookId => ({
-  type: actionTypes.SET_ACTIVE_BOOK,
-  activeBookId,
+// app actions 
+
+export const showLoading = () => ({
+  type: actionTypes.SHOW_LOADING,
 });
 
+export const hideLoading = () => ({
+  type: actionTypes.HIDE_LOADING,
+});
+
+export const isFetchingBook = isFetching => ({
+  type: actionTypes.IS_FETCHING_BOOKS,
+  isFetching,
+});
+
+export const getAppReady = () => ({
+  type: actionTypes.GET_APP_READY,
+});
+
+
+// user actions
 export const login = user => ({
   type: actionTypes.LOGIN,
   user: {
@@ -19,16 +35,21 @@ export const login = user => ({
   },
 });
 
+export const setActiveBook = activeBookId => (
+  (dispatch) => {
+    database.ref(`users/${uid}/activeBookId`)
+      .set(activeBookId)
+      .then(() => {
+        dispatch({
+          type: actionTypes.SET_ACTIVE_BOOK,
+          activeBookId,
+        });
+      });
+  }
+);
+
 export const logout = () => ({
   type: actionTypes.LOGOUT,
-});
-
-export const showLoading = () => ({
-  type: actionTypes.SHOW_LOADING,
-});
-
-export const hideLoading = () => ({
-  type: actionTypes.HIDE_LOADING,
 });
 
 export const loginWithGoogle = () => (
@@ -70,57 +91,70 @@ export const logoutOfFirebase = () => (
   }
 );
 
-export const initApp = () => (
-  (dispatch) => {
-    dispatch(showLoading());
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        const userRef = `user/${user.uid}`;
-        const userObj = {
-          id: user.uid,
-          displayName: user.displayName,
-          email: user.email,
-          photoURL: user.photoURL,
-          activeBookId: null,
-        };
-        database.ref(userRef)
-          .once('value')
-          .then((snapshot) => {
-            if (snapshot.val()) {
-              userObj.activeBookId = snapshot.activeBookId || null;
-            }
-            database.ref(userRef).set(userObj);
-            dispatch(login(userObj));
-            dispatch(hideLoading());
-          });
-      } else {
-        dispatch(logout());
-        dispatch(hideLoading());
-      }
+
+// books action
+
+export const setBooks = books => ({
+  type: actionTypes.SET_BOOKS,
+  books,
+});
+
+let isAddingBook = false;
+export const addBook = book => (
+  () => {
+    if (isAddingBook) return;
+    isAddingBook = true;
+    const newBookRef = database.ref(`books/${uid}`).push();
+    newBookRef.set({
+      id: newBookRef.key,
+      ...book,
+    }).then(() => {
+      isAddingBook = false;
     });
   }
 );
 
+let isDeletingBook = false;
+export const removeBook = targetBook => (
+  () => {
+    if (isDeletingBook) return;
+    isDeletingBook = true;
+    const updates = {};
+    updates[`/books/${uid}/${targetBook.id}`] = null;
+    database.ref()
+      .update(updates)
+      .then(() => {
+        isDeletingBook = false;
+      });
+  }
+);
 
-// books action
+let isEditingBook = false;
 
-export const addBook = book => ({
-  type: actionTypes.ADD_BOOK,
-  book,
-});
+export const editBook = (targetBook, title, lang, transFrm) => (
+  () => {
+    if (isEditingBook) return;
+    isEditingBook = true;
+    database.ref(`books/${uid}/${targetBook.id}`)
+      .set({ id: targetBook.id, title, lang, transFrm })
+      .then(() => {
+        isEditingBook = false;
+      });
+  }
+);
 
-export const removeBook = targetBook => ({
-  type: actionTypes.REMOVE_BOOK,
-  targetBook,
-});
-
-export const editBook = (targetBook, title, lang, transFrm) => ({
-  type: actionTypes.EDIT_BOOK,
-  targetBook,
-  title,
-  lang,
-  transFrm,
-});
+export const listenToBooks = () => (
+  (dispatch) => {
+    dispatch(isFetchingBook(true));
+    database.ref(`books/${uid}`)
+      .on('value', (snapshot) => {
+        const val = snapshot.val() || {};
+        dispatch(setBooks(val));
+        dispatch(isFetchingBook(false));
+        dispatch(getAppReady());
+      });
+  }
+);
 
 
 // lessons action
@@ -166,3 +200,37 @@ export const editVocab = (targetVocab, vocab) => ({
   vocabType: vocab.formType,
   tags: vocab.formTags,
 });
+
+export const initApp = () => (
+  (dispatch) => {
+    dispatch(showLoading());
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        const userRef = `users/${user.uid}`;
+        const userObj = {
+          id: user.uid,
+          displayName: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+          activeBookId: null,
+        };
+        database.ref(userRef)
+          .once('value')
+          .then((snapshot) => {
+            if (snapshot.val()) {
+              userObj.activeBookId = snapshot.val().activeBookId || null;
+            }
+            uid = userObj.id;
+            database.ref(userRef).set(userObj);
+            dispatch(login(userObj));
+            dispatch(hideLoading());
+            dispatch(listenToBooks());
+          });
+      } else {
+        uid = null;
+        dispatch(logout());
+        dispatch(hideLoading());
+      }
+    });
+  }
+);
