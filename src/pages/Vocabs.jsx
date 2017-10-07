@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import NavBar from '../components/NavBar';
 import BackButton from '../components/BackButton';
 import AddVocabForm from '../components/AddVocabForm';
@@ -13,191 +13,32 @@ const propTypes = {
   book: PropTypes.shape({
     lang: PropTypes.string,
     transFrm: PropTypes.string,
-  }).isRequired,
-  lesson: PropTypes.shape({
-    id: PropTypes.string,
-    title: PropTypes.string,
-  }).isRequired,
-  vocabs: PropTypes.arrayOf(
+  }),
+  lessons: PropTypes.objectOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      title: PropTypes.string,
+    }),
+  ).isRequired,
+  vocabs: PropTypes.objectOf(
     PropTypes.shape({
       id: PropTypes.string,
       vocab: PropTypes.string,
       translation: PropTypes.string,
       pron: PropTypes.string,
       useSpeech: PropTypes.bool,
-      lesson: PropTypes.string,
       type: PropTypes.string,
       tags: PropTypes.arrayOf(PropTypes.string),
     }),
   ).isRequired,
+  addVocab: PropTypes.func.isRequired,
   removeVocab: PropTypes.func.isRequired,
+  editVocab: PropTypes.func.isRequired,
 };
 
 const defaultProps = {
-  book: {
-    id: 'thisisanid01',
-    title: '大家的日本語初級I',
-    lang: 'ja',
-    transFrm: 'zh',
-  },
-  lesson: {
-    id: 'thisisalesson01',
-    title: '第一課',
-  },
-  vocabs: [
-    {
-      id: 'thisisavocab01',
-      vocab: '開きます',
-      translation: '開',
-      pron: 'あきます',
-      useSpeech: true,
-      lesson: 'thisisalesson01',
-      type: 'v',
-      tags: ['他動詞', '一段動詞'],
-    },
-    {
-      id: 'thisisavocab02',
-      vocab: '始まる',
-      translation: '開始',
-      pron: 'はじまる',
-      useSpeech: false,
-      lesson: 'thisisalesson01',
-      type: 'v',
-      tags: ['自動詞'],
-    },
-    {
-      id: 'thisisavocab03',
-      vocab: 'そのまま',
-      translation: '就這樣',
-      pron: '',
-      useSpeech: false,
-      lesson: 'thisisalesson01',
-      type: 'n',
-      tags: ['名詞'],
-    },
-    {
-      id: 'thisisavocab04',
-      vocab: 'パーティー',
-      translation: 'Party',
-      pron: '',
-      useSpeech: false,
-      lesson: 'thisisalesson01',
-      type: 'n',
-      tags: [],
-    },
-    {
-      id: 'thisisavocab05',
-      vocab: '拭く',
-      translation: '擦',
-      pron: 'ふく',
-      useSpeech: false,
-      lesson: 'thisisalesson01',
-      type: 'v',
-      tags: ['名詞', '名詞'],
-    },
-    {
-      id: 'thisisavocab06',
-      vocab: '思う',
-      translation: '想',
-      pron: 'おもう',
-      useSpeech: false,
-      lesson: 'thisisalesson01',
-      type: 'v',
-      tags: ['他動詞', '一段動詞'],
-    },
-    {
-      id: 'thisisavocab07',
-      vocab: '貼ります',
-      translation: '貼',
-      pron: 'はります',
-      useSpeech: false,
-      lesson: 'thisisalesson01',
-      type: 'v',
-      tags: ['他動詞', '一段動詞'],
-    },
-    {
-      id: 'thisisavocab08',
-      vocab: '掛けます',
-      translation: '掛',
-      pron: 'かけます',
-      useSpeech: false,
-      lesson: 'thisisalesson01',
-      type: 'v',
-      tags: ['他動詞', '一段動詞'],
-    },
-    {
-      id: 'thisisavocab09',
-      vocab: '並べます',
-      translation: '並排',
-      pron: 'ならべます',
-      useSpeech: false,
-      lesson: 'thisisalesson01',
-      type: 'v',
-      tags: ['他動詞', '一段動詞'],
-    },
-    {
-      id: 'thisisavocab10',
-      vocab: '植えます',
-      translation: '種植',
-      pron: 'うえます',
-      useSpeech: false,
-      lesson: 'thisisalesson01',
-      type: 'v',
-      tags: ['他動詞', '一段動詞'],
-    },
-
-    {
-      id: 'thisisavocab11',
-      vocab: '予習します',
-      translation: '預習',
-      pron: 'よしゅうします',
-      useSpeech: false,
-      lesson: 'thisisalesson01',
-      type: 'v',
-      tags: ['他動詞', '一段動詞'],
-    },
-    {
-      id: 'thisisavocab12',
-      vocab: '授業',
-      translation: '授課',
-      pron: 'じゅぎょう',
-      useSpeech: false,
-      lesson: 'thisisalesson01',
-      type: 'n',
-      tags: ['他動詞', '一段動詞'],
-    },
-    {
-      id: 'thisisavocab13',
-      vocab: '花瓶',
-      translation: '花瓶',
-      pron: 'かびん',
-      useSpeech: false,
-      lesson: 'thisisalesson01',
-      type: 'n',
-      tags: ['他動詞'],
-    },
-    {
-      id: 'thisisavocab14',
-      vocab: '非常袋',
-      translation: '避難袋',
-      pron: 'ひじょうぶくろ',
-      useSpeech: false,
-      lesson: 'thisisalesson01',
-      type: 'v',
-      tags: ['他動詞', '一段動詞'],
-    },
-    {
-      id: 'thisisavocab15',
-      vocab: '懐中電灯',
-      translation: '手電筒',
-      pron: 'かいちゅうでんとう',
-      useSpeech: false,
-      lesson: 'thisisalesson01',
-      type: 'v',
-      tags: ['他動詞', '一段動詞'],
-    },
-  ],
-  removeVocab: (vocab) => { console.log(vocab); },
+  book: null,
+  lessons: null,
 };
 
 class Vocabs extends Component {
@@ -271,7 +112,7 @@ class Vocabs extends Component {
           <i className="icon ion-ios-plus-empty" />
         </div>
         {
-          vocabs.length > 0 ?
+          Object.keys(vocabs).length > 0 ?
             (
               <div
                 onClick={this.switchOnEditMode}
@@ -295,40 +136,43 @@ class Vocabs extends Component {
       <div className="list-block media-list">
         <ul>
           {
-            vocabs.map(vocab => (
-              <EditableItem
-                key={vocab.id}
-                showButtons={editMode}
-                onRemoveClick={() => {
-                  this.removeVocab(vocab);
-                }}
-                onEditClick={() => {
-                  this.editVocab(vocab);
-                }}
-              >
-                <Link
-                  to={
-                    editMode ?
-                      `${match.url}`
-                      :
-                      `${match.url}/${vocab.id}`
-                  }
+            Object.keys(vocabs).map((key) => {
+              const vocab = vocabs[key];
+              return (
+                <EditableItem
+                  key={vocab.id}
+                  showButtons={editMode}
+                  onRemoveClick={() => {
+                    this.removeVocab(vocab);
+                  }}
+                  onEditClick={() => {
+                    this.editVocab(vocab);
+                  }}
                 >
-                  <div className={`item-title-row${vocab.pron ? '' : ' title-only'}`}>
-                    <div className="item-title">{vocab.vocab}</div>
+                  <Link
+                    to={
+                      editMode ?
+                        `${match.url}`
+                        :
+                        `${match.url}/${vocab.id}`
+                    }
+                  >
+                    <div className={`item-title-row${vocab.pron ? '' : ' title-only'}`}>
+                      <div className="item-title">{vocab.vocab}</div>
+                    </div>
+                    {vocab.pron ? <div className="item-subtitle small">{vocab.pron}</div> : ''}
+                  </Link>
+                  <div className="item-vocab-after">
+                    <span>{`[${vocab.type}] ${vocab.translation}`}</span>
+                    <div
+                      className="btn-speech icon ion-ios-volume-high"
+                      onClick={() => { this.speech(vocab); }}
+                      role="presentation"
+                    />
                   </div>
-                  {vocab.pron ? <div className="item-subtitle small">{vocab.pron}</div> : ''}
-                </Link>
-                <div className="item-vocab-after">
-                  <span>{`[${vocab.type}] ${vocab.translation}`}</span>
-                  <div
-                    className="btn-speech icon ion-ios-volume-high"
-                    onClick={() => { this.speech(vocab); }}
-                    role="presentation"
-                  />
-                </div>
-              </EditableItem>
-            ))
+                </EditableItem>
+              );
+            })
           }
         </ul>
       </div>
@@ -345,25 +189,33 @@ class Vocabs extends Component {
 
   render() {
     const { isShowAddVocabPopUp, editingVocab } = this.state;
-    const { lesson, vocabs, match } = this.props;
+    const { lessons, vocabs, match, addVocab, editVocab } = this.props;
+    const lessonId = match.params.lessonId;
+
+    if (!lessons[lessonId]) {
+      return <Redirect to="/lessons" />;
+    }
+
     return (
       <div className="vocabs page">
         <NavBar
-          pageName={lesson.title}
+          pageName={lessons[lessonId].title}
           left={<BackButton to="/lessons" text="Lessons" />}
           right={this.renderRightControl()}
         />
         <div className="page-inner">
-          {vocabs.length <= 0 ? (this.renderNoData()) : (this.renderVocabList())}
+          {Object.keys(vocabs).length <= 0 ? (this.renderNoData()) : (this.renderVocabList())}
         </div>
         <AddVocabForm
-          lessonId={match.params.lessionId}
+          lessonId={lessonId}
           isPopUp={isShowAddVocabPopUp}
           hide={this.hideAddVocabPopUp}
+          addVocab={addVocab}
         />
         <EditVocabForm
           targetVocab={editingVocab}
           hide={this.endEditVocab}
+          editVocab={editVocab}
         />
       </div>
     );

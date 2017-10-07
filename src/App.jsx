@@ -1,17 +1,8 @@
 import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
-import Routes from './Routes';
-import TabBar from './components/TabBar';
+import RootContainer from './containers/RootContainer';
 
 function App() {
-  return (
-    <BrowserRouter>
-      <div className="app">
-        <Routes />
-        <TabBar />
-      </div>
-    </BrowserRouter>
-  );
+  return <RootContainer />;
 }
 
 export default App;

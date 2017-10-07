@@ -9,10 +9,6 @@ const propTypes = {
   addBook: PropTypes.func.isRequired,
 };
 
-const defaultProps = {
-  addBook: (a, b, c) => { console.log(a, b, c); },
-};
-
 class AddBookForm extends Component {
   constructor() {
     super();
@@ -27,7 +23,12 @@ class AddBookForm extends Component {
 
   onClickAdd() {
     const { formTitle, formLang, formTranslateFrom } = this.state;
-    this.props.addBook(formTitle, formLang, formTranslateFrom);
+    this.props.addBook({
+      title: formTitle,
+      lang: formLang,
+      transFrm: formTranslateFrom,
+      lessons: {},
+    });
     this.resetForm();
     this.hideEditPopUp();
   }
@@ -107,6 +108,5 @@ class AddBookForm extends Component {
 }
 
 AddBookForm.propTypes = propTypes;
-AddBookForm.defaultProps = defaultProps;
 
 export default AddBookForm;
