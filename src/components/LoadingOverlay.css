@@ -17,6 +17,9 @@
 }
 
 .loading-icon {
+  width: 80px;
+  height: 80px;
+  line-height: 80px;
   font-size: 80px;
   animation: spin 1s infinite linear;
 }

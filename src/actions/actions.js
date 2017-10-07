@@ -23,6 +23,14 @@ export const logout = () => ({
   type: actionTypes.LOGOUT,
 });
 
+export const showLoading = () => ({
+  type: actionTypes.SHOW_LOADING,
+});
+
+export const hideLoading = () => ({
+  type: actionTypes.HIDE_LOADING,
+});
+
 export const loginWithGoogle = () => (
   () => {
     const provider = new firebase.auth.GoogleAuthProvider();
@@ -52,18 +60,15 @@ export const loginWithGithub = () => (
 );
 
 export const logoutOfFirebase = () => (
-  () => {
-    firebase.auth().signOut();
+  (dispatch) => {
+    dispatch(showLoading());
+    firebase.auth()
+      .signOut()
+      .then(() => {
+        dispatch(hideLoading());
+      });
   }
 );
-
-export const showLoading = () => ({
-  type: actionTypes.SHOW_LOADING,
-});
-
-export const hideLoading = () => ({
-  type: actionTypes.HIDE_LOADING,
-});
 
 export const initApp = () => (
   (dispatch) => {
