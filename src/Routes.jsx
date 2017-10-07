@@ -10,6 +10,7 @@ import History from './pages/History';
 import Dictation from './pages/Dictation';
 import Translation from './pages/Translation';
 import Settings from './containers/SettingsContainer';
+import RedirectTo from './containers/RedirectToContainer';
 
 function Routes() {
   return (
@@ -24,6 +25,7 @@ function Routes() {
         <Route path="/dictation" component={Dictation} />
         <Route path="/translation" component={Translation} />
         <Route path="/settings" component={Settings} />
+        <Route path="/redirect/:redirectPage" component={RedirectTo} />
       </Switch>
     </div>
   );

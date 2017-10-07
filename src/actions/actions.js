@@ -13,8 +13,18 @@ export const hideLoading = () => ({
   type: actionTypes.HIDE_LOADING,
 });
 
-export const isFetchingBook = isFetching => ({
+export const isFetchingBooks = isFetching => ({
   type: actionTypes.IS_FETCHING_BOOKS,
+  isFetching,
+});
+
+export const isFetchingLessons = isFetching => ({
+  type: actionTypes.IS_FETCHING_LESSONS,
+  isFetching,
+});
+
+export const isFetchingVocabs = isFetching => ({
+  type: actionTypes.IS_FETCHING_VOCABS,
   isFetching,
 });
 
@@ -121,6 +131,11 @@ export const removeBook = targetBook => (
     isDeletingBook = true;
     const updates = {};
     updates[`/books/${uid}/${targetBook.id}`] = null;
+    if (targetBook.lessons) {
+      Object.keys(targetBook.lessons).forEach((key) => {
+        updates[`/lessons/${uid}/${key}`] = null;
+      });
+    }
     database.ref()
       .update(updates)
       .then(() => {
@@ -136,7 +151,7 @@ export const editBook = (targetBook, title, lang, transFrm) => (
     if (isEditingBook) return;
     isEditingBook = true;
     database.ref(`books/${uid}/${targetBook.id}`)
-      .set({ id: targetBook.id, title, lang, transFrm })
+      .update({ title, lang, transFrm })
       .then(() => {
         isEditingBook = false;
       });
@@ -145,12 +160,12 @@ export const editBook = (targetBook, title, lang, transFrm) => (
 
 export const listenToBooks = () => (
   (dispatch) => {
-    dispatch(isFetchingBook(true));
+    dispatch(isFetchingBooks(true));
     database.ref(`books/${uid}`)
       .on('value', (snapshot) => {
         const val = snapshot.val() || {};
         dispatch(setBooks(val));
-        dispatch(isFetchingBook(false));
+        dispatch(isFetchingBooks(false));
         dispatch(getAppReady());
       });
   }
@@ -159,24 +174,93 @@ export const listenToBooks = () => (
 
 // lessons action
 
-export const addLesson = (targetBookId, title) => ({
-  type: actionTypes.ADD_LESSON,
-  lesson: {
-    targetBookId,
-    title,
-  },
+export const setLessons = lessons => ({
+  type: actionTypes.SET_LESSONS,
+  lessons,
 });
 
-export const removeLesson = targetLesson => ({
-  type: actionTypes.REMOVE_LESSON,
-  targetLesson,
-});
+let isDeletingLesson = false;
+export const removeLesson = targetLesson => (
+  () => {
+    if (isDeletingLesson) return;
+    isDeletingLesson = true;
+    const updateData = {};
+    updateData[`books/${uid}/${targetLesson.bookId}/lessons/${targetLesson.id}`] = null;
+    updateData[`lessons/${uid}/${targetLesson.id}`] = null;
+    database.ref()
+      .update(updateData)
+      .then(() => {
+        isDeletingLesson = false;
+      });
+  }
+);
 
-export const editLesson = (targetLesson, title) => ({
-  type: actionTypes.EDIT_LESSON,
-  targetLesson,
-  title,
-});
+let isEditingLesson = false;
+export const editLesson = (targetLesson, title) => (
+  () => {
+    if (isEditingLesson) return;
+    isEditingLesson = true;
+    database.ref(`lessons/${uid}/${targetLesson.id}`)
+      .update({
+        title,
+      })
+      .then(() => {
+        isEditingLesson = false;
+      });
+  }
+);
+
+let isAddingLesson = false;
+export const addLesson = (targetBookId, title) => (
+  () => {
+    if (isAddingLesson) return;
+    isAddingLesson = true;
+    const newLessonRef = database.ref(`lessons/${uid}`).push();
+    const newLessonId = newLessonRef.key;
+    const updateData = {};
+    updateData[`lessons/${uid}/${newLessonId}`] = {
+      id: newLessonId,
+      bookId: targetBookId,
+      title,
+    };
+    updateData[`books/${uid}/${targetBookId}/lessons/${newLessonId}`] = true;
+
+    database.ref()
+      .update(updateData)
+      .then(() => {
+        isAddingLesson = false;
+      });
+  }
+);
+
+let onLessonsChange = null;
+export const listenToLessons = bookId => (
+  (dispatch) => {
+    if (onLessonsChange) return;
+    dispatch(isFetchingLessons(true));
+    onLessonsChange = (snapshot) => {
+      const val = snapshot.val() || {};
+      dispatch(setLessons(val));
+      dispatch(isFetchingLessons(false));
+    };
+    database.ref(`lessons/${uid}`)
+      .orderByChild('bookId')
+      .equalTo(bookId)
+      .on('value', onLessonsChange);
+  }
+);
+
+export const unListenToLessons = bookId => (
+  (dispatch) => {
+    if (!onLessonsChange) return;
+    database.ref(`lessons/${uid}`)
+      .orderByChild('bookId')
+      .equalTo(bookId)
+      .off('value', onLessonsChange);
+    onLessonsChange = null;
+    dispatch(setLessons({}));
+  }
+);
 
 
 // vocabs action
