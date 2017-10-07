@@ -9,16 +9,13 @@ const propTypes = {
     title: PropTypes.string,
   }),
   hide: PropTypes.func.isRequired,
-  saveLesson: PropTypes.func.isRequired,
+  editLesson: PropTypes.func.isRequired,
 };
 
 const defaultProps = {
   targetLesson: {
     id: null,
     title: '',
-  },
-  saveLesson: (a, b) => {
-    console.log(a, b);
   },
 };
 
@@ -43,7 +40,7 @@ class EditLessonForm extends Component {
   onClickSave() {
     const { targetLesson } = this.props;
     const { formTitle } = this.state;
-    this.props.saveLesson(targetLesson, formTitle);
+    this.props.editLesson(targetLesson, formTitle);
     this.hideEditPopUp();
   }
 
