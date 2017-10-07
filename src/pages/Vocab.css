@@ -1,0 +1,23 @@
+.vocab-display {
+  font-size: 40px;
+  margin: 0.5em;
+}
+
+.type-display,
+.pron-display {
+  font-size: 20px;
+}
+
+.page.vocab .btn-pron {
+  font-size: 60px;
+  line-height: 0;
+  color: #ef3c6c;
+}
+
+.translate-display {
+  font-size: 25px;
+}
+
+.tags-display {
+  margin: 1em 0;
+}

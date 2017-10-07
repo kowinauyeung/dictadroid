@@ -1,61 +1,62 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import EditBookForm from '../components/EditBookForm';
 import './Home.css';
 
 const propTypes = {
-  activeBook: PropTypes.shape({
-    id: PropTypes.string,
-    title: PropTypes.string,
-    lang: PropTypes.string,
-    transFrm: PropTypes.string,
-  }).isRequired,
+  activeBookId: PropTypes.string,
+  books: PropTypes.objectOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      title: PropTypes.string,
+      lang: PropTypes.string,
+      transFrm: PropTypes.string,
+    }),
+  ).isRequired,
+  editBook: PropTypes.func.isRequired,
 };
 
 const defaultProps = {
-  activeBook: {
-    id: 'thisisanid',
-    title: '大家的日本語初級I',
-    lang: 'ja',
-    transFrm: 'zh',
-  },
+  activeBookId: null,
 };
 
 class Home extends Component {
-  constructor({ activeBook }) {
+  constructor() {
     super();
     this.state = {
       isShowEditPopUp: false,
-      formTitle: activeBook.title,
-      formLang: activeBook.lang,
     };
     this.showEditPopUp = this.showEditPopUp.bind(this);
     this.hideEditPopUp = this.hideEditPopUp.bind(this);
   }
 
   showEditPopUp() {
-    this.setState({
-      isShowEditPopUp: true,
-    });
+    this.setState({ isShowEditPopUp: true });
   }
 
   hideEditPopUp() {
-    this.setState({
-      isShowEditPopUp: false,
-    });
+    this.setState({ isShowEditPopUp: false });
   }
 
   render() {
-    const { activeBook } = this.props;
+    const { activeBookId, books, editBook } = this.props;
     const { isShowEditPopUp } = this.state;
+    const activeBook = books[activeBookId] || null;
+
+    if (!activeBook) {
+      return <Redirect to="/books" />;
+    }
+
     return (
       <div className="home">
         <div className="home-inner">
           <div className="home-header">
             <div className="home-header-inner">
               <span>{activeBook.title}</span>
-              <span className="subtext">Total lesson: 12</span>
+              <span className="subtext">
+                Total lesson: {activeBook.lessons ? Object.keys(activeBook.lessons).length : '0'}
+              </span>
             </div>
             <div
               className="link-right-top"
@@ -91,6 +92,7 @@ class Home extends Component {
         <EditBookForm
           targetBook={isShowEditPopUp ? activeBook : undefined}
           hide={this.hideEditPopUp}
+          editBook={editBook}
         />
       </div>
     );
