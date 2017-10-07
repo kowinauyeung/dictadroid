@@ -1,7 +1,9 @@
 import actionTypes from '../actions/actionTypes';
 
 const initState = {
+  isReady: false,
   isLoading: false,
+  isFetchingBooks: false,
 };
 
 const app = (state = initState, action) => {
@@ -16,6 +18,18 @@ const app = (state = initState, action) => {
       return {
         ...state,
         isLoading: false,
+      };
+
+    case actionTypes.IS_FETCHING_BOOKS:
+      return {
+        ...state,
+        isFetchingBooks: action.isFetching,
+      };
+
+    case actionTypes.GET_APP_READY:
+      return {
+        ...state,
+        isReady: true,
       };
 
     default:
