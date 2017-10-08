@@ -10,6 +10,7 @@ import History from './pages/History';
 import Dictation from './pages/Dictation';
 import Translation from './pages/Translation';
 import Settings from './containers/SettingsContainer';
+import RedirectTo from './containers/RedirectToContainer';
 
 function Routes() {
   return (
@@ -19,11 +20,13 @@ function Routes() {
         <Route path="/books" component={Books} />
         <Route path="/lessons/:lessonId/vocabs/:vocabId" component={Vocab} />
         <Route path="/lessons/:lessonId/vocabs" component={Vocabs} />
+        <Route path="/lessons/:lessonId" component={Lessons} />
         <Route path="/lessons" component={Lessons} />
         <Route path="/history" component={History} />
         <Route path="/dictation" component={Dictation} />
         <Route path="/translation" component={Translation} />
         <Route path="/settings" component={Settings} />
+        <Route path="/redirect" component={RedirectTo} />
       </Switch>
     </div>
   );

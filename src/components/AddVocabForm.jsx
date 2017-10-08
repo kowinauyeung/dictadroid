@@ -9,6 +9,7 @@ const propTypes = {
   hide: PropTypes.func.isRequired,
   addVocab: PropTypes.func.isRequired,
   lessonId: PropTypes.string.isRequired,
+  bookId: PropTypes.string.isRequired,
 };
 
 const vocabTypes = ['n', 'v', 'adj', 'adv', 'pn', 'other'];
@@ -40,9 +41,10 @@ class AddVocabForm extends Component {
       formType,
       formTags,
     } = this.state;
-    const { lessonId } = this.props;
+    const { bookId, lessonId } = this.props;
 
     this.props.addVocab({
+      bookId,
       lessonId,
       vocab: formVocab,
       translation: formTranslation,

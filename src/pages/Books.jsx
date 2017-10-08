@@ -8,6 +8,7 @@ import EditBookForm from '../components/EditBookForm';
 import { Lang } from '../utils/Dictionary';
 
 const propTypes = {
+  isFetchingBooks: PropTypes.bool.isRequired,
   activeBookId: PropTypes.string,
   books: PropTypes.objectOf(
     PropTypes.shape({
@@ -38,6 +39,7 @@ class Books extends Component {
       editingBook: undefined,
     };
     this.noDataMsg = 'You do not have any book yet.';
+    this.loadingMsg = 'Loading...';
     this.switchOnEditMode = this.switchOnEditMode.bind(this);
     this.switchOffEditMode = this.switchOffEditMode.bind(this);
     this.showAddBookPopUp = this.showAddBookPopUp.bind(this);
@@ -170,7 +172,9 @@ class Books extends Component {
                       <div className="item-title">{book.title}</div>
                     </div>
                     <div className="item-subtitle grey">
-                      {Lang[book.lang]}, {Object.keys(book.lessons).length} lessons
+                      {Lang[book.lang]},&nbsp;
+                      {book.lessons ? Object.keys(book.lessons).length : '0'} lessons,&nbsp;
+                      {book.vocabs ? Object.keys(book.vocabs).length : '0'} vocabs
                     </div>
                   </label>
                 </EditableItem>
@@ -183,9 +187,12 @@ class Books extends Component {
   }
 
   renderNoData() {
+    const { isFetchingBooks } = this.props;
     return (
       <div className="content-block">
-        <p className="text-center">{this.noDataMsg}</p>
+        <p className="text-center">
+          {isFetchingBooks ? this.loadingMsg : this.noDataMsg}
+        </p>
       </div>
     );
   }

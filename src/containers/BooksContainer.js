@@ -3,6 +3,7 @@ import Books from '../pages/Books';
 import { addBook, removeBook, editBook, setActiveBook } from '../actions/actions';
 
 const mapStateToProps = state => ({
+  isFetchingBooks: state.app.isFetchingBooks,
   activeBookId: state.user.activeBookId,
   books: state.books,
 });

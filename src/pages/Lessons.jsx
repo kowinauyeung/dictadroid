@@ -23,6 +23,10 @@ const propTypes = {
   addLesson: PropTypes.func.isRequired,
   removeLesson: PropTypes.func.isRequired,
   editLesson: PropTypes.func.isRequired,
+  listenToLessons: PropTypes.func.isRequired,
+  unListenToLessons: PropTypes.func.isRequired,
+  isFetchingLessons: PropTypes.bool.isRequired,
+  isAppReady: PropTypes.bool.isRequired,
 };
 
 const defaultProps = {
@@ -39,12 +43,25 @@ class Lessons extends Component {
       editingLesson: undefined,
     };
     this.noDataMsg = 'You do not have any lesson yet.';
+    this.loadingMsg = 'Loading...';
     this.switchOnEditMode = this.switchOnEditMode.bind(this);
     this.switchOffEditMode = this.switchOffEditMode.bind(this);
     this.showAddLessonPopUp = this.showAddLessonPopUp.bind(this);
     this.hideAddLessonPopUp = this.hideAddLessonPopUp.bind(this);
     this.endEditLesson = this.endEditLesson.bind(this);
     this.removeLesson = this.removeLesson.bind(this);
+  }
+
+  componentDidMount() {
+    const { listenToLessons, book } = this.props;
+    if (!book) return;
+    listenToLessons(book.id);
+  }
+
+  componentWillUnmount() {
+    const { unListenToLessons, book } = this.props;
+    if (!book) return;
+    unListenToLessons(book.id);
   }
 
   editLesson(targetLesson) {
@@ -145,7 +162,7 @@ class Lessons extends Component {
                       <div className="item-title">{lesson.title}</div>
                     </div>
                     <div className="item-subtitle grey">
-                      {Object.keys(lesson.vocabs).length} vocabs
+                      {lesson.vocabs ? Object.keys(lesson.vocabs).length : '0'} vocabs
                     </div>
                   </Link>
                 </EditableItem>
@@ -158,19 +175,41 @@ class Lessons extends Component {
   }
 
   renderNoData() {
+    const { isFetchingLessons } = this.props;
     return (
       <div className="content-block">
-        <p className="text-center">{this.noDataMsg}</p>
+        <p className="text-center">
+          {isFetchingLessons ? this.loadingMsg : this.noDataMsg}
+        </p>
       </div>
     );
   }
 
   render() {
     const { isShowAddLessonPopUp, editingLesson } = this.state;
-    const { book, lessons, addLesson, editLesson } = this.props;
+    const {
+      match,
+      book,
+      lessons,
+      addLesson,
+      editLesson,
+      isAppReady,
+      isFetchingLessons,
+    } = this.props;
+
+    if (!isAppReady) {
+      return <Redirect to="/redirect?url=/lessons" />;
+    }
 
     if (!book) {
       return <Redirect to="/books" />;
+    }
+
+    if (match.params.lessonId && !isFetchingLessons && isAppReady) {
+      if (lessons[match.params.lessonId]) {
+        return <Redirect to={`${match.url}/vocabs`} />;
+      }
+      return <Redirect to="/lessons" />;
     }
 
     return (

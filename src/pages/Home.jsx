@@ -6,6 +6,7 @@ import './Home.css';
 
 const propTypes = {
   activeBookId: PropTypes.string,
+  isAppReady: PropTypes.bool.isRequired,
   books: PropTypes.objectOf(
     PropTypes.shape({
       id: PropTypes.string,
@@ -40,9 +41,17 @@ class Home extends Component {
   }
 
   render() {
-    const { activeBookId, books, editBook } = this.props;
+    const { activeBookId, books, editBook, isAppReady } = this.props;
     const { isShowEditPopUp } = this.state;
     const activeBook = books[activeBookId] || null;
+
+    if (!isAppReady) {
+      return (
+        <div className="loading-overlay">
+          <i className="icon ion-ios-loop-strong loading-icon" />
+        </div>
+      );
+    }
 
     if (!activeBook) {
       return <Redirect to="/books" />;

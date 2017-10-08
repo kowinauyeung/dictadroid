@@ -21,58 +21,60 @@ function LoginForm(props) {
     loginWithGithub,
   } = props;
   return (
-    <Popup
-      header=""
-      visible={!isLogin}
-      isHideLeft
-      isHideRight
-    >
-      <div className="page-inner login-bg">
-        <img className="logo" src={logo} alt="Dictadroid" />
-        <div className="content-block">
-          <p>
-            <a
-              className="button button-login login-with-google"
-              onClick={() => { loginWithGoogle(); }}
-              role="presentation"
-            >
-              <i className="icon ion-social-google" />
-              Login with Google
-            </a>
-          </p>
-          <p style={{ display: 'none' }}>
-            <a
-              className="button button-login login-with-facebook"
-              onClick={() => { loginWithFacebook(); }}
-              role="presentation"
-            >
-              <i className="icon ion-social-facebook" />
-              Login with Facebook
-            </a>
-          </p>
-          <p style={{ display: 'none' }}>
-            <a
-              className="button button-login login-with-twitter"
-              onClick={() => { loginWithTwitter(); }}
-              role="presentation"
-            >
-              <i className="icon ion-social-twitter" />
-              Login with Twitter
-            </a>
-          </p>
-          <p style={{ display: 'none' }}>
-            <a
-              className="button button-login login-with-github"
-              onClick={() => { loginWithGithub(); }}
-              role="presentation"
-            >
-              <i className="icon ion-social-github" />
-              Login with GitHub
-            </a>
-          </p>
+    <div className="login-form">
+      <Popup
+        header=""
+        visible={!isLogin}
+        isHideLeft
+        isHideRight
+      >
+        <div className="page-inner login-bg">
+          <img className="logo" src={logo} alt="Dictadroid" />
+          <div className="content-block">
+            <p>
+              <a
+                className="button button-login login-with-google"
+                onClick={() => { loginWithGoogle(); }}
+                role="presentation"
+              >
+                <i className="icon ion-social-google" />
+                Login with Google
+              </a>
+            </p>
+            <p style={{ display: 'none' }}>
+              <a
+                className="button button-login login-with-facebook"
+                onClick={() => { loginWithFacebook(); }}
+                role="presentation"
+              >
+                <i className="icon ion-social-facebook" />
+                Login with Facebook
+              </a>
+            </p>
+            <p style={{ display: 'none' }}>
+              <a
+                className="button button-login login-with-twitter"
+                onClick={() => { loginWithTwitter(); }}
+                role="presentation"
+              >
+                <i className="icon ion-social-twitter" />
+                Login with Twitter
+              </a>
+            </p>
+            <p style={{ display: 'none' }}>
+              <a
+                className="button button-login login-with-github"
+                onClick={() => { loginWithGithub(); }}
+                role="presentation"
+              >
+                <i className="icon ion-social-github" />
+                Login with GitHub
+              </a>
+            </p>
+          </div>
         </div>
-      </div>
-    </Popup>
+      </Popup>
+    </div>
   );
 }
 

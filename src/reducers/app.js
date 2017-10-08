@@ -1,7 +1,11 @@
 import actionTypes from '../actions/actionTypes';
 
 const initState = {
+  isReady: false,
   isLoading: false,
+  isFetchingBooks: false,
+  isFetchingLessons: false,
+  isFetchingVocabs: false,
 };
 
 const app = (state = initState, action) => {
@@ -16,6 +20,30 @@ const app = (state = initState, action) => {
       return {
         ...state,
         isLoading: false,
+      };
+
+    case actionTypes.IS_FETCHING_BOOKS:
+      return {
+        ...state,
+        isFetchingBooks: action.isFetching,
+      };
+
+    case actionTypes.IS_FETCHING_LESSONS:
+      return {
+        ...state,
+        isFetchingLessons: action.isFetching,
+      };
+
+    case actionTypes.IS_FETCHING_VOCABS:
+      return {
+        ...state,
+        isFetchingVocabs: action.isFetching,
+      };
+
+    case actionTypes.GET_APP_READY:
+      return {
+        ...state,
+        isReady: true,
       };
 
     default:

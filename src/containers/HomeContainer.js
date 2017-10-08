@@ -4,6 +4,7 @@ import { editBook } from '../actions/actions';
 
 const mapStateToProps = state => ({
   activeBookId: state.user.activeBookId,
+  isAppReady: state.app.isReady,
   books: state.books,
 });
 
