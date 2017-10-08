@@ -218,6 +218,7 @@ export const removeLesson = targetLesson => (
     if (targetLesson.vocabs) {
       Object.keys(targetLesson.vocabs).forEach((key) => {
         updateData[`/vocabs/${uid}/${key}`] = null;
+        updateData[`/books/${uid}/${targetLesson.bookId}/vocabs/${key}`] = null;
       });
     }
     database.ref()

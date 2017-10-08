@@ -173,7 +173,8 @@ class Books extends Component {
                     </div>
                     <div className="item-subtitle grey">
                       {Lang[book.lang]},&nbsp;
-                      {book.lessons ? Object.keys(book.lessons).length : '0'} lessons
+                      {book.lessons ? Object.keys(book.lessons).length : '0'} lessons,&nbsp;
+                      {book.vocabs ? Object.keys(book.vocabs).length : '0'} vocabs
                     </div>
                   </label>
                 </EditableItem>
