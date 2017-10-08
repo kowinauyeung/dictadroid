@@ -29,7 +29,12 @@ const propTypes = {
       tags: PropTypes.arrayOf(PropTypes.string),
     }),
   ).isRequired,
+  isAppReady: PropTypes.bool.isRequired,
   editVocab: PropTypes.func.isRequired,
+  isFetchingVocabs: PropTypes.bool.isRequired,
+  isFetchingLessons: PropTypes.bool.isRequired,
+  listenToVocabs: PropTypes.func.isRequired,
+  listenToLessons: PropTypes.func.isRequired,
 };
 
 const defaultProps = {
@@ -52,8 +57,22 @@ class Vocab extends Component {
     this.state = {
       editMode: false,
     };
+    this.isFetching = false;
     this.startEditVocab = this.startEditVocab.bind(this);
     this.endEditVocab = this.endEditVocab.bind(this);
+  }
+
+  componentWillMount() {
+    const { listenToVocabs, match, listenToLessons, book } = this.props;
+    const lessonId = match.params.lessonId;
+    if (!book) return;
+    this.isFetching = true;
+    listenToLessons(book.id);
+    listenToVocabs(lessonId);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.isFetching = nextProps.isFetchingVocabs || nextProps.isFetchingLessons;
   }
 
   startEditVocab() {
@@ -65,21 +84,29 @@ class Vocab extends Component {
   }
 
   render() {
-    const { match, vocabs, book, lessons, editVocab } = this.props;
+    const { match, vocabs, book, lessons, editVocab, isAppReady } = this.props;
     const { editMode } = this.state;
     const lesson = lessons[match.params.lessonId];
     const vocab = vocabs[match.params.vocabId];
 
-    if (!lesson) {
+    if (!isAppReady) {
+      return <Redirect to={`/redirect?url=${match.url}`} />;
+    }
+
+    if (!lesson && !this.isFetching) {
       return <Redirect to="/lessons" />;
     }
 
-    if (!book) {
-      return <Redirect to="/books" />;
+    if (!vocab && !this.isFetching) {
+      return <Redirect to={`/lessons/${match.params.lessonId}/vocabs`} />;
     }
 
-    if (!vocab) {
-      return <Redirect to={`/lessons/${match.params.lessonId}/vocabs`} />;
+    if (this.isFetching && (!lesson || !vocab)) {
+      return (
+        <div className="loading-overlay">
+          <i className="icon ion-ios-loop-strong loading-icon" />
+        </div>
+      );
     }
 
     return (
@@ -105,9 +132,7 @@ class Vocab extends Component {
               <div className="line" />
               <p className="text-center translate-display">{vocab.translation}</p>
               {
-                vocab.tags.length <= 0 ?
-                  ''
-                  :
+                vocab.tags && vocab.tags.length > 0 ?
                   (
                     <div className="text-center tags-display">
                       {
@@ -122,6 +147,8 @@ class Vocab extends Component {
                       }
                     </div>
                   )
+                  :
+                  ''
               }
               <p>
                 <a
