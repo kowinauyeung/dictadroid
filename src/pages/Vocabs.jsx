@@ -34,6 +34,10 @@ const propTypes = {
   addVocab: PropTypes.func.isRequired,
   removeVocab: PropTypes.func.isRequired,
   editVocab: PropTypes.func.isRequired,
+  isAppReady: PropTypes.bool.isRequired,
+  isFetchingVocabs: PropTypes.bool.isRequired,
+  listenToVocabs: PropTypes.func.isRequired,
+  unListenToVocabs: PropTypes.func.isRequired,
 };
 
 const defaultProps = {
@@ -50,12 +54,27 @@ class Vocabs extends Component {
       editingVocab: undefined,
     };
     this.noDataMsg = 'You do not have any vacabulary yet.';
+    this.loadingMsg = 'Loading...';
     this.switchOnEditMode = this.switchOnEditMode.bind(this);
     this.switchOffEditMode = this.switchOffEditMode.bind(this);
     this.showAddVocabPopUp = this.showAddVocabPopUp.bind(this);
     this.hideAddVocabPopUp = this.hideAddVocabPopUp.bind(this);
     this.endEditVocab = this.endEditVocab.bind(this);
     this.removeVocab = this.removeVocab.bind(this);
+  }
+
+  componentDidMount() {
+    const { listenToVocabs, lessons, match } = this.props;
+    const lesson = lessons[match.params.lessonId];
+    if (!lesson) return;
+    listenToVocabs(lesson.id);
+  }
+
+  componentWillUnmount() {
+    const { unListenToVocabs, lessons, match } = this.props;
+    const lesson = lessons[match.params.lessonId];
+    if (!lesson) return;
+    unListenToVocabs(lesson.id);
   }
 
   speech(vocab) {
@@ -180,20 +199,27 @@ class Vocabs extends Component {
   }
 
   renderNoData() {
+    const { isFetchingVocabs } = this.props;
     return (
       <div className="content-block">
-        <p className="text-center">{this.noDataMsg}</p>
+        <p className="text-center">
+          {isFetchingVocabs ? this.loadingMsg : this.noDataMsg}
+        </p>
       </div>
     );
   }
 
   render() {
     const { isShowAddVocabPopUp, editingVocab } = this.state;
-    const { lessons, vocabs, match, addVocab, editVocab } = this.props;
+    const { book, lessons, vocabs, match, addVocab, editVocab, isAppReady } = this.props;
     const lessonId = match.params.lessonId;
 
+    if (!isAppReady) {
+      return <Redirect to={`/redirect?url=${match.url}`} />;
+    }
+
     if (!lessons[lessonId]) {
-      return <Redirect to="/lessons" />;
+      return <Redirect to={`/lessons/${lessonId}`} />;
     }
 
     return (
@@ -207,6 +233,7 @@ class Vocabs extends Component {
           {Object.keys(vocabs).length <= 0 ? (this.renderNoData()) : (this.renderVocabList())}
         </div>
         <AddVocabForm
+          bookId={book.id}
           lessonId={lessonId}
           isPopUp={isShowAddVocabPopUp}
           hide={this.hideAddVocabPopUp}

@@ -3,21 +3,20 @@ import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 
 const propTypes = {
-  match: PropTypes.shape({ url: PropTypes.string }).isRequired,
+  location: PropTypes.shape({ search: PropTypes.string }).isRequired,
   isAppReady: PropTypes.bool.isRequired,
 };
 
 function RedirectTo(props) {
-  const { match, isAppReady } = props;
+  const { location, isAppReady } = props;
   if (!isAppReady) {
     return (
       <div className="loading-overlay">
         <i className="icon ion-ios-loop-strong loading-icon" />
       </div>
     );
-  } else {
-    return <Redirect to={`/${match.params.redirectPage}`} />;
   }
+  return <Redirect to={`/${location.search.replace('?url=/', '')}`} />;
 }
 
 RedirectTo.propTypes = propTypes;

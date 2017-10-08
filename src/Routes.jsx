@@ -20,12 +20,13 @@ function Routes() {
         <Route path="/books" component={Books} />
         <Route path="/lessons/:lessonId/vocabs/:vocabId" component={Vocab} />
         <Route path="/lessons/:lessonId/vocabs" component={Vocabs} />
+        <Route path="/lessons/:lessonId" component={Lessons} />
         <Route path="/lessons" component={Lessons} />
         <Route path="/history" component={History} />
         <Route path="/dictation" component={Dictation} />
         <Route path="/translation" component={Translation} />
         <Route path="/settings" component={Settings} />
-        <Route path="/redirect/:redirectPage" component={RedirectTo} />
+        <Route path="/redirect" component={RedirectTo} />
       </Switch>
     </div>
   );
