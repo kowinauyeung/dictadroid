@@ -206,7 +206,10 @@ class Lessons extends Component {
     }
 
     if (match.params.lessonId && !isFetchingLessons && isAppReady) {
-      return <Redirect to={`${match.url}/vocabs`} />;
+      if (lessons[match.params.lessonId]) {
+        return <Redirect to={`${match.url}/vocabs`} />;
+      }
+      return <Redirect to="/lessons" />;
     }
 
     return (

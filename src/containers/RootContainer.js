@@ -6,9 +6,9 @@ const mapDispatchToProps = ({
   initApp,
 });
 
-const BooksContainer = connect(
+const RootContainer = connect(
   null,
   mapDispatchToProps,
 )(Root);
 
-export default BooksContainer;
+export default RootContainer;
