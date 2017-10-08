@@ -15,9 +15,7 @@ const actionTypes = {
 
   SET_LESSONS: 'SET_LESSONS',
 
-  ADD_VOCAB: 'ADD_VOCAB',
-  REMOVE_VOCAB: 'REMOVE_VOCAB',
-  EDIT_VOCAB: 'EDIT_VOCAB',
+  SET_VOCABS: 'SET_VOCABS',
 };
 
 export default actionTypes;

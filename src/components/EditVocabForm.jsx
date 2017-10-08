@@ -38,7 +38,7 @@ class EditVocabForm extends Component {
     this.state = {
       formVocab: targetVocab.vocab,
       formTranslation: targetVocab.translation,
-      formPron: targetVocab.pron || false,
+      formPron: targetVocab.pron || '',
       formUseSpeech: targetVocab.useSpeech,
       formType: targetVocab.type,
       formTags: targetVocab.tags || [],
@@ -55,7 +55,7 @@ class EditVocabForm extends Component {
     this.setState({
       formVocab: targetVocab.vocab,
       formTranslation: targetVocab.translation,
-      formPron: targetVocab.pron || false,
+      formPron: targetVocab.pron || '',
       formUseSpeech: targetVocab.useSpeech,
       formType: targetVocab.type,
       formTags: targetVocab.tags || [],
@@ -73,12 +73,12 @@ class EditVocabForm extends Component {
       formTags,
     } = this.state;
     const formValue = {
-      formVocab,
-      formTranslation,
-      formPron,
-      formUseSpeech,
-      formType,
-      formTags,
+      vocab: formVocab,
+      translation: formTranslation,
+      pron: formPron,
+      useSpeech: formUseSpeech,
+      type: formType,
+      tags: formTags,
     };
     this.props.editVocab(targetVocab, formValue);
     this.hideEditPopUp();

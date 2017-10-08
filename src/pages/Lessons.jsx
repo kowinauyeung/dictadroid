@@ -187,14 +187,26 @@ class Lessons extends Component {
 
   render() {
     const { isShowAddLessonPopUp, editingLesson } = this.state;
-    const { book, lessons, addLesson, editLesson, isAppReady } = this.props;
+    const {
+      match,
+      book,
+      lessons,
+      addLesson,
+      editLesson,
+      isAppReady,
+      isFetchingLessons,
+    } = this.props;
 
     if (!isAppReady) {
-      return <Redirect to="/redirect/lessons" />;
+      return <Redirect to="/redirect?url=/lessons" />;
     }
 
     if (!book) {
       return <Redirect to="/books" />;
+    }
+
+    if (match.params.lessonId && !isFetchingLessons && isAppReady) {
+      return <Redirect to={`${match.url}/vocabs`} />;
     }
 
     return (
