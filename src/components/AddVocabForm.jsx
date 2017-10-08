@@ -9,10 +9,7 @@ const propTypes = {
   hide: PropTypes.func.isRequired,
   addVocab: PropTypes.func.isRequired,
   lessonId: PropTypes.string.isRequired,
-};
-
-const defaultProps = {
-  addVocab: (a) => { console.log(a); },
+  bookId: PropTypes.string.isRequired,
 };
 
 const vocabTypes = ['n', 'v', 'adj', 'adv', 'pn', 'other'];
@@ -44,9 +41,10 @@ class AddVocabForm extends Component {
       formType,
       formTags,
     } = this.state;
-    const { lessonId } = this.props;
+    const { bookId, lessonId } = this.props;
 
     this.props.addVocab({
+      bookId,
       lessonId,
       vocab: formVocab,
       translation: formTranslation,
@@ -62,7 +60,7 @@ class AddVocabForm extends Component {
   }
 
   onTagsChange(e) {
-    const pattern = /^\s*[a-zA-Z\u4e00-\u9fa5]+\s+$/;
+    const pattern = /^\s*[a-zA-Z\d\u4e00-\u9fa5]+\s+$/;
     let val = e.target.value;
     val = _.trimStart(val);
     if (!pattern.test(val)) return;
@@ -72,7 +70,7 @@ class AddVocabForm extends Component {
 
   onTagsInputKeyDown(e) {
     if (e.keyCode === 13 && e.target.value !== '') {
-      const pattern = /^\s*[a-zA-Z\u4e00-\u9fa5]+$/;
+      const pattern = /^\s*[a-zA-Z\d\u4e00-\u9fa5]+$/;
       const val = e.target.value;
       if (!pattern.test(val)) return;
       this.addChip(val);
@@ -224,6 +222,5 @@ class AddVocabForm extends Component {
 }
 
 AddVocabForm.propTypes = propTypes;
-AddVocabForm.defaultProps = defaultProps;
 
 export default AddVocabForm;
