@@ -7,7 +7,7 @@ const langMap = {
   ja: 'Japanese Female',
 };
 
-const filterSpecialChar = (txt => txt.replace('～', ''));
+const filterSpecialChar = (txt => txt.replace(/～/g, ''));
 
 Speech.pron = (vocab, lang) => {
   const voice = langMap[lang];
