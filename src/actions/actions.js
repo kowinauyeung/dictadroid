@@ -46,7 +46,7 @@ export const login = user => ({
 });
 
 export const setActiveBook = activeBookId => (
-  (dispatch) => {
+  dispatch => (
     database.ref(`users/${uid}/activeBookId`)
       .set(activeBookId)
       .then(() => {
@@ -54,8 +54,9 @@ export const setActiveBook = activeBookId => (
           type: actionTypes.SET_ACTIVE_BOOK,
           activeBookId,
         });
-      });
-  }
+        return activeBookId;
+      })
+  )
 );
 
 export const logout = () => ({
@@ -109,26 +110,18 @@ export const setBooks = books => ({
   books,
 });
 
-let isAddingBook = false;
 export const addBook = book => (
   () => {
-    if (isAddingBook) return;
-    isAddingBook = true;
     const newBookRef = database.ref(`books/${uid}`).push();
-    newBookRef.set({
+    return newBookRef.set({
       id: newBookRef.key,
       ...book,
-    }).then(() => {
-      isAddingBook = false;
-    });
+    }).then(() => newBookRef.key);
   }
 );
 
-let isDeletingBook = false;
 export const removeBook = targetBook => (
   () => {
-    if (isDeletingBook) return;
-    isDeletingBook = true;
     const updates = {};
     updates[`/books/${uid}/${targetBook.id}`] = null;
     if (targetBook.lessons) {
@@ -141,26 +134,18 @@ export const removeBook = targetBook => (
         updates[`/vocabs/${uid}/${key}`] = null;
       });
     }
-    database.ref()
+    return database.ref()
       .update(updates)
-      .then(() => {
-        isDeletingBook = false;
-      });
+      .then(() => targetBook);
   }
 );
 
-let isEditingBook = false;
-
 export const editBook = (targetBook, title, lang, transFrm) => (
-  () => {
-    if (isEditingBook) return;
-    isEditingBook = true;
+  () => (
     database.ref(`books/${uid}/${targetBook.id}`)
       .update({ title, lang, transFrm })
-      .then(() => {
-        isEditingBook = false;
-      });
-  }
+      .then(() => targetBook)
+  )
 );
 
 export const listenToBooks = () => (
@@ -184,11 +169,8 @@ export const setLessons = lessons => ({
   lessons,
 });
 
-let isAddingLesson = false;
 export const addLesson = (targetBookId, title) => (
   () => {
-    if (isAddingLesson) return;
-    isAddingLesson = true;
     const newLessonRef = database.ref(`lessons/${uid}`).push();
     const newLessonId = newLessonRef.key;
     const updateData = {};
@@ -198,20 +180,14 @@ export const addLesson = (targetBookId, title) => (
       title,
     };
     updateData[`books/${uid}/${targetBookId}/lessons/${newLessonId}`] = true;
-
-    database.ref()
+    return database.ref()
       .update(updateData)
-      .then(() => {
-        isAddingLesson = false;
-      });
+      .then(() => newLessonId);
   }
 );
 
-let isDeletingLesson = false;
 export const removeLesson = targetLesson => (
   () => {
-    if (isDeletingLesson) return;
-    isDeletingLesson = true;
     const updateData = {};
     updateData[`books/${uid}/${targetLesson.bookId}/lessons/${targetLesson.id}`] = null;
     updateData[`lessons/${uid}/${targetLesson.id}`] = null;
@@ -221,35 +197,24 @@ export const removeLesson = targetLesson => (
         updateData[`/books/${uid}/${targetLesson.bookId}/vocabs/${key}`] = null;
       });
     }
-    database.ref()
+    return database.ref()
       .update(updateData)
-      .then(() => {
-        isDeletingLesson = false;
-      });
+      .then(() => targetLesson);
   }
 );
 
-let isEditingLesson = false;
 export const editLesson = (targetLesson, title) => (
-  () => {
-    if (isEditingLesson) return;
-    isEditingLesson = true;
+  () => (
     database.ref(`lessons/${uid}/${targetLesson.id}`)
-      .update({
-        title,
-      })
-      .then(() => {
-        isEditingLesson = false;
-      });
-  }
+      .update({ title })
+      .then(() => targetLesson)
+  )
 );
 
-let onLessonsChange = null;
 export const listenToLessons = bookId => (
   (dispatch) => {
-    if (onLessonsChange) return;
     dispatch(isFetchingLessons(true));
-    onLessonsChange = (snapshot) => {
+    const onLessonsChange = (snapshot) => {
       const val = snapshot.val() || {};
       dispatch(setLessons(val));
       dispatch(isFetchingLessons(false));
@@ -258,18 +223,17 @@ export const listenToLessons = bookId => (
       .orderByChild('bookId')
       .equalTo(bookId)
       .on('value', onLessonsChange);
+    return onLessonsChange;
   }
 );
 
-export const unListenToLessons = bookId => (
-  () => {
-    if (!onLessonsChange) return;
+export const unListenToLessons = (bookId, listener) => (
+  () => (
     database.ref(`lessons/${uid}`)
       .orderByChild('bookId')
       .equalTo(bookId)
-      .off('value', onLessonsChange);
-    onLessonsChange = null;
-  }
+      .off('value', listener)
+  )
 );
 
 
@@ -279,11 +243,8 @@ export const setVocabs = vocabs => ({
   vocabs,
 });
 
-let isAddingVocab = false;
 export const addVocab = vocab => (
   () => {
-    if (isAddingVocab) return;
-    isAddingVocab = true;
     const newVocabRef = database.ref(`vocabs/${uid}`).push();
     const newVocabId = newVocabRef.key;
     const updateData = {};
@@ -294,50 +255,36 @@ export const addVocab = vocab => (
     updateData[`lessons/${uid}/${vocab.lessonId}/vocabs/${newVocabId}`] = true;
     updateData[`books/${uid}/${vocab.bookId}/vocabs/${newVocabId}`] = true;
 
-    database.ref()
+    return database.ref()
       .update(updateData)
-      .then(() => {
-        isAddingVocab = false;
-      });
+      .then(() => newVocabId);
   }
 );
 
-let isDeletingVocab = false;
 export const removeVocab = targetVocab => (
   () => {
-    if (isDeletingVocab) return;
-    isDeletingVocab = true;
     const updateData = {};
     updateData[`lessons/${uid}/${targetVocab.lessonId}/vocabs/${targetVocab.id}`] = null;
     updateData[`books/${uid}/${targetVocab.bookId}/vocabs/${targetVocab.id}`] = null;
     updateData[`vocabs/${uid}/${targetVocab.id}`] = null;
-    database.ref()
+    return database.ref()
       .update(updateData)
-      .then(() => {
-        isDeletingVocab = false;
-      });
+      .then(() => targetVocab);
   }
 );
 
-let isEditingVocab = false;
 export const editVocab = (targetVocab, vocab) => (
-  () => {
-    if (isEditingVocab) return;
-    isEditingVocab = true;
+  () => (
     database.ref(`vocabs/${uid}/${targetVocab.id}`)
       .update(vocab)
-      .then(() => {
-        isEditingVocab = false;
-      });
-  }
+      .then(() => targetVocab)
+  )
 );
 
-let onVocabsChange = null;
 export const listenToVocabs = lessonId => (
   (dispatch) => {
-    if (onVocabsChange) return;
     dispatch(isFetchingVocabs(true));
-    onVocabsChange = (snapshot) => {
+    const onVocabsChange = (snapshot) => {
       const val = snapshot.val() || {};
       dispatch(setVocabs(val));
       dispatch(isFetchingVocabs(false));
@@ -346,18 +293,17 @@ export const listenToVocabs = lessonId => (
       .orderByChild('lessonId')
       .equalTo(lessonId)
       .on('value', onVocabsChange);
+    return onVocabsChange;
   }
 );
 
-export const unListenToVocabs = lessonId => (
-  () => {
-    if (!onVocabsChange) return;
+export const unListenToVocabs = (lessonId, listener) => (
+  () => (
     database.ref(`vocabs/${uid}`)
       .orderByChild('lessonId')
       .equalTo(lessonId)
-      .off('value', onVocabsChange);
-    onVocabsChange = null;
-  }
+      .off('value', listener)
+  )
 );
 
 

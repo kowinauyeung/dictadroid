@@ -4,6 +4,8 @@ import {
   editVocab,
   listenToVocabs,
   listenToLessons,
+  unListenToVocabs,
+  unListenToLessons,
 } from '../actions/actions';
 
 const mapStateToProps = state => ({
@@ -19,6 +21,8 @@ const mapDispatchToProps = ({
   editVocab,
   listenToVocabs,
   listenToLessons,
+  unListenToVocabs,
+  unListenToLessons,
 });
 
 const LessonsContainer = connect(

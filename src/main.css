@@ -635,3 +635,71 @@ input[type=radio]:not(:checked) + .check-box {
   background: #e1e1e1;
   margin: 10px 0;
 }
+
+.card-footer, .card-header {
+  min-height: 44px;
+  position: relative;
+  padding: 10px 15px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-header {
+  border-radius: 2px 2px 0 0;
+  font-size: 17px;
+}
+
+.color-white {
+  color: #fff;
+}
+
+.card-footer[valign=bottom], .card-header[valign=bottom] {
+  align-items: flex-end;
+}
+
+.card-content-inner > p:first-child {
+  margin-top: 0;
+}
+
+.card-content-inner>p:last-child {
+  margin-bottom: 0;
+}
+
+.card-footer {
+  border-radius: 0 0 2px 2px;
+  color: #6d6d72;
+}
+
+.card-footer a.link, .card-header a.link {
+  line-height: 44px;
+  height: 44px;
+  text-decoration: none;
+  position: relative;
+  margin-top: -10px;
+  margin-bottom: -10px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  transition-duration: .3s;
+}
+
+.card-footer:before {
+  transform: scaleY(.5);
+}
+
+.card-footer:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: auto;
+  right: auto;
+  height: 1px;
+  width: 100%;
+  background-color: #e1e1e1;
+  display: block;
+  z-index: 15;
+  transform-origin: 50% 0;
+}

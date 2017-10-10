@@ -35,6 +35,8 @@ const propTypes = {
   isFetchingLessons: PropTypes.bool.isRequired,
   listenToVocabs: PropTypes.func.isRequired,
   listenToLessons: PropTypes.func.isRequired,
+  unListenToVocabs: PropTypes.func.isRequired,
+  unListenToLessons: PropTypes.func.isRequired,
 };
 
 const defaultProps = {
@@ -60,6 +62,8 @@ class Vocab extends Component {
     this.isFetching = false;
     this.startEditVocab = this.startEditVocab.bind(this);
     this.endEditVocab = this.endEditVocab.bind(this);
+    this.lessonsListener = null;
+    this.vocabsListener = null;
   }
 
   componentWillMount() {
@@ -67,12 +71,25 @@ class Vocab extends Component {
     const lessonId = match.params.lessonId;
     if (!book) return;
     this.isFetching = true;
-    listenToLessons(book.id);
-    listenToVocabs(lessonId);
+    this.lessonsListener = listenToLessons(book.id);
+    this.vocabsListener = listenToVocabs(lessonId);
   }
 
   componentWillReceiveProps(nextProps) {
     this.isFetching = nextProps.isFetchingVocabs || nextProps.isFetchingLessons;
+  }
+
+  componentWillUnmount() {
+    const { unListenToLessons, unListenToVocabs, book, match } = this.props;
+    const lessonId = match.params.lessonId;
+    if (this.lessonsListener) {
+      unListenToLessons(book.id, this.lessonsListener);
+      this.lessonsListener = null;
+    }
+    if (this.vocabsListener) {
+      unListenToVocabs(lessonId, this.vocabsListener);
+      this.unListenToVocabs = null;
+    }
   }
 
   startEditVocab() {
