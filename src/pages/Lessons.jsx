@@ -23,8 +23,6 @@ const propTypes = {
   addLesson: PropTypes.func.isRequired,
   removeLesson: PropTypes.func.isRequired,
   editLesson: PropTypes.func.isRequired,
-  listenToLessons: PropTypes.func.isRequired,
-  unListenToLessons: PropTypes.func.isRequired,
   isFetchingLessons: PropTypes.bool.isRequired,
   isAppReady: PropTypes.bool.isRequired,
 };
@@ -50,26 +48,6 @@ class Lessons extends Component {
     this.hideAddLessonPopUp = this.hideAddLessonPopUp.bind(this);
     this.endEditLesson = this.endEditLesson.bind(this);
     this.removeLesson = this.removeLesson.bind(this);
-    this.listener = null;
-    this.isFetching = false;
-  }
-
-  componentWillMount() {
-    const { listenToLessons, book } = this.props;
-    if (!book) return;
-    this.isFetching = true;
-    this.listener = listenToLessons(book.id);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.isFetching = nextProps.isFetchingLessons;
-  }
-
-  componentWillUnmount() {
-    const { unListenToLessons, book } = this.props;
-    if (!book) return;
-    unListenToLessons(book.id, this.listener);
-    this.listener = null;
   }
 
   editLesson(targetLesson) {
@@ -196,7 +174,6 @@ class Lessons extends Component {
   render() {
     const { isShowAddLessonPopUp, editingLesson } = this.state;
     const {
-      match,
       book,
       lessons,
       addLesson,
@@ -210,13 +187,6 @@ class Lessons extends Component {
 
     if (!book) {
       return <Redirect to="/books" />;
-    }
-
-    if (match.params.lessonId && !this.isFetching && isAppReady) {
-      if (lessons[match.params.lessonId]) {
-        return <Redirect to={`${match.url}/vocabs`} />;
-      }
-      return <Redirect to="/lessons" />;
     }
 
     return (

@@ -33,10 +33,6 @@ const propTypes = {
   editVocab: PropTypes.func.isRequired,
   isFetchingVocabs: PropTypes.bool.isRequired,
   isFetchingLessons: PropTypes.bool.isRequired,
-  listenToVocabs: PropTypes.func.isRequired,
-  listenToLessons: PropTypes.func.isRequired,
-  unListenToVocabs: PropTypes.func.isRequired,
-  unListenToLessons: PropTypes.func.isRequired,
 };
 
 const defaultProps = {
@@ -59,37 +55,11 @@ class Vocab extends Component {
     this.state = {
       editMode: false,
     };
-    this.isFetching = false;
     this.startEditVocab = this.startEditVocab.bind(this);
     this.endEditVocab = this.endEditVocab.bind(this);
     this.lessonsListener = null;
     this.vocabsListener = null;
-  }
-
-  componentWillMount() {
-    const { listenToVocabs, match, listenToLessons, book } = this.props;
-    const lessonId = match.params.lessonId;
-    if (!book) return;
-    this.isFetching = true;
-    this.lessonsListener = listenToLessons(book.id);
-    this.vocabsListener = listenToVocabs(lessonId);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.isFetching = nextProps.isFetchingVocabs || nextProps.isFetchingLessons;
-  }
-
-  componentWillUnmount() {
-    const { unListenToLessons, unListenToVocabs, book, match } = this.props;
-    const lessonId = match.params.lessonId;
-    if (this.lessonsListener) {
-      unListenToLessons(book.id, this.lessonsListener);
-      this.lessonsListener = null;
-    }
-    if (this.vocabsListener) {
-      unListenToVocabs(lessonId, this.vocabsListener);
-      this.unListenToVocabs = null;
-    }
+    this.noDataMsg = 'Loading...';
   }
 
   startEditVocab() {
@@ -100,94 +70,114 @@ class Vocab extends Component {
     this.setState({ editMode: false });
   }
 
-  render() {
-    const { match, vocabs, book, lessons, editVocab, isAppReady } = this.props;
-    const { editMode } = this.state;
-    const lesson = lessons[match.params.lessonId];
+  renderInner() {
+    const { match, vocabs, book } = this.props;
     const vocab = vocabs[match.params.vocabId];
+
+    return (
+      <div className="page-inner">
+        <div className="content-block">
+          <div className="content-block-inner">
+            <p className="text-center vocab-display">{vocab.vocab}</p>
+            {vocab.pron ? <p className="text-center pron-display">{vocab.pron}</p> : ''}
+            <p className="text-center">
+              <i
+                className="icon ion-ios-volume-high btn-pron"
+                role="presentation"
+                onClick={() => { Speech.pron(vocab, book.lang); }}
+              />
+            </p>
+            <p className="text-center type-display">[{typeMap[vocab.type]}]</p>
+            <div className="line" />
+            <p className="text-center translate-display">{vocab.translation}</p>
+            {
+              vocab.tags && vocab.tags.length > 0 ?
+                (
+                  <div className="text-center tags-display">
+                    {
+                      vocab.tags.map(tag => (
+                        <div
+                          key={`tag-${tag}`}
+                          className="chip"
+                        >
+                          <div className="chip-label">{tag}</div>
+                        </div>
+                      ))
+                    }
+                  </div>
+                )
+                :
+                ''
+            }
+            <p>
+              <a
+                href={`http://www.google.com/images?q=${vocab.vocab}`}
+                className="button"
+                target="_blank"
+              >
+                Google image
+              </a>
+            </p>
+            <p>
+              <a
+                href={`https://www.japandict.com/?s=${vocab.vocab}`}
+                className="button"
+                target="_blank"
+              >
+                Dictionary
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  renderNoData() {
+    return (
+      <div className="content-block">
+        <p className="text-center">{this.noDataMsg}</p>
+      </div>
+    );
+  }
+
+  render() {
+    const {
+      match,
+      vocabs,
+      book,
+      lessons,
+      editVocab,
+      isAppReady,
+      isFetchingVocabs,
+      isFetchingLessons,
+    } = this.props;
+    const { editMode } = this.state;
+    const lessonId = match.params.lessonId;
+    const vocabId = match.params.vocabId;
+    const lesson = lessons[lessonId];
+    const vocab = vocabs[vocabId];
 
     if (!isAppReady) {
       return <Redirect to={`/redirect?url=${match.url}`} />;
     }
 
-    if (!lesson && !this.isFetching) {
+    if (!lesson && !isFetchingLessons) {
       return <Redirect to="/lessons" />;
     }
 
-    if (!vocab && !this.isFetching) {
+    if (!vocab && !isFetchingVocabs) {
       return <Redirect to={`/lessons/${match.params.lessonId}/vocabs`} />;
-    }
-
-    if (this.isFetching && (!lesson || !vocab)) {
-      return (
-        <div className="loading-overlay">
-          <i className="icon ion-ios-loop-strong loading-icon" />
-        </div>
-      );
     }
 
     return (
       <div className="vocab page">
         <NavBar
-          pageName={`${book.title} - ${lesson.title}`}
-          left={<BackButton to={`/lessons/${lesson.id}/vocabs`} text="back" />}
+          pageName={book && lesson ? `${book.title} - ${lesson.title}` : 'loading...'}
+          left={<BackButton to={`/lessons/${lessonId}/vocabs`} text="back" />}
           right={<div onClick={this.startEditVocab} role="presentation">Edit</div>}
         />
-        <div className="page-inner">
-          <div className="content-block">
-            <div className="content-block-inner">
-              <p className="text-center vocab-display">{vocab.vocab}</p>
-              {vocab.pron ? <p className="text-center pron-display">{vocab.pron}</p> : ''}
-              <p className="text-center">
-                <i
-                  className="icon ion-ios-volume-high btn-pron"
-                  role="presentation"
-                  onClick={() => { Speech.pron(vocab, book.lang); }}
-                />
-              </p>
-              <p className="text-center type-display">[{typeMap[vocab.type]}]</p>
-              <div className="line" />
-              <p className="text-center translate-display">{vocab.translation}</p>
-              {
-                vocab.tags && vocab.tags.length > 0 ?
-                  (
-                    <div className="text-center tags-display">
-                      {
-                        vocab.tags.map(tag => (
-                          <div
-                            key={`tag-${tag}`}
-                            className="chip"
-                          >
-                            <div className="chip-label">{tag}</div>
-                          </div>
-                        ))
-                      }
-                    </div>
-                  )
-                  :
-                  ''
-              }
-              <p>
-                <a
-                  href={`http://www.google.com/images?q=${vocab.vocab}`}
-                  className="button"
-                  target="_blank"
-                >
-                  Google image
-                </a>
-              </p>
-              <p>
-                <a
-                  href={`https://www.japandict.com/?s=${vocab.vocab}`}
-                  className="button"
-                  target="_blank"
-                >
-                  Dictionary
-                </a>
-              </p>
-            </div>
-          </div>
-        </div>
+        {vocab ? this.renderInner() : this.renderNoData()}
         <EditVocabForm
           targetVocab={editMode ? vocab : undefined}
           hide={this.endEditVocab}

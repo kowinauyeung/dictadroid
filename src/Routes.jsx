@@ -20,7 +20,6 @@ function Routes() {
         <Route path="/books" component={Books} />
         <Route path="/lessons/:lessonId/vocabs/:vocabId" component={Vocab} />
         <Route path="/lessons/:lessonId/vocabs" component={Vocabs} />
-        <Route path="/lessons/:lessonId" component={Lessons} />
         <Route path="/lessons" component={Lessons} />
         <Route path="/history" component={History} />
         <Route path="/dictation" component={Dictation} />

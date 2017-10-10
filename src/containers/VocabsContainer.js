@@ -4,8 +4,6 @@ import {
   addVocab,
   removeVocab,
   editVocab,
-  listenToVocabs,
-  unListenToVocabs,
 } from '../actions/actions';
 
 const mapStateToProps = state => ({
@@ -14,14 +12,13 @@ const mapStateToProps = state => ({
   vocabs: state.vocabs,
   isAppReady: state.app.isReady,
   isFetchingVocabs: state.app.isFetchingVocabs,
+  isFetchingLessons: state.app.isFetchingLessons,
 });
 
 const mapDispatchToProps = ({
   addVocab,
   removeVocab,
   editVocab,
-  listenToVocabs,
-  unListenToVocabs,
 });
 
 const LessonsContainer = connect(

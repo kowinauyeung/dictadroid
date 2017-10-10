@@ -36,8 +36,7 @@ const propTypes = {
   editVocab: PropTypes.func.isRequired,
   isAppReady: PropTypes.bool.isRequired,
   isFetchingVocabs: PropTypes.bool.isRequired,
-  listenToVocabs: PropTypes.func.isRequired,
-  unListenToVocabs: PropTypes.func.isRequired,
+  isFetchingLessons: PropTypes.bool.isRequired,
 };
 
 const defaultProps = {
@@ -61,22 +60,6 @@ class Vocabs extends Component {
     this.hideAddVocabPopUp = this.hideAddVocabPopUp.bind(this);
     this.endEditVocab = this.endEditVocab.bind(this);
     this.removeVocab = this.removeVocab.bind(this);
-    this.listener = null;
-  }
-
-  componentDidMount() {
-    const { listenToVocabs, lessons, match } = this.props;
-    const lesson = lessons[match.params.lessonId];
-    if (!lesson) return;
-    this.listener = listenToVocabs(lesson.id);
-  }
-
-  componentWillUnmount() {
-    const { unListenToVocabs, lessons, match } = this.props;
-    const lesson = lessons[match.params.lessonId];
-    if (!lesson) return;
-    unListenToVocabs(lesson.id, this.listener);
-    this.listener = null;
   }
 
   speech(vocab) {
@@ -153,11 +136,12 @@ class Vocabs extends Component {
   renderVocabList() {
     const { editMode } = this.state;
     const { vocabs, match } = this.props;
+    const lessonId = match.params.lessonId;
     return (
       <div className="list-block media-list">
         <ul>
           {
-            Object.keys(vocabs).map((key) => {
+            Object.keys(vocabs).filter(key => (vocabs[key].lessonId === lessonId)).map((key) => {
               const vocab = vocabs[key];
               return (
                 <EditableItem
@@ -213,21 +197,33 @@ class Vocabs extends Component {
 
   render() {
     const { isShowAddVocabPopUp, editingVocab } = this.state;
-    const { book, lessons, vocabs, match, addVocab, editVocab, isAppReady } = this.props;
+    const {
+      book,
+      lessons,
+      vocabs,
+      match,
+      addVocab,
+      editVocab,
+      isAppReady,
+      isFetchingLessons,
+    } = this.props;
+
     const lessonId = match.params.lessonId;
 
     if (!isAppReady) {
       return <Redirect to={`/redirect?url=${match.url}`} />;
     }
 
-    if (!lessons[lessonId]) {
+    if (!lessons[lessonId] && !isFetchingLessons) {
       return <Redirect to={`/lessons/${lessonId}`} />;
     }
+
+    const lesson = lessons[lessonId];
 
     return (
       <div className="vocabs page">
         <NavBar
-          pageName={lessons[lessonId].title}
+          pageName={lesson ? lesson.title : 'Loading...'}
           left={<BackButton to="/lessons" text="Lessons" />}
           right={this.renderRightControl()}
         />
