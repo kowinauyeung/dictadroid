@@ -211,9 +211,14 @@ export const editLesson = (targetLesson, title) => (
   )
 );
 
+let lastBookId = null;
 export const listenToLessons = bookId => (
   (dispatch) => {
     dispatch(isFetchingLessons(true));
+    if (lastBookId !== bookId) {
+      dispatch(setLessons({}));
+      lastBookId = bookId;
+    }
     const onLessonsChange = (snapshot) => {
       const val = snapshot.val() || {};
       dispatch(setLessons(val));
@@ -281,9 +286,14 @@ export const editVocab = (targetVocab, vocab) => (
   )
 );
 
+let lastLessonId = null;
 export const listenToVocabs = lessonId => (
   (dispatch) => {
     dispatch(isFetchingVocabs(true));
+    if (lessonId !== lastLessonId) {
+      dispatch(setVocabs({}));
+      lastLessonId = lessonId;
+    }
     const onVocabsChange = (snapshot) => {
       const val = snapshot.val() || {};
       dispatch(setVocabs(val));
