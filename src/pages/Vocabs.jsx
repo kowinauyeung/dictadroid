@@ -61,20 +61,22 @@ class Vocabs extends Component {
     this.hideAddVocabPopUp = this.hideAddVocabPopUp.bind(this);
     this.endEditVocab = this.endEditVocab.bind(this);
     this.removeVocab = this.removeVocab.bind(this);
+    this.listener = null;
   }
 
   componentDidMount() {
     const { listenToVocabs, lessons, match } = this.props;
     const lesson = lessons[match.params.lessonId];
     if (!lesson) return;
-    listenToVocabs(lesson.id);
+    this.listener = listenToVocabs(lesson.id);
   }
 
   componentWillUnmount() {
     const { unListenToVocabs, lessons, match } = this.props;
     const lesson = lessons[match.params.lessonId];
     if (!lesson) return;
-    unListenToVocabs(lesson.id);
+    unListenToVocabs(lesson.id, this.listener);
+    this.listener = null;
   }
 
   speech(vocab) {

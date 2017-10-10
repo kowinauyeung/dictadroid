@@ -50,18 +50,26 @@ class Lessons extends Component {
     this.hideAddLessonPopUp = this.hideAddLessonPopUp.bind(this);
     this.endEditLesson = this.endEditLesson.bind(this);
     this.removeLesson = this.removeLesson.bind(this);
+    this.listener = null;
+    this.isFetching = false;
   }
 
-  componentDidMount() {
+  componentWillMount() {
     const { listenToLessons, book } = this.props;
     if (!book) return;
-    listenToLessons(book.id);
+    this.isFetching = true;
+    this.listener = listenToLessons(book.id);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.isFetching = nextProps.isFetchingLessons;
   }
 
   componentWillUnmount() {
     const { unListenToLessons, book } = this.props;
     if (!book) return;
-    unListenToLessons(book.id);
+    unListenToLessons(book.id, this.listener);
+    this.listener = null;
   }
 
   editLesson(targetLesson) {
@@ -194,7 +202,6 @@ class Lessons extends Component {
       addLesson,
       editLesson,
       isAppReady,
-      isFetchingLessons,
     } = this.props;
 
     if (!isAppReady) {
@@ -205,7 +212,7 @@ class Lessons extends Component {
       return <Redirect to="/books" />;
     }
 
-    if (match.params.lessonId && !isFetchingLessons && isAppReady) {
+    if (match.params.lessonId && !this.isFetching && isAppReady) {
       if (lessons[match.params.lessonId]) {
         return <Redirect to={`${match.url}/vocabs`} />;
       }
