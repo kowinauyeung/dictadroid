@@ -10,7 +10,9 @@
 
 .ks-card-header-pic {
   background: #fff;
-  margin-bottom: 42px;
+  height: 100%;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .ks-card-header-pic .card-header {
@@ -56,13 +58,19 @@
   z-index: 0;
 }
 
-.ks-card-header-pic .card-footer .link,
-.ks-card-header-pic .card-footer .block {
+.import-book-form-main .card-footer .link,
+.import-book-form-main .card-footer .block {
   display: block;
   width: 100%;
 }
 
-.ks-card-header-pic .card-footer .link {
+.import-book-form-main {
+  height: 100%;
+  padding-bottom: 44px;
+  box-sizing: border-box;
+}
+
+.import-book-form-main .card-footer .link {
   color: #F03D6C;
 }
 
@@ -82,8 +90,8 @@
   margin-top: 0;
 }
 
-.ks-card-header-pic .card-footer {
-  position: fixed;
+.import-book-form-main .card-footer {
+  position: absolute;
   bottom: 0;
   background: #fff;
   width: 100%;

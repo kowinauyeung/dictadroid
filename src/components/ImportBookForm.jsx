@@ -138,7 +138,7 @@ class ImportBookForm extends Component {
     const { filename } = this.props;
     const { data } = this.state;
     return (
-      <div>
+      <div className="import-book-form-main">
         <div className="ks-card-header-pic">
           <div
             className="card-header color-white no-border"
@@ -177,8 +177,8 @@ class ImportBookForm extends Component {
               </ul>
             </div>
           </div>
-          <div className="card-footer">{this.renderFooter()}</div>
         </div>
+        <div className="card-footer">{this.renderFooter()}</div>
       </div>
     );
   }
