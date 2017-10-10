@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
+import './RedirectTo.css';
 
 const propTypes = {
   location: PropTypes.shape({ search: PropTypes.string }).isRequired,
@@ -11,8 +12,10 @@ function RedirectTo(props) {
   const { location, isAppReady } = props;
   if (!isAppReady) {
     return (
-      <div className="loading-overlay">
-        <i className="icon ion-ios-loop-strong loading-icon" />
+      <div className="redirect-to page without-header">
+        <div className="page-inner">
+          <p className="text-center grey">Please wait for a moment.</p>
+        </div>
       </div>
     );
   }

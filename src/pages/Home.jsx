@@ -46,11 +46,7 @@ class Home extends Component {
     const activeBook = books[activeBookId] || null;
 
     if (!isAppReady) {
-      return (
-        <div className="loading-overlay">
-          <i className="icon ion-ios-loop-strong loading-icon" />
-        </div>
-      );
+      return <Redirect to="/redirect?url=/" />;
     }
 
     if (!activeBook) {
@@ -64,7 +60,8 @@ class Home extends Component {
             <div className="home-header-inner">
               <span>{activeBook.title}</span>
               <span className="subtext">
-                Total lesson: {activeBook.lessons ? Object.keys(activeBook.lessons).length : '0'}
+                {activeBook.lessons ? Object.keys(activeBook.lessons).length : '0'} lessons,&nbsp;
+                {activeBook.lessons ? Object.keys(activeBook.vocabs).length : '0'} vocabs.
               </span>
             </div>
             <div

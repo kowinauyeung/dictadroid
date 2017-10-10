@@ -1,0 +1,5 @@
+.redirect-to .page-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
