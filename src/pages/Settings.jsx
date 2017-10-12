@@ -101,7 +101,7 @@ class Settings extends Component {
                   <div className="item-content">
                     <div className="item-inner">
                       <div className="item-title">Version</div>
-                      <div className="item-after">1.0.0</div>
+                      <div className="item-after">1.0.1</div>
                     </div>
                   </div>
                 </div>
