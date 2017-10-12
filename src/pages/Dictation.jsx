@@ -231,7 +231,7 @@ class Dictation extends Component {
     const trainType = match.path.replace('/', '');
 
     if (!isAppReady) {
-      return <Redirect to="/redirect?url=/dictation" />;
+      return <Redirect to={`/redirect?url=${match.url}`} />;
     }
 
     if (!book) {
