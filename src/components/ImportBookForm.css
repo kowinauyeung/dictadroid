@@ -1,0 +1,99 @@
+.downloading-book {
+  font-size: 20px;
+  display: flex;
+  align-self: center;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  color: #656565;
+}
+
+.ks-card-header-pic {
+  background: #fff;
+  height: 100%;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.ks-card-header-pic .card-header {
+  height: 70vw;
+  align-items: flex-end;
+  text-shadow: 0 0 5px #000;
+  font-size: 2em;
+  position: relative;
+  overflow: hidden;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.ks-card-header-pic .card-header:before {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-image: inherit;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  z-index: 0;
+  filter: blur(15px);
+}
+
+.ks-card-header-pic .card-header:after {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-image: inherit;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  z-index: 0;
+}
+
+.import-book-form-main .card-footer .link,
+.import-book-form-main .card-footer .block {
+  display: block;
+  width: 100%;
+}
+
+.import-book-form-main {
+  height: 100%;
+  padding-bottom: 44px;
+  box-sizing: border-box;
+}
+
+.import-book-form-main .card-footer .link {
+  color: #F03D6C;
+}
+
+.ks-card-header-pic .list-block {
+  margin: 0;
+}
+
+.ks-card-header-pic .list-block li.imported {
+  background: #f6fff4;
+}
+
+.ks-card-header-pic .list-block  .item-after {
+  color: #616161;
+}
+
+.ks-card-header-pic h2 {
+  margin-top: 0;
+}
+
+.import-book-form-main .card-footer {
+  position: absolute;
+  bottom: 0;
+  background: #fff;
+  width: 100%;
+  z-index: 100;
+}

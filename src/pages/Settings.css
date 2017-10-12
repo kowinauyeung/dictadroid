@@ -1,0 +1,22 @@
+.profile-block {
+  background: #ef3c6c;
+  padding: 20px 0;
+  color: #fff;
+  box-sizing: border-box;
+}
+
+img.avatar {
+  border-radius: 50%;
+  width: 140px;
+  height: 140px;
+  display: block;
+  margin: 0 auto;
+}
+
+.text-alpha {
+  opacity: 0.7;
+}
+
+.page.settings {
+  color: #292929;
+}
