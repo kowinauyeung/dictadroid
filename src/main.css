@@ -703,3 +703,101 @@ input[type=radio]:not(:checked) + .check-box {
   z-index: 15;
   transform-origin: 50% 0;
 }
+
+label.label-checkbox input[type=checkbox] {
+  display: none;
+}
+
+label.label-checkbox i.ion-ios-checkmark-empty {
+  width: 22px;
+  height: 22px;
+  position: relative;
+  border-radius: 22px;
+  border: 1px solid #c7c7cc;
+  box-sizing: border-box;
+  display: block;
+}
+label.label-checkbox input[type=checkbox]:not(:checked) + .item-media i.icon:before {
+  content: " ";
+}
+
+.list-block .item-media+.item-inner {
+  margin-left: 15px;
+}
+
+.item-content:not(.edit-mode) .item-media.show-only-edit-mode+.item-inner {
+  margin-left: 0;
+}
+
+label.label-checkbox input[type=checkbox]:checked + .item-media i.icon {
+  border: none;
+  color: #fff;
+  background-color: #f03d6c;
+  font-size: 30px;
+  text-align: center;
+  line-height: 24px;
+}
+
+label.label-checkbox .item-media i.icon:before {
+  line-height: inherit;
+}
+
+.real-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.progressbar, .progressbar-infinite {
+  height: 2px;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  display: block;
+  background: #b6b6b6;
+  border-radius: 2px;
+  transform-origin: center top;
+  transform-style: preserve-3d;
+}
+
+.progressbar span {
+  width: 100%;
+  background: #ef3c6c;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: translate3d(-100%,0,0);
+  transition-duration: 150ms;
+}
+
+.progressbar {
+  vertical-align: middle;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.row>[class*=col-] {
+  box-sizing: border-box;
+}
+
+.row .col-50 {
+  width: calc((100% - 15px*1)/ 2);
+}
+
+.row .col-33 {
+  width: calc((100% - 15px*2)/ 3);
+}
+
+.page-title {
+  color: inherit;
+  text-align: center;
+  font-size: 2em;
+  display: block;
+}

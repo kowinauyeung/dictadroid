@@ -61,7 +61,7 @@ class Home extends Component {
               <span>{activeBook.title}</span>
               <span className="subtext">
                 {activeBook.lessons ? Object.keys(activeBook.lessons).length : '0'} lessons,&nbsp;
-                {activeBook.lessons ? Object.keys(activeBook.vocabs).length : '0'} vocabs.
+                {activeBook.vocabs ? Object.keys(activeBook.vocabs).length : '0'} vocabs.
               </span>
             </div>
             <div
@@ -83,9 +83,9 @@ class Home extends Component {
                   <i className="icon ion-ios-list-outline" />
                   <span>Lessons</span>
                 </Link>
-                <Link to="/history" className="link">
+                <Link to="/results" className="link">
                   <i className="icon ion-ios-clock-outline" />
-                  <span>History</span>
+                  <span>Results</span>
                 </Link>
                 <Link to="/dictation" className="link">
                   <i className="icon ion-ios-play-outline" />

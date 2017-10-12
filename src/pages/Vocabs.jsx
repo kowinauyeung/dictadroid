@@ -187,8 +187,8 @@ class Vocabs extends Component {
   renderNoData() {
     const { isFetchingVocabs } = this.props;
     return (
-      <div className="content-block">
-        <p className="text-center">
+      <div className="real-center">
+        <p className="text-center grey">
           {isFetchingVocabs ? this.loadingMsg : this.noDataMsg}
         </p>
       </div>

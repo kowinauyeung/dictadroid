@@ -1,5 +1,5 @@
 import actionTypes from './actionTypes';
-import firebase, { database } from '../utils/Firebase';
+import firebase, { database, serverTimestamp } from '../utils/Firebase';
 
 let uid = null;
 
@@ -120,6 +120,11 @@ export const removeBook = targetBook => (
         updates[`/vocabs/${uid}/${key}`] = null;
       });
     }
+    if (targetBook.results) {
+      Object.keys(targetBook.results).forEach((key) => {
+        updates[`/results/${uid}/${key}`] = null;
+      });
+    }
     return database.ref()
       .update(updates)
       .then(() => targetBook);
@@ -227,6 +232,29 @@ export const editVocab = (targetVocab, vocab) => (
       .then(() => targetVocab)
   )
 );
+
+// history actions
+export const submitResult = (targetBookId, result) => (
+  () => {
+    const newResultRef = database.ref(`results/${uid}`).push();
+    const newResultId = newResultRef.key;
+    const updateData = {};
+    updateData[`results/${uid}/${newResultId}`] = {
+      ...result,
+      id: newResultId,
+      bookId: targetBookId,
+      createDt: serverTimestamp(),
+    };
+    updateData[`books/${uid}/${targetBookId}/results/${newResultId}`] = true;
+
+    return database.ref()
+      .update(updateData)
+      .then(() => newResultId);
+  }
+);
+
+
+// app action
 
 export const listenToBooks = () => (
   (dispatch) => {

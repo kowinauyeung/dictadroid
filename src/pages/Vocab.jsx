@@ -135,8 +135,8 @@ class Vocab extends Component {
 
   renderNoData() {
     return (
-      <div className="content-block">
-        <p className="text-center">{this.noDataMsg}</p>
+      <div className="real-center">
+        <p className="text-center grey">{this.noDataMsg}</p>
       </div>
     );
   }

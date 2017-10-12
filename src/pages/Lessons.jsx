@@ -163,8 +163,8 @@ class Lessons extends Component {
   renderNoData() {
     const { isFetchingLessons } = this.props;
     return (
-      <div className="content-block">
-        <p className="text-center">
+      <div className="real-center">
+        <p className="text-center grey">
           {isFetchingLessons ? this.loadingMsg : this.noDataMsg}
         </p>
       </div>

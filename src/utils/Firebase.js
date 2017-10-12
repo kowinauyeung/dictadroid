@@ -10,4 +10,6 @@ firebase.initializeApp(config);
 
 export const database = firebase.database();
 
+export const serverTimestamp = () => firebase.database.ServerValue.TIMESTAMP;
+
 export default firebase;
