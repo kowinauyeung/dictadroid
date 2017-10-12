@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Routes from '../Routes';
-import LoginFormContainer from '../containers/LoginFormContainer';
-import LoadingOverlayContainer from '../containers/LoadingOverlayContainer';
-import TabBar from './TabBar';
+import VocabCard from '../containers/VocabCardContainer';
 
 const propTypes = {
   initApp: PropTypes.func.isRequired,
@@ -19,10 +17,10 @@ class Root extends Component {
     return (
       <BrowserRouter>
         <div className="root">
-          <Routes />
-          <TabBar />
-          <LoginFormContainer />
-          <LoadingOverlayContainer />
+          <Switch>
+            <Route path="/vocab-card/:vocabJson" component={VocabCard} />
+            <Route component={Routes} />
+          </Switch>
         </div>
       </BrowserRouter>
     );

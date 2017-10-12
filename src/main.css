@@ -26,7 +26,7 @@ a, input, select, textarea {
 
 a {
   text-decoration: none;
-  color: #007aff;
+  color: inherit;
 }
 
 p {
@@ -742,6 +742,10 @@ label.label-checkbox input[type=checkbox]:not(:checked) + .item-media i.icon:bef
   margin-left: 0;
 }
 
+.item-content.edit-mode .item-media+.item-inner {
+  margin-left: 0;
+}
+
 label.label-checkbox input[type=checkbox]:checked + .item-media i.icon {
   border: none;
   color: #fff;
@@ -817,7 +821,7 @@ label.label-checkbox .item-media i.icon:before {
 
 .ks-card-header-pic .list-block  .item-after.fail,
 .fail {
-  color: #c55555;
+  color: #f31212;
 }
 
 .fullmarks {

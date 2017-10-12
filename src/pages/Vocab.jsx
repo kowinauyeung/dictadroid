@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import NavBar from '../components/NavBar';
 import BackButton from '../components/BackButton';
 import EditVocabForm from '../components/EditVocabForm';
 import Speech from '../utils/Speech';
+import { parseJSONToURIComponent, plainVocabObject } from '../utils/Utils';
 import './Vocab.css';
 
 const propTypes = {
@@ -126,6 +127,18 @@ class Vocab extends Component {
               >
                 Dictionary
               </a>
+            </p>
+            <p>
+              <Link
+                className="button"
+                target="_blank"
+                to={`/vocab-card/${parseJSONToURIComponent(plainVocabObject({
+                  ...vocab,
+                  lang: book.lang,
+                }))}`}
+              >
+                Share this vocabulary
+              </Link>
             </p>
           </div>
         </div>
