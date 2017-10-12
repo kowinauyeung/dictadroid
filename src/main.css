@@ -26,7 +26,7 @@ a, input, select, textarea {
 
 a {
   text-decoration: none;
-  color: #007aff;
+  color: inherit;
 }
 
 p {
@@ -739,6 +739,10 @@ label.label-checkbox input[type=checkbox]:not(:checked) + .item-media i.icon:bef
 }
 
 .item-content:not(.edit-mode) .item-media.show-only-edit-mode+.item-inner {
+  margin-left: 0;
+}
+
+.item-content.edit-mode .item-media+.item-inner {
   margin-left: 0;
 }
 

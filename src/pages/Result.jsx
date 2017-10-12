@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import classNames from 'classnames';
 import { Link, Redirect } from 'react-router-dom';
 import NavBar from '../components/NavBar';
 import BackButton from '../components/BackButton';
 import { Lang } from '../utils/Dictionary';
+import { parseJSONToURIComponent, plainVocabObject } from '../utils/Utils';
 
 const propTypes = {
   match: PropTypes.shape({ url: PropTypes.string }).isRequired,
@@ -28,6 +28,10 @@ const propTypes = {
   ).isRequired,
 };
 
+const defaultProps = {
+  book: null,
+};
+
 const trainTypeMap = {
   dictation: 'Dictation',
   translation: 'Translation',
@@ -43,8 +47,7 @@ function renderNoData(isFetchingResults) {
   );
 }
 
-function renderResult(props) {
-  const { results, match, book } = props;
+const renderResult = (results, match, book) => {
   const resultId = match.params.resultId;
   const result = results[resultId];
 
@@ -53,8 +56,11 @@ function renderResult(props) {
       <div className="card-content">
         <div className="card-content-inner">
           <h2>{book.title}</h2>
-          <p className="grey">Language: {Lang[book.lang]}</p>
           <p className="grey">Lessons: {result.subject}</p>
+          <p className="grey">
+            Training type: {trainTypeMap[result.trainType]},&nbsp;
+            Language: {Lang[book.lang]}
+          </p>
           <p className="grey">
             {moment(result.createDt).calendar()},&nbsp;
             Score: {result.correctAnswer} / {result.vocabs.length}
@@ -73,16 +79,23 @@ function renderResult(props) {
             {
               result.vocabs.map(vocab => (
                 <li key={vocab.id}>
-                  <div className="item-content">
-                    <div className="item-inner">
-                      <div className="item-title">
-                        {result.trainType === 'dictation' ? vocab.vocab : vocab.translation}
-                      </div>
-                      <div className={`item-after${vocab.vocab === vocab.answer ? '' : ' fail'}`}>
-                        {vocab.answer}
+                  <Link
+                    to={`/vocab-card/${parseJSONToURIComponent(plainVocabObject({
+                      ...vocab,
+                      lang: book.lang,
+                    }))}`}
+                  >
+                    <div className="item-content">
+                      <div className="item-inner">
+                        <div className="item-title">
+                          {result.trainType === 'dictation' ? vocab.vocab : vocab.translation}
+                        </div>
+                        <div className={`item-after${vocab.vocab === vocab.answer ? '' : ' fail'}`}>
+                          {vocab.answer}
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 </li>
               ))
             }
@@ -91,10 +104,10 @@ function renderResult(props) {
       </div>
     </div>
   );
-}
+};
 
-function Results(props) {
-  const { isAppReady, isFetchingResults, results, match } = props;
+function Result(props) {
+  const { isAppReady, isFetchingResults, results, match, book } = props;
   const resultId = match.params.resultId;
   const result = results[resultId];
 
@@ -103,8 +116,8 @@ function Results(props) {
   }
 
   if (!result && !isFetchingResults) {
-      return <Redirect to="/results" />;
-    }
+    return <Redirect to="/results" />;
+  }
 
   return (
     <div className="history page">
@@ -113,12 +126,18 @@ function Results(props) {
         left={<BackButton to="/results" />}
       />
       <div className="page-inner">
-        {Object.keys(results).length <= 0 ? renderNoData(isFetchingResults) : renderResult(props)}
+        {
+          Object.keys(results).length <= 0 ?
+            renderNoData(isFetchingResults)
+            :
+            renderResult(results, match, book)
+        }
       </div>
     </div>
   );
 }
 
-Results.propTypes = propTypes;
+Result.propTypes = propTypes;
+Result.defaultProps = defaultProps;
 
-export default Results;
+export default Result;
