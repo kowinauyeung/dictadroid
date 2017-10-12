@@ -22,6 +22,7 @@ const propTypes = {
       tags: PropTypes.arrayOf(PropTypes.string),
     }),
   ).isRequired,
+  trainType: PropTypes.string.isRequired,
   lang: PropTypes.string.isRequired,
   speak: PropTypes.func.isRequired,
   submitResult: PropTypes.func.isRequired,
@@ -79,7 +80,7 @@ class TrainingForm extends Component {
   }
 
   showResult() {
-    const { vocabs, book, subject, submitResult } = this.props;
+    const { vocabs, book, subject, submitResult, trainType } = this.props;
     let isHasEmptyAnswer = false;
     vocabs.forEach((vocab) => {
       if (!vocab.answer || vocab.answer === '') {
@@ -94,10 +95,19 @@ class TrainingForm extends Component {
       }
     }
 
+    let correctAnswer = 0;
+    vocabs.forEach((vocab) => {
+      if (vocab.answer === vocab.vocab) {
+        correctAnswer += 1;
+      }
+    });
+
     const result = {
       title: book.title,
       subject,
       vocabs,
+      trainType,
+      correctAnswer,
     };
     submitResult(book.id, result);
     this.hideEditPopUp();

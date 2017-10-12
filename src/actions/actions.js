@@ -28,6 +28,11 @@ export const isFetchingVocabs = isFetching => ({
   isFetching,
 });
 
+export const isFetchingResults = isFetching => ({
+  type: actionTypes.IS_FETCHING_RESULTS,
+  isFetching,
+});
+
 export const getAppReady = () => ({
   type: actionTypes.GET_APP_READY,
 });
@@ -234,6 +239,11 @@ export const editVocab = (targetVocab, vocab) => (
 );
 
 // history actions
+export const setResults = results => ({
+  type: actionTypes.SET_RESULTS,
+  results,
+});
+
 export const submitResult = (targetBookId, result) => (
   () => {
     const newResultRef = database.ref(`results/${uid}`).push();
@@ -307,10 +317,30 @@ export const listenToVocabs = bookId => (
   }
 );
 
+let onResultsChange = null;
+export const listenToResults = bookId => (
+  (dispatch) => {
+    const ref = database.ref(`results/${uid}`).orderByChild('bookId').equalTo(bookId);
+
+    if (onResultsChange) ref.off('value', onResultsChange);
+    onResultsChange = (snapshot) => {
+      const val = snapshot.val() || {};
+      dispatch(setResults(val));
+      dispatch(isFetchingResults(false));
+    };
+
+    dispatch(setResults({}));
+    dispatch(isFetchingResults(true));
+
+    ref.on('value', onResultsChange);
+  }
+);
+
 export const listenToBook = bookId => (
   (dispatch) => {
     dispatch(listenToLessons(bookId));
     dispatch(listenToVocabs(bookId));
+    dispatch(listenToResults(bookId));
   }
 );
 

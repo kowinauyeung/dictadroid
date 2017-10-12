@@ -6,6 +6,7 @@ const initState = {
   isFetchingBooks: false,
   isFetchingLessons: false,
   isFetchingVocabs: false,
+  isFetchingResults: false,
 };
 
 const app = (state = initState, action) => {
@@ -38,6 +39,12 @@ const app = (state = initState, action) => {
       return {
         ...state,
         isFetchingVocabs: action.isFetching,
+      };
+
+    case actionTypes.IS_FETCHING_RESULTS:
+      return {
+        ...state,
+        isFetchingResults: action.isFetching,
       };
 
     case actionTypes.GET_APP_READY:
