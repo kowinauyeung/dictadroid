@@ -12,6 +12,10 @@ import Dictation from './containers/DictationContainer';
 import Settings from './containers/SettingsContainer';
 import RedirectTo from './containers/RedirectToContainer';
 
+import LoginFormContainer from './containers/LoginFormContainer';
+import LoadingOverlayContainer from './containers/LoadingOverlayContainer';
+import TabBar from './components/TabBar';
+
 function Routes() {
   return (
     <div className="pages">
@@ -27,7 +31,11 @@ function Routes() {
         <Route path="/translation" component={Dictation} />
         <Route path="/settings" component={Settings} />
         <Route path="/redirect" component={RedirectTo} />
+        <Route component={Home} />
       </Switch>
+      <TabBar />
+      <LoginFormContainer />
+      <LoadingOverlayContainer />
     </div>
   );
 }
