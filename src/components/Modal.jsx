@@ -44,7 +44,11 @@ export class Popup extends Component {
   }
 
   renderLeftButton() {
-    return <div className="link light" onClick={this.onLeftClick} role="presentation">Cancel</div>;
+    return (
+      <div className="link light" onClick={this.onLeftClick} role="presentation">
+        {this.props.leftText}
+      </div>
+    );
   }
 
   renderRightButton() {
@@ -85,6 +89,7 @@ Popup.propTypes = {
   header: PropTypes.string.isRequired,
   onLeftClick: PropTypes.func,
   onRightClick: PropTypes.func,
+  leftText: PropTypes.string,
   rightText: PropTypes.string,
   isHideLeft: PropTypes.bool,
   isHideRight: PropTypes.bool,
@@ -94,6 +99,7 @@ Popup.defaultProps = {
   visible: false,
   onLeftClick: null,
   onRightClick: null,
+  leftText: 'Cancel',
   rightText: 'OK',
   isHideLeft: false,
   isHideRight: false,
