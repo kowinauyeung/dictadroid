@@ -10,6 +10,7 @@ const propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
+  match: PropTypes.shape({ url: PropTypes.string }).isRequired,
   book: PropTypes.shape({
     lang: PropTypes.string,
     transFrm: PropTypes.string,
@@ -225,8 +226,9 @@ class Dictation extends Component {
   }
 
   render() {
-    const { book, lessons, isAppReady } = this.props;
+    const { book, lessons, isAppReady, match } = this.props;
     const { training } = this.state;
+    const trainType = match.path.replace('/', '');
 
     if (!isAppReady) {
       return <Redirect to="/redirect?url=/dictation" />;
@@ -239,18 +241,19 @@ class Dictation extends Component {
     return (
       <div className="dictation page">
         <NavBar
-          pageName="Dictation"
+          pageName={trainType === 'dictation' ? 'Dictation' : 'Translation'}
           left={this.renderLeft()}
           right={this.renderRight()}
         />
         {Object.keys(lessons).length <= 0 ? this.renderNoData() : this.renderLesson()}
         <TrainingForm
-          speak={Speech.pron}
+          speak={trainType === 'dictation' ? Speech.pron : Speech.trans}
           hide={this.stopTraining}
           book={book}
           subject={training ? training.subject : ''}
           vocabs={training ? training.vocabs : []}
-          lang={book.lang}
+          lang={trainType === 'dictation' ? book.lang : book.transFrm}
+          trainType={trainType}
           submitResult={this.submitResult}
         />
       </div>

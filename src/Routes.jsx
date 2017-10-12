@@ -8,7 +8,6 @@ import Vocabs from './containers/VocabsContainer';
 import Vocab from './containers/VocabContainer';
 import Results from './pages/Results';
 import Dictation from './containers/DictationContainer';
-import Translation from './pages/Translation';
 import Settings from './containers/SettingsContainer';
 import RedirectTo from './containers/RedirectToContainer';
 
@@ -24,7 +23,7 @@ function Routes() {
         <Route path="/results/:resultId" component={Results} />
         <Route path="/results" component={Results} />
         <Route path="/dictation" component={Dictation} />
-        <Route path="/translation" component={Translation} />
+        <Route path="/translation" component={Dictation} />
         <Route path="/settings" component={Settings} />
         <Route path="/redirect" component={RedirectTo} />
       </Switch>
