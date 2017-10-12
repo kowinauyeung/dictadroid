@@ -2,15 +2,15 @@ import React from 'react';
 import NavBar from '../components/NavBar';
 import BackButton from '../components/BackButton';
 
-function History() {
+function Results() {
   return (
     <div className="history page">
       <NavBar
-        pageName="History"
+        pageName="Results"
         left={<BackButton to="/" />}
       />
     </div>
   );
 }
 
-export default History;
+export default Results;

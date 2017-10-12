@@ -17,7 +17,7 @@ const vocabTypes = ['n', 'v', 'adj', 'adv', 'pn', 'other'];
 class AddVocabForm extends Component {
   constructor() {
     super();
-    this.defaulatState = {
+    this.defaultState = {
       formVocab: '',
       formTranslation: '',
       formPron: '',
@@ -25,7 +25,7 @@ class AddVocabForm extends Component {
       formType: '',
       formTags: [],
     };
-    this.state = { ...this.defaulatState };
+    this.state = { ...this.defaultState };
     this.onClickAdd = this.onClickAdd.bind(this);
     this.hideEditPopUp = this.hideEditPopUp.bind(this);
     this.onTagsChange = this.onTagsChange.bind(this);
@@ -83,7 +83,7 @@ class AddVocabForm extends Component {
   }
 
   resetForm() {
-    this.setState({ ...this.defaulatState });
+    this.setState({ ...this.defaultState });
   }
 
   removeChip(chip) {

@@ -6,8 +6,8 @@ import Books from './containers/BooksContainer';
 import Lessons from './containers/LessonsContainer';
 import Vocabs from './containers/VocabsContainer';
 import Vocab from './containers/VocabContainer';
-import History from './pages/History';
-import Dictation from './pages/Dictation';
+import Results from './pages/Results';
+import Dictation from './containers/DictationContainer';
 import Translation from './pages/Translation';
 import Settings from './containers/SettingsContainer';
 import RedirectTo from './containers/RedirectToContainer';
@@ -20,9 +20,9 @@ function Routes() {
         <Route path="/books" component={Books} />
         <Route path="/lessons/:lessonId/vocabs/:vocabId" component={Vocab} />
         <Route path="/lessons/:lessonId/vocabs" component={Vocabs} />
-        <Route path="/lessons/:lessonId" component={Lessons} />
         <Route path="/lessons" component={Lessons} />
-        <Route path="/history" component={History} />
+        <Route path="/results/:resultId" component={Results} />
+        <Route path="/results" component={Results} />
         <Route path="/dictation" component={Dictation} />
         <Route path="/translation" component={Translation} />
         <Route path="/settings" component={Settings} />

@@ -1,10 +1,6 @@
 import { connect } from 'react-redux';
-import Vocabs from '../pages/Vocabs';
-import {
-  addVocab,
-  removeVocab,
-  editVocab,
-} from '../actions/actions';
+import Dictation from '../pages/Dictation';
+import { submitResult } from '../actions/actions';
 
 const mapStateToProps = state => ({
   book: state.books[state.user.activeBookId],
@@ -16,14 +12,12 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = ({
-  addVocab,
-  removeVocab,
-  editVocab,
+  submitResult,
 });
 
-const LessonsContainer = connect(
+const DictationContainer = connect(
   mapStateToProps,
   mapDispatchToProps,
-)(Vocabs);
+)(Dictation);
 
-export default LessonsContainer;
+export default DictationContainer;

@@ -1,8 +1,6 @@
 import { connect } from 'react-redux';
 import Lessons from '../pages/Lessons';
 import {
-  listenToLessons,
-  unListenToLessons,
   addLesson,
   removeLesson,
   editLesson,
@@ -16,8 +14,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = ({
-  listenToLessons,
-  unListenToLessons,
   addLesson,
   removeLesson,
   editLesson,

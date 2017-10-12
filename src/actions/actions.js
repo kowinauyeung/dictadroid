@@ -1,5 +1,5 @@
 import actionTypes from './actionTypes';
-import firebase, { database } from '../utils/Firebase';
+import firebase, { database, serverTimestamp } from '../utils/Firebase';
 
 let uid = null;
 
@@ -44,20 +44,6 @@ export const login = user => ({
     activeBookId: user.activeBookId,
   },
 });
-
-export const setActiveBook = activeBookId => (
-  dispatch => (
-    database.ref(`users/${uid}/activeBookId`)
-      .set(activeBookId)
-      .then(() => {
-        dispatch({
-          type: actionTypes.SET_ACTIVE_BOOK,
-          activeBookId,
-        });
-        return activeBookId;
-      })
-  )
-);
 
 export const logout = () => ({
   type: actionTypes.LOGOUT,
@@ -134,6 +120,11 @@ export const removeBook = targetBook => (
         updates[`/vocabs/${uid}/${key}`] = null;
       });
     }
+    if (targetBook.results) {
+      Object.keys(targetBook.results).forEach((key) => {
+        updates[`/results/${uid}/${key}`] = null;
+      });
+    }
     return database.ref()
       .update(updates)
       .then(() => targetBook);
@@ -146,19 +137,6 @@ export const editBook = (targetBook, title, lang, transFrm) => (
       .update({ title, lang, transFrm })
       .then(() => targetBook)
   )
-);
-
-export const listenToBooks = () => (
-  (dispatch) => {
-    dispatch(isFetchingBooks(true));
-    database.ref(`books/${uid}`)
-      .on('value', (snapshot) => {
-        const val = snapshot.val() || {};
-        dispatch(setBooks(val));
-        dispatch(isFetchingBooks(false));
-        dispatch(getAppReady());
-      });
-  }
 );
 
 
@@ -211,37 +189,6 @@ export const editLesson = (targetLesson, title) => (
   )
 );
 
-let lastBookId = null;
-export const listenToLessons = bookId => (
-  (dispatch) => {
-    dispatch(isFetchingLessons(true));
-    if (lastBookId !== bookId) {
-      dispatch(setLessons({}));
-      lastBookId = bookId;
-    }
-    const onLessonsChange = (snapshot) => {
-      const val = snapshot.val() || {};
-      dispatch(setLessons(val));
-      dispatch(isFetchingLessons(false));
-    };
-    database.ref(`lessons/${uid}`)
-      .orderByChild('bookId')
-      .equalTo(bookId)
-      .on('value', onLessonsChange);
-    return onLessonsChange;
-  }
-);
-
-export const unListenToLessons = (bookId, listener) => (
-  () => (
-    database.ref(`lessons/${uid}`)
-      .orderByChild('bookId')
-      .equalTo(bookId)
-      .off('value', listener)
-  )
-);
-
-
 // vocabs action
 export const setVocabs = vocabs => ({
   type: actionTypes.SET_VOCABS,
@@ -286,36 +233,110 @@ export const editVocab = (targetVocab, vocab) => (
   )
 );
 
-let lastLessonId = null;
-export const listenToVocabs = lessonId => (
+// history actions
+export const submitResult = (targetBookId, result) => (
+  () => {
+    const newResultRef = database.ref(`results/${uid}`).push();
+    const newResultId = newResultRef.key;
+    const updateData = {};
+    updateData[`results/${uid}/${newResultId}`] = {
+      ...result,
+      id: newResultId,
+      bookId: targetBookId,
+      createDt: serverTimestamp(),
+    };
+    updateData[`books/${uid}/${targetBookId}/results/${newResultId}`] = true;
+
+    return database.ref()
+      .update(updateData)
+      .then(() => newResultId);
+  }
+);
+
+
+// app action
+
+export const listenToBooks = () => (
   (dispatch) => {
-    dispatch(isFetchingVocabs(true));
-    if (lessonId !== lastLessonId) {
-      dispatch(setVocabs({}));
-      lastLessonId = lessonId;
-    }
-    const onVocabsChange = (snapshot) => {
+    dispatch(isFetchingBooks(true));
+    database.ref(`books/${uid}`)
+      .on('value', (snapshot) => {
+        const val = snapshot.val() || {};
+        dispatch(setBooks(val));
+        dispatch(isFetchingBooks(false));
+        dispatch(getAppReady());
+      });
+  }
+);
+
+let onLessonsChange = null;
+export const listenToLessons = bookId => (
+  (dispatch) => {
+    const ref = database.ref(`lessons/${uid}`).orderByChild('bookId').equalTo(bookId);
+
+    if (onLessonsChange) ref.off('value', onLessonsChange);
+    onLessonsChange = (snapshot) => {
+      const val = snapshot.val() || {};
+      dispatch(setLessons(val));
+      dispatch(isFetchingLessons(false));
+    };
+
+    dispatch(setLessons({}));
+    dispatch(isFetchingLessons(true));
+
+    ref.on('value', onLessonsChange);
+  }
+);
+
+let onVocabsChange = null;
+export const listenToVocabs = bookId => (
+  (dispatch) => {
+    const ref = database.ref(`vocabs/${uid}`).orderByChild('bookId').equalTo(bookId);
+
+    if (onVocabsChange) ref.off('value', onVocabsChange);
+    onVocabsChange = (snapshot) => {
       const val = snapshot.val() || {};
       dispatch(setVocabs(val));
       dispatch(isFetchingVocabs(false));
     };
-    database.ref(`vocabs/${uid}`)
-      .orderByChild('lessonId')
-      .equalTo(lessonId)
-      .on('value', onVocabsChange);
-    return onVocabsChange;
+
+    dispatch(setVocabs({}));
+    dispatch(isFetchingVocabs(true));
+
+    ref.on('value', onVocabsChange);
   }
 );
 
-export const unListenToVocabs = (lessonId, listener) => (
-  () => (
-    database.ref(`vocabs/${uid}`)
-      .orderByChild('lessonId')
-      .equalTo(lessonId)
-      .off('value', listener)
+export const listenToBook = bookId => (
+  (dispatch) => {
+    dispatch(listenToLessons(bookId));
+    dispatch(listenToVocabs(bookId));
+  }
+);
+
+export const setActiveBook = activeBookId => (
+  dispatch => (
+    database.ref(`users/${uid}/activeBookId`)
+      .set(activeBookId)
+      .then(() => {
+        dispatch({
+          type: actionTypes.SET_ACTIVE_BOOK,
+          activeBookId,
+        });
+        dispatch(listenToBook(activeBookId));
+        return activeBookId;
+      })
   )
 );
 
+export const initData = bookId => (
+  (dispatch) => {
+    dispatch(listenToBooks());
+    if (bookId) {
+      dispatch(listenToBook(bookId));
+    }
+  }
+);
 
 export const initApp = () => (
   (dispatch) => {
@@ -340,7 +361,7 @@ export const initApp = () => (
             database.ref(userRef).set(userObj);
             dispatch(login(userObj));
             dispatch(hideLoading());
-            dispatch(listenToBooks());
+            dispatch(initData(userObj.activeBookId));
           });
       } else {
         uid = null;

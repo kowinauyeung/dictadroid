@@ -125,7 +125,7 @@ class Books extends Component {
     return (
       <div className="list-block media-list">
         {
-          activeBookId ?
+          activeBookId && books[activeBookId] ?
             ''
             :
             (
@@ -189,8 +189,8 @@ class Books extends Component {
   renderNoData() {
     const { isFetchingBooks } = this.props;
     return (
-      <div className="content-block">
-        <p className="text-center">
+      <div className="real-center">
+        <p className="text-center grey">
           {isFetchingBooks ? this.loadingMsg : this.noDataMsg}
         </p>
       </div>

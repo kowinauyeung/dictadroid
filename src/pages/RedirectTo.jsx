@@ -11,8 +11,10 @@ function RedirectTo(props) {
   const { location, isAppReady } = props;
   if (!isAppReady) {
     return (
-      <div className="loading-overlay">
-        <i className="icon ion-ios-loop-strong loading-icon" />
+      <div className="redirect-to page without-header">
+        <div className="page-inner real-center">
+          <p className="text-center grey">Please wait for a moment.</p>
+        </div>
       </div>
     );
   }
