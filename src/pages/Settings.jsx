@@ -94,6 +94,20 @@ class Settings extends Component {
               }
             </ul>
           </div>
+          <div className="list-block">
+            <ul>
+              <li>
+                <div className="btn-free-book">
+                  <div className="item-content">
+                    <div className="item-inner">
+                      <div className="item-title">Version</div>
+                      <div className="item-after">1.0.0</div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
           <div className="list-block inset">
             <ul>
               <li>
