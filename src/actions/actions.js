@@ -47,6 +47,7 @@ export const login = user => ({
     email: user.email,
     photoURL: user.photoURL,
     activeBookId: user.activeBookId,
+    lang: user.lang,
   },
 });
 
@@ -359,6 +360,20 @@ export const setActiveBook = activeBookId => (
   )
 );
 
+export const setUserLang = lang => (
+  dispatch => (
+    database.ref(`users/${uid}/lang`)
+      .set(lang)
+      .then(() => {
+        dispatch({
+          type: actionTypes.SET_USER_LANG,
+          lang,
+        });
+        return lang;
+      })
+  )
+);
+
 export const initData = bookId => (
   (dispatch) => {
     dispatch(listenToBooks());
@@ -380,12 +395,14 @@ export const initApp = () => (
           email: user.email,
           photoURL: user.photoURL,
           activeBookId: null,
+          lang: null,
         };
         database.ref(userRef)
           .once('value')
           .then((snapshot) => {
             if (snapshot.val()) {
               userObj.activeBookId = snapshot.val().activeBookId || null;
+              userObj.lang = snapshot.val().lang || 'en';
             }
             uid = userObj.id;
             database.ref(userRef).set(userObj);

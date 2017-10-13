@@ -1,9 +1,10 @@
 import { connect } from 'react-redux';
 import Settings from '../pages/Settings';
-import { logoutOfFirebase, addBook, addLesson, addVocab } from '../actions/actions';
+import { logoutOfFirebase, addBook, addLesson, addVocab, setUserLang } from '../actions/actions';
 
 const mapStateToProps = state => ({
   user: state.user,
+  isAppReady: state.app.isReady,
 });
 
 const mapDispatchToProps = ({
@@ -11,6 +12,7 @@ const mapDispatchToProps = ({
   addBook,
   addLesson,
   addVocab,
+  setUserLang,
 });
 
 const BooksContainer = connect(

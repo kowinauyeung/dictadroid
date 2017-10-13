@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Redirect } from 'react-router-dom';
 import ImportBookForm from '../components/ImportBookForm';
 import './Settings.css';
 
@@ -13,6 +14,8 @@ const propTypes = {
   addBook: PropTypes.func.isRequired,
   addLesson: PropTypes.func.isRequired,
   addVocab: PropTypes.func.isRequired,
+  setUserLang: PropTypes.func.isRequired,
+  isAppReady: PropTypes.bool.isRequired,
 };
 
 const books = [
@@ -56,9 +59,22 @@ class Settings extends Component {
   }
 
   render() {
-    const { logoutOfFirebase, user, addBook, addLesson, addVocab } = this.props;
+    const {
+      logoutOfFirebase,
+      user,
+      addBook,
+      addLesson,
+      addVocab,
+      setUserLang,
+      isAppReady,
+    } = this.props;
     const { bookToImport } = this.state;
-    const { displayName, email, photoURL } = user;
+    const { displayName, email, photoURL, lang } = user;
+
+    if (!isAppReady) {
+      return <Redirect to="/redirect?url=/settings" />;
+    }
+
     return (
       <div className="settings page without-header">
         <div className="page-inner">
@@ -66,6 +82,28 @@ class Settings extends Component {
             {photoURL ? <img className="avatar" src={photoURL} alt={displayName} /> : ''}
             <h2 className="text-center">{displayName}</h2>
             <p className="text-center text-alpha">{email}</p>
+          </div>
+          <div className="list-block">
+            <ul>
+              <li>
+                <div className="item-content">
+                  <div className="item-inner">
+                    <div className="item-title label">Language</div>
+                    <div className="item-input">
+                      <select
+                        value={lang}
+                        onChange={(e) => {
+                          setUserLang(e.target.value);
+                        }}
+                      >
+                        <option value="en">English</option>
+                        <option value="zh">中文</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ul>
           </div>
           <div className="content-block-title">Free Book from server</div>
           <div className="list-block">
