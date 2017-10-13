@@ -5,6 +5,7 @@ import EditBookForm from '../components/EditBookForm';
 import './Home.css';
 
 const propTypes = {
+  LANG: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
   activeBookId: PropTypes.string,
   isAppReady: PropTypes.bool.isRequired,
   books: PropTypes.objectOf(
@@ -41,7 +42,7 @@ class Home extends Component {
   }
 
   render() {
-    const { activeBookId, books, editBook, isAppReady } = this.props;
+    const { activeBookId, books, editBook, isAppReady, LANG } = this.props;
     const { isShowEditPopUp } = this.state;
     const activeBook = books[activeBookId] || null;
 
@@ -60,8 +61,10 @@ class Home extends Component {
             <div className="home-header-inner">
               <span>{activeBook.title}</span>
               <span className="subtext">
-                {activeBook.lessons ? Object.keys(activeBook.lessons).length : '0'} lessons,&nbsp;
-                {activeBook.vocabs ? Object.keys(activeBook.vocabs).length : '0'} vocabs.
+                {activeBook.lessons ? Object.keys(activeBook.lessons).length : '0'}
+                {LANG.UNIT_LESSONS},&nbsp;
+                {activeBook.vocabs ? Object.keys(activeBook.vocabs).length : '0'}
+                {LANG.UNIT_VOCABS}
               </span>
             </div>
             <div
@@ -77,19 +80,19 @@ class Home extends Component {
               <div className="card-content">
                 <Link to="/books" className="link">
                   <i className="icon ion-ios-bookmarks-outline" />
-                  <span>Books</span>
+                  <span>{LANG.BOOKS}</span>
                 </Link>
                 <Link to="/lessons" className="link">
                   <i className="icon ion-ios-list-outline" />
-                  <span>Lessons</span>
+                  <span>{LANG.LESSONS}</span>
                 </Link>
                 <Link to="/results" className="link">
                   <i className="icon ion-ios-clock-outline" />
-                  <span>Results</span>
+                  <span>{LANG.RESULTS}</span>
                 </Link>
                 <Link to="/dictation" className="link">
                   <i className="icon ion-ios-play-outline" />
-                  <span>Start</span>
+                  <span>{LANG.START}</span>
                 </Link>
               </div>
             </div>
@@ -99,6 +102,7 @@ class Home extends Component {
           targetBook={isShowEditPopUp ? activeBook : undefined}
           hide={this.hideEditPopUp}
           editBook={editBook}
+          LANG={LANG}
         />
       </div>
     );

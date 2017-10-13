@@ -8,6 +8,7 @@ import EditLessonForm from '../components/EditLessonForm';
 import EditableItem from '../components/EditableItem';
 
 const propTypes = {
+  LANG: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
   match: PropTypes.shape({ url: PropTypes.string }).isRequired,
   book: PropTypes.shape({
     id: PropTypes.string,
@@ -32,6 +33,8 @@ const defaultProps = {
   lessons: null,
 };
 
+let scrollTop = 0;
+
 class Lessons extends Component {
   constructor() {
     super();
@@ -40,14 +43,21 @@ class Lessons extends Component {
       isShowAddLessonPopUp: false,
       editingLesson: undefined,
     };
-    this.noDataMsg = 'You do not have any lesson yet.';
-    this.loadingMsg = 'Loading...';
     this.switchOnEditMode = this.switchOnEditMode.bind(this);
     this.switchOffEditMode = this.switchOffEditMode.bind(this);
     this.showAddLessonPopUp = this.showAddLessonPopUp.bind(this);
     this.hideAddLessonPopUp = this.hideAddLessonPopUp.bind(this);
     this.endEditLesson = this.endEditLesson.bind(this);
     this.removeLesson = this.removeLesson.bind(this);
+    this.scrollContainer = null;
+  }
+
+  componentDidMount() {
+    this.scrollContainer.scrollTop = scrollTop;
+  }
+
+  componentWillUnmount() {
+    scrollTop = this.scrollContainer.scrollTop;
   }
 
   editLesson(targetLesson) {
@@ -81,11 +91,11 @@ class Lessons extends Component {
 
   renderRightControl() {
     const { editMode } = this.state;
-    const { lessons } = this.props;
+    const { lessons, LANG } = this.props;
 
     if (editMode) {
       return (
-        <div onClick={this.switchOffEditMode} role="presentation">Done</div>
+        <div onClick={this.switchOffEditMode} role="presentation">{LANG.DONE}</div>
       );
     }
 
@@ -118,7 +128,7 @@ class Lessons extends Component {
 
   renderLessonList() {
     const { editMode } = this.state;
-    const { lessons, match } = this.props;
+    const { lessons, match, LANG } = this.props;
     return (
       <div className="list-block media-list">
         <ul>
@@ -148,7 +158,8 @@ class Lessons extends Component {
                       <div className="item-title">{lesson.title}</div>
                     </div>
                     <div className="item-subtitle grey">
-                      {lesson.vocabs ? Object.keys(lesson.vocabs).length : '0'} vocabs
+                      {lesson.vocabs ? Object.keys(lesson.vocabs).length : '0'}
+                      {LANG.UNIT_VOCABS}
                     </div>
                   </Link>
                 </EditableItem>
@@ -161,11 +172,11 @@ class Lessons extends Component {
   }
 
   renderNoData() {
-    const { isFetchingLessons } = this.props;
+    const { isFetchingLessons, LANG } = this.props;
     return (
       <div className="real-center">
         <p className="text-center grey">
-          {isFetchingLessons ? this.loadingMsg : this.noDataMsg}
+          {isFetchingLessons ? LANG.LOADING : LANG.NO_LESSON_MSG}
         </p>
       </div>
     );
@@ -179,6 +190,7 @@ class Lessons extends Component {
       addLesson,
       editLesson,
       isAppReady,
+      LANG,
     } = this.props;
 
     if (!isAppReady) {
@@ -193,13 +205,14 @@ class Lessons extends Component {
       <div className="lessons page">
         <NavBar
           pageName={book.title}
-          left={<BackButton to="/" />}
+          left={<BackButton to="/" text={LANG.BACK} />}
           right={this.renderRightControl()}
         />
-        <div className="page-inner">
+        <div className="page-inner" ref={(ref) => { this.scrollContainer = ref; }}>
           {Object.keys(lessons).length <= 0 ? (this.renderNoData()) : (this.renderLessonList())}
         </div>
         <AddLessonForm
+          LANG={LANG}
           isPopUp={isShowAddLessonPopUp}
           hide={this.hideAddLessonPopUp}
           bookId={book.id}
@@ -209,6 +222,7 @@ class Lessons extends Component {
           targetLesson={editingLesson}
           hide={this.endEditLesson}
           editLesson={editLesson}
+          LANG={LANG}
         />
       </div>
     );

@@ -5,6 +5,7 @@ import { Lang } from '../utils/Dictionary';
 import './ImportBookForm.css';
 
 const propTypes = {
+  LANG: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
   filename: PropTypes.string.isRequired,
   endAdd: PropTypes.func.isRequired,
   addBook: PropTypes.func.isRequired,
@@ -26,7 +27,6 @@ class ImportBookForm extends Component {
       data: null,
       isImporting: false,
     };
-    this.loadingText = 'Downloading the book...';
     this.endImport = this.endImport.bind(this);
     this.startImport = this.startImport.bind(this);
   }
@@ -110,8 +110,9 @@ class ImportBookForm extends Component {
 
   renderFooter() {
     const { isImporting, data } = this.state;
+    const { LANG } = this.props;
     if (isImporting) {
-      return <div className="text-center block">Importing...</div>;
+      return <div className="text-center block">{LANG.IMPORTING}</div>;
     } else if (data.imported) {
       return (
         <a
@@ -119,7 +120,7 @@ class ImportBookForm extends Component {
           role="presentation"
           onClick={this.endImport}
         >
-          Done
+          {LANG.DONE}
         </a>
       );
     }
@@ -129,13 +130,13 @@ class ImportBookForm extends Component {
         role="presentation"
         onClick={this.startImport}
       >
-        Import
+        {LANG.IMPORT}
       </a>
     );
   }
 
   renderMain() {
-    const { filename } = this.props;
+    const { filename, LANG } = this.props;
     const { data } = this.state;
     return (
       <div className="import-book-form-main">
@@ -150,7 +151,7 @@ class ImportBookForm extends Component {
             <div className="card-content-inner">
               <h2>{data.title}</h2>
               <p className="grey">
-                Language: {Lang[data.lang]}, {data.lessons.length} lessons.
+                {LANG.LANGUAGE}: {Lang[data.lang]}, {data.lessons.length}{LANG.UNIT_LESSONS}.
               </p>
             </div>
             <div className="list-block">
@@ -167,7 +168,8 @@ class ImportBookForm extends Component {
                             {lesson.title}
                           </div>
                           <div className="item-after">
-                            {`${lesson.vocabs.length} vocabs${lesson.imported ? ' imported' : ''}.`}
+                            {lesson.vocabs.length}{LANG.UNIT_VOCABS}
+                            {lesson.imported ? LANG.IMPORTED : ''}
                           </div>
                         </div>
                       </div>
@@ -184,18 +186,20 @@ class ImportBookForm extends Component {
   }
 
   renderLoading() {
-    return (<div className="downloading-book">{this.loadingText}</div>);
+    const { LANG } = this.props;
+    return (<div className="downloading-book">{LANG.DOWNLOADING_BOOK}</div>);
   }
 
   render() {
-    const { filename } = this.props;
+    const { filename, LANG } = this.props;
     const { data } = this.state;
     return (
       <Popup
-        header="Import Book"
+        header={LANG.IMPORT_BOOK}
         visible={filename !== ''}
         isHideRight
         onLeftClick={this.endImport}
+        leftText={LANG.CANCEL}
       >
         <div className="page-inner">
           {this.isFetching || !data ? this.renderLoading() : this.renderMain()}

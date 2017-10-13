@@ -7,6 +7,7 @@ const initState = {
   email: null,
   photoURL: null,
   activeBookId: null,
+  lang: 'en',
 };
 
 const user = (state = initState, action) => {
@@ -15,6 +16,12 @@ const user = (state = initState, action) => {
       return {
         ...state,
         activeBookId: action.activeBookId,
+      };
+
+    case actionTypes.SET_USER_LANG:
+      return {
+        ...state,
+        lang: action.lang,
       };
 
     case actionTypes.LOGIN:

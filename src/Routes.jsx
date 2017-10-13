@@ -14,7 +14,7 @@ import RedirectTo from './containers/RedirectToContainer';
 
 import LoginFormContainer from './containers/LoginFormContainer';
 import LoadingOverlayContainer from './containers/LoadingOverlayContainer';
-import TabBar from './components/TabBar';
+import TabBar from './containers/TabBarContainer';
 
 function Routes() {
   return (

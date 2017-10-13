@@ -4,6 +4,7 @@ import ListForm, { ListItem } from '../components/ListForm';
 import { Popup } from '../components/Modal';
 
 const propTypes = {
+  LANG: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
   isPopUp: PropTypes.bool.isRequired,
   hide: PropTypes.func.isRequired,
   addLesson: PropTypes.func.isRequired,
@@ -41,14 +42,15 @@ class AddLessonForm extends Component {
 
   render() {
     const { formTitle } = this.state;
-    const { isPopUp } = this.props;
+    const { isPopUp, LANG } = this.props;
     return (
       <Popup
-        header="Add lesson"
+        header={LANG.ADD_LESSON}
         visible={isPopUp}
         onLeftClick={this.hideEditPopUp}
         onRightClick={this.onClickAdd}
-        rightText="Add"
+        rightText={LANG.ADD}
+        leftText={LANG.CANCEL}
       >
         <div className="page-inner form-box">
           <ListForm
@@ -58,10 +60,10 @@ class AddLessonForm extends Component {
               return false;
             }}
           >
-            <ListItem label="Title">
+            <ListItem label={LANG.LESSON_TITLE}>
               <input
                 type="text"
-                placeholder="e.g. 第一課"
+                placeholder={LANG.LESSON_TITLE_PLACEHOLDER}
                 value={formTitle}
                 onChange={(e) => {
                   this.setState({ formTitle: e.target.value });
