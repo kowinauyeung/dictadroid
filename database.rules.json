@@ -1,0 +1,37 @@
+{
+  "rules": {
+    "users": {
+      "$uid": {
+        ".write": "$uid === auth.uid",
+        ".read": "$uid === auth.uid",
+      },
+    },
+    "books": {
+      "$uid": {
+        ".write": "$uid === auth.uid",
+        ".read": "$uid === auth.uid",
+      },
+    },
+    "lessons": {
+      "$uid": {
+        ".indexOn": "bookId",
+        ".write": "$uid === auth.uid",
+        ".read": "$uid === auth.uid",
+      }
+    },
+    "vocabs": {
+      "$uid": {
+        ".indexOn": "bookId",
+        ".write": "$uid === auth.uid",
+        ".read": "$uid === auth.uid",
+      }
+    },
+    "results": {
+      "$uid": {
+        ".indexOn": "bookId",
+        ".write": "$uid === auth.uid",
+        ".read": "$uid === auth.uid",
+      }
+    },
+  }
+}
