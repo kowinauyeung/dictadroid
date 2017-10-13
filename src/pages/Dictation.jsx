@@ -7,6 +7,7 @@ import TrainingForm from '../components/TrainingForm';
 import Speech from '../utils/Speech';
 
 const propTypes = {
+  LANG: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
@@ -56,8 +57,6 @@ class Dictation extends Component {
     this.selectAll = this.selectAll.bind(this);
     this.deSelectAll = this.deSelectAll.bind(this);
     this.start = this.start.bind(this);
-    this.loadingText = 'loading...';
-    this.noDataMsg = 'Please add vocabs before starting dictation.';
     this.stopTraining = this.stopTraining.bind(this);
     this.submitResult = this.submitResult.bind(this);
   }
@@ -121,28 +120,30 @@ class Dictation extends Component {
 
   renderLeft() {
     const { isAll } = this.state;
+    const { LANG } = this.props;
     if (!isAll) {
       return (
         <div className="link" role="presentation" onClick={this.selectAll}>
           <i className="icon ion-ios-circle-outline" />
-          <span>Select all</span>
+          <span>{LANG.SELECT_ALL}</span>
         </div>
       );
     }
     return (
       <div className="link" role="presentation" onClick={this.deSelectAll}>
         <i className="icon ion-ios-checkmark-outline" />
-        <span>Deselect all</span>
+        <span>{LANG.DESELECT_ALL}</span>
       </div>
     );
   }
 
   renderRight() {
-    return <div onClick={this.start} role="presentation">Start</div>;
+    const { LANG } = this.props;
+    return <div onClick={this.start} role="presentation">{LANG.START}</div>;
   }
 
   renderLesson() {
-    const { book, lessons } = this.props;
+    const { book, lessons, LANG } = this.props;
     const { selectedLessons, typeFilter } = this.state;
     return (
       <div className="page-inner">
@@ -163,13 +164,13 @@ class Dictation extends Component {
                     });
                   }}
                 >
-                  {t}
+                  {LANG.VOCAB_TYPE_SHORT_FORM[t]}
                 </div>
               ))
             }
           </div>
         </div>
-        <div className="content-block-title">Please select the lessons to start</div>
+        <div className="content-block-title">{LANG.DICTATION_REMIND_MSG}</div>
         <div className="list-block">
           <ul>
             {
@@ -201,7 +202,10 @@ class Dictation extends Component {
                       </div>
                       <div className="item-inner">
                         <div className="item-title">{lesson.title}</div>
-                        <div className="item-after">{Object.keys(lesson.vocabs).length} vocabs</div>
+                        <div className="item-after">
+                          {Object.keys(lesson.vocabs).length}
+                          {LANG.UNIT_VOCABS}
+                        </div>
                       </div>
                     </label>
                   </li>
@@ -215,18 +219,18 @@ class Dictation extends Component {
   }
 
   renderNoData() {
-    const { isFetchingLessons } = this.props;
+    const { isFetchingLessons, LANG } = this.props;
     return (
       <div className="page-inner real-center">
         <p className="text-center grey">
-          {isFetchingLessons ? this.loadingText : this.noDataMsg}
+          {isFetchingLessons ? LANG.LOADING : LANG.NO_DATA_IN_DICTATION }
         </p>
       </div>
     );
   }
 
   render() {
-    const { book, lessons, isAppReady, match } = this.props;
+    const { book, lessons, isAppReady, match, LANG } = this.props;
     const { training } = this.state;
     const trainType = match.path.replace('/', '');
 
@@ -241,7 +245,7 @@ class Dictation extends Component {
     return (
       <div className="dictation page">
         <NavBar
-          pageName={trainType === 'dictation' ? 'Dictation' : 'Translation'}
+          pageName={trainType === 'dictation' ? LANG.DICTATION : LANG.TRANSLATION}
           left={this.renderLeft()}
           right={this.renderRight()}
         />
@@ -255,6 +259,7 @@ class Dictation extends Component {
           lang={trainType === 'dictation' ? book.lang : book.transFrm}
           trainType={trainType}
           submitResult={this.submitResult}
+          LANG={LANG}
         />
       </div>
     );

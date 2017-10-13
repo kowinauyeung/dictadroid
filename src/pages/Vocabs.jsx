@@ -9,6 +9,7 @@ import EditableItem from '../components/EditableItem';
 import Speech from '../utils/Speech';
 
 const propTypes = {
+  LANG: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
   match: PropTypes.shape({ url: PropTypes.string }).isRequired,
   book: PropTypes.shape({
     lang: PropTypes.string,
@@ -54,8 +55,6 @@ class Vocabs extends Component {
       isShowAddVocabPopUp: false,
       editingVocab: undefined,
     };
-    this.noDataMsg = 'You do not have any vacabulary yet.';
-    this.loadingMsg = 'Loading...';
     this.switchOnEditMode = this.switchOnEditMode.bind(this);
     this.switchOffEditMode = this.switchOffEditMode.bind(this);
     this.showAddVocabPopUp = this.showAddVocabPopUp.bind(this);
@@ -146,7 +145,7 @@ class Vocabs extends Component {
 
   renderVocabList() {
     const { editMode } = this.state;
-    const { vocabs, match } = this.props;
+    const { vocabs, match, LANG } = this.props;
     const lessonId = match.params.lessonId;
     return (
       <div className="list-block media-list">
@@ -179,7 +178,9 @@ class Vocabs extends Component {
                     {vocab.pron ? <div className="item-subtitle small">{vocab.pron}</div> : ''}
                   </Link>
                   <div className="item-vocab-after">
-                    <span>{`[${vocab.type}] ${vocab.translation}`}</span>
+                    <span>
+                      {`[${LANG.VOCAB_TYPE_SHORT_FORM[vocab.type]}] ${vocab.translation}`}
+                    </span>
                     <div
                       className="btn-speech icon ion-ios-volume-high"
                       onClick={() => { this.speech(vocab); }}
@@ -196,11 +197,11 @@ class Vocabs extends Component {
   }
 
   renderNoData() {
-    const { isFetchingVocabs } = this.props;
+    const { isFetchingVocabs, LANG } = this.props;
     return (
       <div className="real-center">
         <p className="text-center grey">
-          {isFetchingVocabs ? this.loadingMsg : this.noDataMsg}
+          {isFetchingVocabs ? LANG.LOADING : LANG.NO_VOCABS_MSG}
         </p>
       </div>
     );
@@ -217,6 +218,7 @@ class Vocabs extends Component {
       editVocab,
       isAppReady,
       isFetchingLessons,
+      LANG,
     } = this.props;
 
     const lessonId = match.params.lessonId;
@@ -234,8 +236,8 @@ class Vocabs extends Component {
     return (
       <div className="vocabs page">
         <NavBar
-          pageName={lesson ? lesson.title : 'Loading...'}
-          left={<BackButton to="/lessons" text="Lessons" />}
+          pageName={lesson ? lesson.title : LANG.LOADING}
+          left={<BackButton to="/lessons" text={LANG.LESSONS} />}
           right={this.renderRightControl()}
         />
         <div className="page-inner" ref={(ref) => { this.scrollContainer = ref; }}>
@@ -247,11 +249,13 @@ class Vocabs extends Component {
           isPopUp={isShowAddVocabPopUp}
           hide={this.hideAddVocabPopUp}
           addVocab={addVocab}
+          LANG={LANG}
         />
         <EditVocabForm
           targetVocab={editingVocab}
           hide={this.endEditVocab}
           editVocab={editVocab}
+          LANG={LANG}
         />
       </div>
     );

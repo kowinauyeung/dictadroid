@@ -7,7 +7,7 @@ const initState = {
   email: null,
   photoURL: null,
   activeBookId: null,
-  lang: null,
+  lang: 'en',
 };
 
 const user = (state = initState, action) => {

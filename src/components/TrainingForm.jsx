@@ -6,6 +6,7 @@ import { removeStuffInVocab } from '../utils/Utils';
 import './TrainingForm.css';
 
 const propTypes = {
+  LANG: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
   hide: PropTypes.func.isRequired,
   subject: PropTypes.string.isRequired,
   book: PropTypes.shape({
@@ -31,15 +32,6 @@ const propTypes = {
 
 const defaultProps = {
   vocabs: [],
-};
-
-const typeMap = {
-  n: 'Noun',
-  v: 'Verb',
-  adj: 'Adjective',
-  adv: 'Adverb',
-  pn: 'pronoun',
-  other: 'Other',
 };
 
 const formatAnswer = answer => (_.trim(answer));
@@ -153,7 +145,7 @@ class TrainingForm extends Component {
   }
 
   render() {
-    const { book, subject, speak, lang, vocabs } = this.props;
+    const { book, subject, speak, lang, vocabs, LANG } = this.props;
     const { inputVal, currentVocabIndex } = this.state;
     const currentVocab = vocabs[currentVocabIndex] || null;
     const completedVocabs = currentVocabIndex + 1;
@@ -165,8 +157,8 @@ class TrainingForm extends Component {
         visible={vocabs !== null && vocabs.length > 0}
         onLeftClick={this.hideEditPopUp}
         onRightClick={this.showResult}
-        leftText="Stop"
-        rightText="Results"
+        leftText={LANG.STOP}
+        rightText={LANG.RESULTS}
       >
         <div className="page-inner training-form">
           <div className="content-block">
@@ -182,7 +174,9 @@ class TrainingForm extends Component {
               <p className="text-center text-progress">
                 {completedVocabs} / {totalVocabs}
               </p>
-              <p className="text-center">[{currentVocab ? typeMap[currentVocab.type] : ''}]</p>
+              <p className="text-center">
+                [{currentVocab ? LANG.VOCAB_TYPE[currentVocab.type] : ''}]
+              </p>
               <div className="train-form-cotainer">
                 <form
                   onSubmit={(e) => {
@@ -195,7 +189,7 @@ class TrainingForm extends Component {
                     type="text"
                     value={inputVal}
                     className="answer-field"
-                    placeholder="Input your answer here."
+                    placeholder={LANG.INPUT_YOUR_ANSWER_HERE}
                     onChange={e => this.setState({ inputVal: e.target.value })}
                   />
                 </form>

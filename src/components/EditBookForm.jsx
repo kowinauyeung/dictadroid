@@ -4,6 +4,7 @@ import ListForm, { ListItem } from '../components/ListForm';
 import { Popup } from '../components/Modal';
 
 const propTypes = {
+  LANG: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
   targetBook: PropTypes.shape({
     id: PropTypes.string,
     title: PropTypes.string,
@@ -58,14 +59,15 @@ class EditBookForm extends Component {
 
   render() {
     const { formTitle, formLang, formTranslateFrom } = this.state;
-    const { targetBook } = this.props;
+    const { targetBook, LANG } = this.props;
     return (
       <Popup
-        header="Edit book"
+        header={LANG.EDIT_BOOK}
         visible={targetBook.id !== null}
         onLeftClick={this.hideEditPopUp}
         onRightClick={this.onClickSave}
-        rightText="Save"
+        rightText={LANG.SAVE}
+        leftText={LANG.CANCEL}
       >
         <div className="page-inner form-box">
           <ListForm
@@ -75,17 +77,17 @@ class EditBookForm extends Component {
               return false;
             }}
           >
-            <ListItem label="Title">
+            <ListItem label={LANG.BOOK_TITLE}>
               <input
                 type="text"
-                placeholder="e.g. 大家的日本語初級I"
+                placeholder={LANG.BOOK_TITLE_PLACE_HOLDER}
                 value={formTitle}
                 onChange={(e) => {
                   this.setState({ formTitle: e.target.value });
                 }}
               />
             </ListItem>
-            <ListItem label="Language">
+            <ListItem label={LANG.LANGUAGE}>
               <select
                 value={formLang}
                 onChange={(e) => {
@@ -97,7 +99,7 @@ class EditBookForm extends Component {
                 <option value="zh">中文</option>
               </select>
             </ListItem>
-            <ListItem label="Translate from">
+            <ListItem label={LANG.TRANSLATE_FROM}>
               <select
                 value={formTranslateFrom}
                 onChange={(e) => {

@@ -8,6 +8,7 @@ import EditBookForm from '../components/EditBookForm';
 import { Lang } from '../utils/Dictionary';
 
 const propTypes = {
+  LANG: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
   isFetchingBooks: PropTypes.bool.isRequired,
   activeBookId: PropTypes.string,
   books: PropTypes.objectOf(
@@ -40,8 +41,6 @@ class Books extends Component {
       isShowAddBookPopUp: false,
       editingBook: undefined,
     };
-    this.noDataMsg = 'You do not have any book yet.';
-    this.loadingMsg = 'Loading...';
     this.switchOnEditMode = this.switchOnEditMode.bind(this);
     this.switchOffEditMode = this.switchOffEditMode.bind(this);
     this.showAddBookPopUp = this.showAddBookPopUp.bind(this);
@@ -95,11 +94,11 @@ class Books extends Component {
 
   renderRightControl() {
     const { editMode } = this.state;
-    const { books } = this.props;
+    const { books, LANG } = this.props;
 
     if (editMode) {
       return (
-        <div onClick={this.switchOffEditMode} role="presentation">Done</div>
+        <div onClick={this.switchOffEditMode} role="presentation">{LANG.DONE}</div>
       );
     }
 
@@ -132,7 +131,7 @@ class Books extends Component {
 
   renderBookList() {
     const { editMode } = this.state;
-    const { books, activeBookId } = this.props;
+    const { books, activeBookId, LANG } = this.props;
     return (
       <div className="list-block media-list">
         {
@@ -140,7 +139,7 @@ class Books extends Component {
             ''
             :
             (
-              <div className="content-block-title">Please select a book to continue.</div>
+              <div className="content-block-title">{LANG.NO_ACTIVE_BOOK_MSG}</div>
             )
         }
         <ul>
@@ -198,11 +197,11 @@ class Books extends Component {
   }
 
   renderNoData() {
-    const { isFetchingBooks } = this.props;
+    const { isFetchingBooks, LANG } = this.props;
     return (
       <div className="real-center">
         <p className="text-center grey">
-          {isFetchingBooks ? this.loadingMsg : this.noDataMsg}
+          {isFetchingBooks ? LANG.LOADING : LANG.NO_BOOK_MSG}
         </p>
       </div>
     );
@@ -210,18 +209,19 @@ class Books extends Component {
 
   render() {
     const { isShowAddBookPopUp, editingBook } = this.state;
-    const { books, editBook, addBook } = this.props;
+    const { books, editBook, addBook, LANG } = this.props;
     return (
       <div className="books page">
         <NavBar
-          pageName="Books"
-          left={<BackButton to="/" />}
+          pageName={LANG.BOOKS}
+          left={<BackButton to="/" text={LANG.BACK} />}
           right={this.renderRightControl()}
         />
         <div className="page-inner" ref={(ref) => { this.scrollContainer = ref; }}>
           {Object.keys(books).length <= 0 ? (this.renderNoData()) : (this.renderBookList())}
         </div>
         <AddBookForm
+          LANG={LANG}
           isPopUp={isShowAddBookPopUp}
           hide={this.hideAddBookPopUp}
           addBook={addBook}
@@ -230,6 +230,7 @@ class Books extends Component {
           targetBook={editingBook}
           hide={this.endEditBook}
           editBook={editBook}
+          LANG={LANG}
         />
       </div>
     );

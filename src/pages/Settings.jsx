@@ -5,6 +5,7 @@ import ImportBookForm from '../components/ImportBookForm';
 import './Settings.css';
 
 const propTypes = {
+  LANG: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
   user: PropTypes.shape({
     displayName: PropTypes.string,
     email: PropTypes.string,
@@ -67,6 +68,7 @@ class Settings extends Component {
       addVocab,
       setUserLang,
       isAppReady,
+      LANG,
     } = this.props;
     const { bookToImport } = this.state;
     const { displayName, email, photoURL, lang } = user;
@@ -88,7 +90,7 @@ class Settings extends Component {
               <li>
                 <div className="item-content">
                   <div className="item-inner">
-                    <div className="item-title label">Language</div>
+                    <div className="item-title label">{LANG.LANGUAGE}</div>
                     <div className="item-input">
                       <select
                         value={lang}
@@ -105,7 +107,7 @@ class Settings extends Component {
               </li>
             </ul>
           </div>
-          <div className="content-block-title">Free Book from server</div>
+          <div className="content-block-title">{LANG.FREE_BOOKS_MSG}</div>
           <div className="list-block">
             <ul>
               {
@@ -138,7 +140,7 @@ class Settings extends Component {
                 <div className="btn-free-book">
                   <div className="item-content">
                     <div className="item-inner">
-                      <div className="item-title">Version</div>
+                      <div className="item-title">{LANG.VERSION}</div>
                       <div className="item-after">{process.env.REACT_APP_VERSION}</div>
                     </div>
                   </div>
@@ -154,7 +156,7 @@ class Settings extends Component {
                   role="presentation"
                   onClick={() => { logoutOfFirebase(); }}
                 >
-                  Log out
+                  {LANG.LOG_OUT}
                 </a>
               </li>
             </ul>
@@ -166,6 +168,7 @@ class Settings extends Component {
           addBook={addBook}
           addLesson={addLesson}
           addVocab={addVocab}
+          LANG={LANG}
         />
 
       </div>
