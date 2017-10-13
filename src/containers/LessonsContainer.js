@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import Lessons from '../pages/Lessons';
+import Languages from '../utils/Languages';
 import {
   addLesson,
   removeLesson,
@@ -11,6 +12,7 @@ const mapStateToProps = state => ({
   isFetchingLessons: state.app.isFetchingLessons,
   isAppReady: state.app.isReady,
   lessons: state.lessons,
+  LANG: Languages[state.user.lang],
 });
 
 const mapDispatchToProps = ({

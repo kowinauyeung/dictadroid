@@ -18,4 +18,6 @@ export const parseJSONToURIComponent = json => (
   encodeURIComponent(JSON.stringify(json))
 );
 
+export const removeStuffInVocab = val => (val.replace(/～/g, ''));
+
 export default Utils;

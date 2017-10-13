@@ -1,15 +1,14 @@
 import { connect } from 'react-redux';
-import RedirectTo from '../pages/RedirectTo';
 import Languages from '../utils/Languages';
+import TabBar from '../components/TabBar';
 
 const mapStateToProps = state => ({
-  isAppReady: state.app.isReady,
   LANG: Languages[state.user.lang],
 });
 
-const BooksContainer = connect(
+const TabBarContainer = connect(
   mapStateToProps,
   null,
-)(RedirectTo);
+)(TabBar);
 
-export default BooksContainer;
+export default TabBarContainer;

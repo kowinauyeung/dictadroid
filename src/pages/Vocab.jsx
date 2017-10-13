@@ -9,6 +9,7 @@ import { parseJSONToURIComponent, plainVocabObject } from '../utils/Utils';
 import './Vocab.css';
 
 const propTypes = {
+  LANG: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
   match: PropTypes.shape({ url: PropTypes.string }).isRequired,
   book: PropTypes.shape({
     title: PropTypes.string,
@@ -41,15 +42,6 @@ const defaultProps = {
   lessons: null,
 };
 
-const typeMap = {
-  n: 'Noun',
-  v: 'Verb',
-  adj: 'Adjective',
-  adv: 'Adverb',
-  pn: 'pronoun',
-  other: 'Other',
-};
-
 class Vocab extends Component {
   constructor() {
     super();
@@ -60,7 +52,6 @@ class Vocab extends Component {
     this.endEditVocab = this.endEditVocab.bind(this);
     this.lessonsListener = null;
     this.vocabsListener = null;
-    this.noDataMsg = 'Loading...';
   }
 
   startEditVocab() {
@@ -72,7 +63,7 @@ class Vocab extends Component {
   }
 
   renderInner() {
-    const { match, vocabs, book } = this.props;
+    const { match, vocabs, book, LANG } = this.props;
     const vocab = vocabs[match.params.vocabId];
 
     return (
@@ -88,7 +79,7 @@ class Vocab extends Component {
                 onClick={() => { Speech.pron(vocab, book.lang); }}
               />
             </p>
-            <p className="text-center type-display">[{typeMap[vocab.type]}]</p>
+            <p className="text-center type-display">[{LANG.VOCAB_TYPE[vocab.type]}]</p>
             <div className="line" />
             <p className="text-center translate-display">{vocab.translation}</p>
             {
@@ -116,18 +107,25 @@ class Vocab extends Component {
                 className="button"
                 target="_blank"
               >
-                Google image
+                {LANG.GOOGLE_IMAGES}
               </a>
             </p>
-            <p>
-              <a
-                href={`https://www.japandict.com/?s=${vocab.vocab}`}
-                className="button"
-                target="_blank"
-              >
-                Dictionary
-              </a>
-            </p>
+            {
+              book.lang === 'ja' ?
+                (
+                  <p>
+                    <a
+                      href={`https://www.japandict.com/?s=${vocab.vocab}`}
+                      className="button"
+                      target="_blank"
+                    >
+                      {LANG.DICTIONARY}
+                    </a>
+                  </p>
+                )
+                :
+                ''
+            }
             <p>
               <Link
                 className="button"
@@ -137,7 +135,7 @@ class Vocab extends Component {
                   lang: book.lang,
                 }))}`}
               >
-                Share this vocabulary
+                {LANG.SHARE_THIS_VOCAB}
               </Link>
             </p>
           </div>
@@ -147,9 +145,10 @@ class Vocab extends Component {
   }
 
   renderNoData() {
+    const { LANG } = this.props;
     return (
       <div className="real-center">
-        <p className="text-center grey">{this.noDataMsg}</p>
+        <p className="text-center grey">{LANG.LOADING}</p>
       </div>
     );
   }
@@ -164,6 +163,7 @@ class Vocab extends Component {
       isAppReady,
       isFetchingVocabs,
       isFetchingLessons,
+      LANG,
     } = this.props;
     const { editMode } = this.state;
     const lessonId = match.params.lessonId;
@@ -186,15 +186,16 @@ class Vocab extends Component {
     return (
       <div className="vocab page">
         <NavBar
-          pageName={book && lesson ? `${book.title} - ${lesson.title}` : 'loading...'}
-          left={<BackButton to={`/lessons/${lessonId}/vocabs`} text="back" />}
-          right={<div onClick={this.startEditVocab} role="presentation">Edit</div>}
+          pageName={book && lesson ? `${book.title} - ${lesson.title}` : LANG.LOADING}
+          left={<BackButton to={`/lessons/${lessonId}/vocabs`} text={LANG.BACK} />}
+          right={<div onClick={this.startEditVocab} role="presentation">{LANG.EDIT}</div>}
         />
         {vocab ? this.renderInner() : this.renderNoData()}
         <EditVocabForm
           targetVocab={editMode ? vocab : undefined}
           hide={this.endEditVocab}
           editVocab={editVocab}
+          LANG={LANG}
         />
       </div>
     );

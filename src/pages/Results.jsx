@@ -2,12 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import moment from 'moment';
+import 'moment/locale/zh-hk';
+import 'moment/locale/ja';
 import classNames from 'classnames';
 import { Link, Redirect } from 'react-router-dom';
 import NavBar from '../components/NavBar';
 import BackButton from '../components/BackButton';
 
 const propTypes = {
+  lang: PropTypes.string.isRequired,
+  LANG: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
   isFetchingResults: PropTypes.bool.isRequired,
   isAppReady: PropTypes.bool.isRequired,
   results: PropTypes.objectOf(
@@ -23,28 +27,30 @@ const propTypes = {
   ).isRequired,
 };
 
-const trainTypeMap = {
-  dictation: 'Dictation',
-  translation: 'Translation',
-};
-
-function renderNoData(isFetchingResults) {
+function renderNoData(isFetchingResults, LANG) {
   return (
     <div className="real-center">
       <p className="text-center grey">
-        {isFetchingResults ? 'Loading...' : 'Start training to get results.'}
+        {isFetchingResults ? LANG.LOADING : LANG.NO_RESULTS_MSG}
       </p>
     </div>
   );
 }
 
-function renderList(results) {
+function orderResults(results) {
+  const res = [];
+  Object.keys(results).forEach((key) => {
+    res.push(results[key]);
+  });
+  return _.orderBy(res, ['createDt'], ['desc']);
+}
+
+function renderList(results, LANG) {
   return (
     <div className="list-block">
       <ul>
         {
-          Object.keys(results).map((key) => {
-            const result = results[key];
+          orderResults(results).map((result) => {
             const score = (result.correctAnswer / result.vocabs.length);
             const isPass = (score >= 0.5);
             const resultClass = classNames('item-title-after', {
@@ -52,7 +58,7 @@ function renderList(results) {
               fullmarks: score >= 1,
             });
             return (
-              <li key={key}>
+              <li key={result.id}>
                 <div className="item-content">
                   <div className="item-inner">
                     <Link to={`/results/${result.id}`}>
@@ -62,11 +68,11 @@ function renderList(results) {
                         </div>
                       </div>
                       <div className="item-subtitle grey">
-                        {trainTypeMap[result.trainType]}, {moment(result.createDt).calendar()}
+                        {LANG[result.trainType.toUpperCase()]}, {moment(result.createDt).calendar()}
                       </div>
                     </Link>
                     <div className={resultClass}>
-                      <span>Results: {result.correctAnswer}/{result.vocabs.length}</span>
+                      <span>{LANG.SCORE}: {result.correctAnswer}/{result.vocabs.length}</span>
                     </div>
                   </div>
                 </div>
@@ -80,7 +86,7 @@ function renderList(results) {
 }
 
 function Results(props) {
-  const { isAppReady, isFetchingResults, results } = props;
+  const { isAppReady, isFetchingResults, results, LANG } = props;
 
   if (!isAppReady) {
     return <Redirect to="/redirect?url=/results" />;
@@ -89,11 +95,16 @@ function Results(props) {
   return (
     <div className="history page">
       <NavBar
-        pageName="Results"
-        left={<BackButton to="/" />}
+        pageName={LANG.RESULTS}
+        left={<BackButton to="/" text={LANG.BACK} />}
       />
       <div className="page-inner">
-        {Object.keys(results).length <= 0 ? renderNoData(isFetchingResults) : renderList(results)}
+        {
+          Object.keys(results).length <= 0 ?
+            renderNoData(isFetchingResults, LANG)
+            :
+            renderList(results, LANG)
+        }
       </div>
     </div>
   );

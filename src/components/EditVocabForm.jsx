@@ -5,6 +5,7 @@ import ListForm, { ListItem } from '../components/ListForm';
 import { Popup } from '../components/Modal';
 
 const propTypes = {
+  LANG: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
   targetVocab: PropTypes.shape({
     id: PropTypes.string,
     vocab: PropTypes.string,
@@ -134,14 +135,15 @@ class EditVocabForm extends Component {
       formType,
       formTags,
     } = this.state;
-    const { targetVocab } = this.props;
+    const { targetVocab, LANG } = this.props;
     return (
       <Popup
-        header="Edit vocab"
+        header={LANG.EDIT_VOCAB}
         visible={targetVocab.id !== null}
         onLeftClick={this.hideEditPopUp}
         onRightClick={this.onClickSave}
-        rightText="Save"
+        rightText={LANG.SAVE}
+        leftText={LANG.CANCEL}
       >
         <div className="page-inner form-box">
           <ListForm
@@ -165,29 +167,29 @@ class EditVocabForm extends Component {
                         });
                       }}
                     >
-                      {t}
+                      {LANG.VOCAB_TYPE_SHORT_FORM[t]}
                     </div>
                   ))
                 }
               </div>
             </ListItem>
-            <ListItem label="Vocabulary">
+            <ListItem label={LANG.VOCABULARY}>
               <input
                 type="text"
                 value={formVocab}
                 onChange={(e) => { this.setState({ formVocab: e.target.value }); }}
               />
             </ListItem>
-            <ListItem label="Pronunciation">
+            <ListItem label={LANG.PRONUNCIATION}>
               <input
                 type="text"
-                placeholder="(optional)"
+                placeholder={`(${LANG.OPTIONAL})`}
                 value={formPron}
                 onChange={(e) => { this.setState({ formPron: e.target.value }); }}
               />
             </ListItem>
             <ListItem
-              label="Use for speech"
+              label={LANG.USE_FOR_SPEECH}
               className={`hidden-field${formPron !== '' ? ' show' : ''}`}
             >
               <label className="label-switch" htmlFor={`form-use-speech-${targetVocab.id}`}>
@@ -200,14 +202,14 @@ class EditVocabForm extends Component {
                 <div className="checkbox" />
               </label>
             </ListItem>
-            <ListItem label="Translation">
+            <ListItem label={LANG.TRANSLATION}>
               <input
                 type="text"
                 value={formTranslation}
                 onChange={(e) => { this.setState({ formTranslation: e.target.value }); }}
               />
             </ListItem>
-            <ListItem label="Tags">
+            <ListItem label={LANG.TAGS}>
               <div className="content-block-inner">
                 <div className="chips">
                   {

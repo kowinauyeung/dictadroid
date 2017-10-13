@@ -1,9 +1,9 @@
 import firebase from 'firebase';
 
 const config = {
-  apiKey: 'AIzaSyAxA8tx8Zny-lXFGwk-0dTG9np_lmb2mI0',
-  authDomain: 'dictadroid.firebaseapp.com',
-  databaseURL: 'https://dictadroid.firebaseio.com',
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  databaseURL: process.env.REACT_APP_DB_URL,
 };
 
 firebase.initializeApp(config);
