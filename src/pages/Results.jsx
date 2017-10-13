@@ -38,13 +38,20 @@ function renderNoData(isFetchingResults) {
   );
 }
 
+function orderResults(results) {
+  const res = [];
+  Object.keys(results).forEach((key) => {
+    res.push(results[key]);
+  });
+  return _.orderBy(res, ['createDt'], ['desc']);
+}
+
 function renderList(results) {
   return (
     <div className="list-block">
       <ul>
         {
-          Object.keys(results).map((key) => {
-            const result = results[key];
+          orderResults(results).map((result) => {
             const score = (result.correctAnswer / result.vocabs.length);
             const isPass = (score >= 0.5);
             const resultClass = classNames('item-title-after', {
@@ -52,7 +59,7 @@ function renderList(results) {
               fullmarks: score >= 1,
             });
             return (
-              <li key={key}>
+              <li key={result.id}>
                 <div className="item-content">
                   <div className="item-inner">
                     <Link to={`/results/${result.id}`}>

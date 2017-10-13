@@ -75,7 +75,7 @@ class Dictation extends Component {
       else subject += `, ${lesson.title}`;
       Object.keys(lesson.vocabs).forEach((vid) => {
         if (typeFilter !== '' && typeFilter !== 'all' && vocabs[vid].type !== typeFilter) return;
-        vocabsToTrain.push(vocabs[vid]);
+        vocabsToTrain.push({ ...vocabs[vid] });
       });
     });
 

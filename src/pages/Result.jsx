@@ -5,7 +5,7 @@ import { Link, Redirect } from 'react-router-dom';
 import NavBar from '../components/NavBar';
 import BackButton from '../components/BackButton';
 import { Lang } from '../utils/Dictionary';
-import { parseJSONToURIComponent, plainVocabObject } from '../utils/Utils';
+import { parseJSONToURIComponent, plainVocabObject, removeStuffInVocab } from '../utils/Utils';
 
 const propTypes = {
   match: PropTypes.shape({ url: PropTypes.string }).isRequired,
@@ -90,7 +90,10 @@ const renderResult = (results, match, book) => {
                         <div className="item-title">
                           {result.trainType === 'dictation' ? vocab.vocab : vocab.translation}
                         </div>
-                        <div className={`item-after${vocab.vocab === vocab.answer ? '' : ' fail'}`}>
+                        <div className={`item-after${
+                          removeStuffInVocab(vocab.vocab) === vocab.answer ? '' : ' fail'
+                        }`}
+                        >
                           {vocab.answer}
                         </div>
                       </div>

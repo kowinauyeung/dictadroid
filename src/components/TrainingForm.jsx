@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { Popup } from '../components/Modal';
+import { removeStuffInVocab } from '../utils/Utils';
 import './TrainingForm.css';
 
 const propTypes = {
@@ -97,7 +98,7 @@ class TrainingForm extends Component {
 
     let correctAnswer = 0;
     vocabs.forEach((vocab) => {
-      if (vocab.answer === vocab.vocab) {
+      if (vocab.answer === removeStuffInVocab(vocab.vocab)) {
         correctAnswer += 1;
       }
     });
