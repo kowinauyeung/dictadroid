@@ -30,6 +30,8 @@ const defaultProps = {
   books: {},
 };
 
+let scrollTop = 0;
+
 class Books extends Component {
   constructor() {
     super();
@@ -46,6 +48,15 @@ class Books extends Component {
     this.hideAddBookPopUp = this.hideAddBookPopUp.bind(this);
     this.endEditBook = this.endEditBook.bind(this);
     this.removeBook = this.removeBook.bind(this);
+    this.scrollContainer = null;
+  }
+
+  componentDidMount() {
+    this.scrollContainer.scrollTop = scrollTop;
+  }
+
+  componentWillUnmount() {
+    scrollTop = this.scrollContainer.scrollTop;
   }
 
   setSelectedBook(id) {
@@ -207,7 +218,7 @@ class Books extends Component {
           left={<BackButton to="/" />}
           right={this.renderRightControl()}
         />
-        <div className="page-inner">
+        <div className="page-inner" ref={(ref) => { this.scrollContainer = ref; }}>
           {Object.keys(books).length <= 0 ? (this.renderNoData()) : (this.renderBookList())}
         </div>
         <AddBookForm

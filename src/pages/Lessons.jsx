@@ -32,6 +32,8 @@ const defaultProps = {
   lessons: null,
 };
 
+let scrollTop = 0;
+
 class Lessons extends Component {
   constructor() {
     super();
@@ -48,6 +50,15 @@ class Lessons extends Component {
     this.hideAddLessonPopUp = this.hideAddLessonPopUp.bind(this);
     this.endEditLesson = this.endEditLesson.bind(this);
     this.removeLesson = this.removeLesson.bind(this);
+    this.scrollContainer = null;
+  }
+
+  componentDidMount() {
+    this.scrollContainer.scrollTop = scrollTop;
+  }
+
+  componentWillUnmount() {
+    scrollTop = this.scrollContainer.scrollTop;
   }
 
   editLesson(targetLesson) {
@@ -196,7 +207,7 @@ class Lessons extends Component {
           left={<BackButton to="/" />}
           right={this.renderRightControl()}
         />
-        <div className="page-inner">
+        <div className="page-inner" ref={(ref) => { this.scrollContainer = ref; }}>
           {Object.keys(lessons).length <= 0 ? (this.renderNoData()) : (this.renderLessonList())}
         </div>
         <AddLessonForm

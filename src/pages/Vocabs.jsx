@@ -44,6 +44,8 @@ const defaultProps = {
   lessons: null,
 };
 
+let scrollTop = 0;
+
 class Vocabs extends Component {
   constructor() {
     super();
@@ -60,6 +62,15 @@ class Vocabs extends Component {
     this.hideAddVocabPopUp = this.hideAddVocabPopUp.bind(this);
     this.endEditVocab = this.endEditVocab.bind(this);
     this.removeVocab = this.removeVocab.bind(this);
+    this.scrollContainer = null;
+  }
+
+  componentDidMount() {
+    this.scrollContainer.scrollTop = scrollTop;
+  }
+
+  componentWillUnmount() {
+    scrollTop = this.scrollContainer.scrollTop;
   }
 
   speech(vocab) {
@@ -227,7 +238,7 @@ class Vocabs extends Component {
           left={<BackButton to="/lessons" text="Lessons" />}
           right={this.renderRightControl()}
         />
-        <div className="page-inner">
+        <div className="page-inner" ref={(ref) => { this.scrollContainer = ref; }}>
           {Object.keys(vocabs).length <= 0 ? (this.renderNoData()) : (this.renderVocabList())}
         </div>
         <AddVocabForm
