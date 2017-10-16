@@ -256,7 +256,7 @@ class Dictation extends Component {
           book={book}
           subject={training ? training.subject : ''}
           vocabs={training ? training.vocabs : []}
-          lang={trainType === 'dictation' ? book.lang : book.transFrm}
+          spkLang={trainType === 'dictation' ? book.lang : book.transFrm}
           trainType={trainType}
           submitResult={this.submitResult}
           LANG={LANG}

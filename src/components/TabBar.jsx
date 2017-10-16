@@ -12,7 +12,7 @@ const homePageMatchPath = [
   '/',
   'books',
   'lessons',
-  'history',
+  'results',
   'login',
 ];
 

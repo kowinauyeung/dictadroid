@@ -25,7 +25,7 @@ const propTypes = {
     }),
   ).isRequired,
   trainType: PropTypes.string.isRequired,
-  lang: PropTypes.string.isRequired,
+  spkLang: PropTypes.string.isRequired,
   speak: PropTypes.func.isRequired,
   submitResult: PropTypes.func.isRequired,
 };
@@ -61,9 +61,9 @@ class TrainingForm extends Component {
   }
 
   componentDidUpdate(prevProp, prevState) {
-    const { speak, lang, vocabs } = this.props;
+    const { speak, spkLang, vocabs } = this.props;
     if (prevState.currentVocabIndex !== this.state.currentVocabIndex && vocabs.length) {
-      speak(vocabs[this.state.currentVocabIndex], lang);
+      speak(vocabs[this.state.currentVocabIndex], spkLang);
     }
   }
 
@@ -134,10 +134,10 @@ class TrainingForm extends Component {
 
   submitAnswerAndNextVocab() {
     const { currentVocabIndex, inputVal } = this.state;
-    const { vocabs, lang, speak } = this.props;
+    const { vocabs, spkLang, speak } = this.props;
     const vocab = vocabs[currentVocabIndex];
     if (formatAnswer(inputVal) === '') {
-      speak(vocab, lang);
+      speak(vocab, spkLang);
       return;
     }
     vocab.answer = formatAnswer(inputVal);
@@ -145,7 +145,7 @@ class TrainingForm extends Component {
   }
 
   render() {
-    const { book, subject, speak, lang, vocabs, LANG } = this.props;
+    const { book, subject, speak, spkLang, vocabs, LANG } = this.props;
     const { inputVal, currentVocabIndex } = this.state;
     const currentVocab = vocabs[currentVocabIndex] || null;
     const completedVocabs = currentVocabIndex + 1;
@@ -167,7 +167,7 @@ class TrainingForm extends Component {
             <p>
               <button
                 className="icon ion-ios-mic btn btn-speech text-center"
-                onClick={() => speak(currentVocab, lang)}
+                onClick={() => speak(currentVocab, spkLang)}
               />
             </p>
             <div className="content-block-inner">
