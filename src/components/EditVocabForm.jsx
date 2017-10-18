@@ -12,6 +12,7 @@ const propTypes = {
     translation: PropTypes.string,
     pron: PropTypes.string,
     useSpeech: PropTypes.bool,
+    outOfDict: PropTypes.bool,
     type: PropTypes.string,
     tags: PropTypes.arrayOf(PropTypes.string),
   }),
@@ -26,6 +27,7 @@ const defaultProps = {
     translation: '',
     pron: '',
     useSpeech: false,
+    formOutOfDict: false,
     type: '',
     tags: [],
   },
@@ -41,6 +43,7 @@ class EditVocabForm extends Component {
       formTranslation: targetVocab.translation,
       formPron: targetVocab.pron || '',
       formUseSpeech: targetVocab.useSpeech,
+      formOutOfDict: targetVocab.formOutOfDict || false,
       formType: targetVocab.type,
       formTags: targetVocab.tags || [],
     };
@@ -58,6 +61,7 @@ class EditVocabForm extends Component {
       formTranslation: targetVocab.translation,
       formPron: targetVocab.pron || '',
       formUseSpeech: targetVocab.useSpeech,
+      formOutOfDict: targetVocab.outOfDict || false,
       formType: targetVocab.type,
       formTags: targetVocab.tags || [],
     });
@@ -70,6 +74,7 @@ class EditVocabForm extends Component {
       formTranslation,
       formPron,
       formUseSpeech,
+      formOutOfDict,
       formType,
       formTags,
     } = this.state;
@@ -78,6 +83,7 @@ class EditVocabForm extends Component {
       translation: formTranslation,
       pron: formPron,
       useSpeech: formUseSpeech,
+      outOfDict: formOutOfDict,
       type: formType,
       tags: formTags,
     };
@@ -132,6 +138,7 @@ class EditVocabForm extends Component {
       formTranslation,
       formPron,
       formUseSpeech,
+      formOutOfDict,
       formType,
       formTags,
     } = this.state;
@@ -208,6 +215,17 @@ class EditVocabForm extends Component {
                 value={formTranslation}
                 onChange={(e) => { this.setState({ formTranslation: e.target.value }); }}
               />
+            </ListItem>
+            <ListItem label={LANG.OUT_OF_DICT}>
+              <label className="label-switch" htmlFor={`form-out-of-dict-${targetVocab.id}`}>
+                <input
+                  type="checkbox"
+                  id={`form-out-of-dict-${targetVocab.id}`}
+                  checked={formOutOfDict}
+                  onChange={(e) => { this.setState({ formOutOfDict: e.target.checked }); }}
+                />
+                <div className="checkbox" />
+              </label>
             </ListItem>
             <ListItem label={LANG.TAGS}>
               <div className="content-block-inner">
