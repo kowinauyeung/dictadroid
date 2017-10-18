@@ -23,6 +23,7 @@ class AddVocabForm extends Component {
       formTranslation: '',
       formPron: '',
       formUseSpeech: false,
+      formOutOfDict: false,
       formType: '',
       formTags: [],
     };
@@ -39,6 +40,7 @@ class AddVocabForm extends Component {
       formTranslation,
       formPron,
       formUseSpeech,
+      formOutOfDict,
       formType,
       formTags,
     } = this.state;
@@ -51,6 +53,7 @@ class AddVocabForm extends Component {
       translation: formTranslation,
       pron: formPron,
       useSpeech: formUseSpeech,
+      outOfDict: formOutOfDict,
       type: formType,
       tags: formTags,
     });
@@ -112,6 +115,7 @@ class AddVocabForm extends Component {
       formTranslation,
       formPron,
       formUseSpeech,
+      formOutOfDict,
       formType,
       formTags,
     } = this.state;
@@ -188,6 +192,17 @@ class AddVocabForm extends Component {
                 value={formTranslation}
                 onChange={(e) => { this.setState({ formTranslation: e.target.value }); }}
               />
+            </ListItem>
+            <ListItem label={LANG.OUT_OF_DICT}>
+              <label className="label-switch" htmlFor="form-out-of-dict">
+                <input
+                  type="checkbox"
+                  id="form-out-of-dict"
+                  checked={formOutOfDict}
+                  onChange={(e) => { this.setState({ formOutOfDict: e.target.checked }); }}
+                />
+                <div className="checkbox" />
+              </label>
             </ListItem>
             <ListItem label={LANG.TAGS}>
               <div className="content-block-inner">
