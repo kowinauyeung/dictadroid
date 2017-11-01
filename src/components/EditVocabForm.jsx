@@ -92,7 +92,7 @@ class EditVocabForm extends Component {
   }
 
   onTagsChange(e) {
-    const pattern = /^\s*[a-zA-Z\d\u4e00-\u9fa5]+\s+$/;
+    const pattern = /^\s*[a-zA-Z\d\u4e00-\u9fff\u3040-\u309f\u30a0-\u30ff\uff00-\uffef]+\s+$/;
     let val = e.target.value;
     val = _.trimStart(val);
     if (!pattern.test(val)) return;
@@ -102,7 +102,7 @@ class EditVocabForm extends Component {
 
   onTagsInputKeyDown(e) {
     if (e.keyCode === 13 && e.target.value !== '') {
-      const pattern = /^\s*[a-zA-Z\d\u4e00-\u9fa5]+$/;
+      const pattern = /^\s*[a-zA-Z\d\u4e00-\u9fff\u3040-\u309f\u30a0-\u30ff\uff00-\uffef]+$/;
       const val = e.target.value;
       if (!pattern.test(val)) return;
       this.addChip(val);
