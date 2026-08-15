@@ -141,7 +141,7 @@ class Settings extends Component {
                   <div className="item-content">
                     <div className="item-inner">
                       <div className="item-title">{LANG.VERSION}</div>
-                      <div className="item-after">{process.env.REACT_APP_VERSION}</div>
+                      <div className="item-after">{import.meta.env.VITE_APP_VERSION}</div>
                     </div>
                   </div>
                 </div>

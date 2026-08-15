@@ -58,7 +58,12 @@ export const logout = () => ({
 export const loginWithGoogle = () => (
   () => {
     const provider = new firebase.auth.GoogleAuthProvider();
-    firebase.auth().signInWithPopup(provider);
+    provider.setCustomParameters({ prompt: 'select_account' });
+    return firebase.auth().signInWithPopup(provider).catch((error) => {
+      console.error('Google sign-in failed:', error);
+      window.alert(`Google sign-in failed: ${error.message}`);
+      throw error;
+    });
   }
 );
 

@@ -445,7 +445,7 @@ input[type=radio]:not(:checked) + .check-box {
   display: none;
 }
 
-.input[type=radio]:checked < label {
+.input[type=radio]:checked + label {
   background: #ef3c6c;
   color: #fff;
 }

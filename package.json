@@ -1,34 +1,30 @@
 {
   "name": "dictadroid",
-  "version": "0.1.0",
+  "version": "1.2.0",
   "private": true,
   "dependencies": {
-    "classnames": "^2.2.5",
-    "firebase": "^4.5.0",
-    "lodash": "^4.17.4",
-    "moment": "^2.19.1",
-    "prop-types": "^15.5.10",
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1",
-    "react-redux": "^5.0.6",
-    "react-router-dom": "^4.2.2",
-    "redux": "^3.7.2",
+    "classnames": "^2.5.1",
+    "firebase": "^11.10.0",
+    "lodash": "^4.17.21",
+    "moment": "^2.30.1",
+    "prop-types": "^15.8.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-redux": "^7.2.9",
+    "react-router-dom": "^5.3.4",
+    "redux": "^4.2.1",
     "redux-logger": "^3.0.6",
-    "redux-thunk": "^2.2.0"
+    "redux-thunk": "^2.4.2"
   },
   "devDependencies": {
-    "eslint": "^4.3.0",
-    "eslint-config-airbnb": "^15.1.0",
-    "eslint-plugin-import": "^2.7.0",
-    "eslint-plugin-jsx-a11y": "^5.1.1",
-    "eslint-plugin-react": "^7.1.0",
-    "react-scripts": "1.0.10"
+    "@vitejs/plugin-react": "^4.6.0",
+    "firebase-tools": "^14.12.1",
+    "vite": "^7.1.2"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "check": "eslint ./src/ --ext .jsx --fix",
-    "eject": "react-scripts eject"
+    "start": "vite --mode production",
+    "build": "vite build",
+    "preview": "vite preview",
+    "deploy": "yarn build && firebase deploy --project dictadroid --only hosting,database"
   }
 }
